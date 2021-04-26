@@ -49,6 +49,7 @@
     <button type="submit" value = "send" >Submit</button>
   </div>
 </form>
+      <div id = "my-form-status"> </div>
   </div>
   </div>
   <div class="bottom-container">
@@ -71,10 +72,12 @@
             'Accept': 'application/json'
         }
       }).then(response => {
-        status.innerHTML = "Thanks for your submission! I will get in touch with you";
+        status.classList.add("Sent");
+        status.innerHTML = "Thank you!"
         form.reset()
       }).catch(error => {
-        status.innerHTML = "Oops! There was a problem submitting your form"
+        status.classList.add("Error");
+        status.innerHTML = "Sorry, There was an error"
       });
     }
     form.addEventListener("submit", handleSubmit)
