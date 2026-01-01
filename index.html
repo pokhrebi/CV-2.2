@@ -1,58 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bhakti Pokhrel | Software Engineer</title>
-  <meta name="description" content="Bhakti Pokhrel — Software Engineer specializing in .NET, Angular, and Azure cloud solutions.">
 
-  <!-- SEO -->
-  <link rel="canonical" href="https://bhaktipokhrel.com">
-  <meta property="og:title" content="Bhakti Pokhrel | Software Engineer">
-  <meta property="og:description" content="Full-stack engineer specializing in .NET, Angular, and Azure.">
-  <meta property="og:type" content="website">
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Sacramento&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="./styles.css">
-  <link rel="icon" href="images/favicon.ico">
-
-  <!-- Schema.org -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Bhakti Pokhrel",
-    "jobTitle": "Software Engineer",
-    "url": "https://bhaktipokhrel.com",
-    "sameAs": [
-      "https://www.linkedin.com",
-      "https://github.com"
-    ]
-  }
-  </script>
-
-  <!-- Google Analytics (replace ID) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXX');
-  </script>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" href="./src/images/favicon.ico" />
 </head>
 
-<body class="page-transition">
-
+<body>
 <header class="top-container">
   <div class="header-grid">
-    <img class="logo" src="images/favicon.png" alt="Logo">
 
-    <button class="nav-toggle">☰</button>
+    <img class="logo" src="./src/images/favicon.png" alt="Logo">
+
+    <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
 
     <nav class="nav">
       <a class="active" href="index.html">Home</a>
@@ -63,41 +26,22 @@
     </nav>
 
     <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+
   </div>
 
   <h1>I’m Bhakti</h1>
-  <h2>a <span class="pro">Software Engineer</span></h2>
+  <h2 class="subtitle">Software Engineer</h2>
 
-  <img class="hero-img" src="images/book.png" alt="Hero image" loading="lazy">
+  <img class="hero-img" src="./src/images/book.png" alt="Hero Image" loading="lazy">
 </header>
 
-<main class="middle-container">
+<main class="middle-container page">
   <section class="profile">
-    <img class="avatar" src="images/bhakti.png" alt="Bhakti Pokhrel">
+    <img class="avatar" src="./src/images/bhakti.png" alt="Bhakti Pokhrel">
     <h2>Hello 👋</h2>
     <p>
-      Software Engineer at <strong>Medpace</strong>.  
-      I build scalable full-stack applications using <strong>.NET, Angular & Azure</strong>.
+      Software Engineer specializing in <strong>.NET, Angular, and Azure</strong>.
     </p>
-  </section>
-
-  <section class="skills">
-    <h2>My Tech Stack</h2>
-    <div class="skill-grid">
-      <div class="skill-card">
-        <h3>Frontend</h3>
-        <p>Angular, TypeScript, responsive UI systems</p>
-      </div>
-      <div class="skill-card">
-        <h3>Backend & Cloud</h3>
-        <p>.NET APIs, Azure, SQL Server, Cosmos DB</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta">
-    <h2>Get In Touch</h2>
-    <a class="btn" href="Contact.html">Contact Me</a>
   </section>
 </main>
 
@@ -106,6 +50,5 @@
 </footer>
 
 <script src="./site.js" defer></script>
-
 </body>
 </html>
