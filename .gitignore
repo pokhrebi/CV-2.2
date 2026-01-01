@@ -3,6 +3,15 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Project-level ignores
+# Build output
+/dist/
+/.angular/
+
+# Node modules
+/node_modules/
+
+
 # User-specific files
 *.rsuser
 *.suo
