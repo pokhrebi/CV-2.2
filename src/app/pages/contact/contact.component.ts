@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { SeoService } from '../../core/seo.service';
-import { ContactService } from '../../core/contact.service';
 
 @Component({
   selector: 'app-contact',
@@ -26,7 +25,7 @@ export class ContactComponent implements OnInit {
   private lastSubmissionTime: number = 0;
   private readonly SUBMISSION_COOLDOWN = 30000; // 30 seconds
 
-  constructor(private seo: SeoService, private contactService: ContactService) {
+  constructor(private seo: SeoService) {
     this.generateMathQuestion();
   }
 
@@ -90,8 +89,22 @@ export class ContactComponent implements OnInit {
         timestamp: new Date().toISOString()
       };
 
-      // Submit form via EmailJS
-      await this.contactService.submitContact(contactData);
+      // Open user's email client via mailto: (sends to owner's email)
+      const ownerEmail = 'myphotosfirst@gmail.com';
+      const subject = encodeURIComponent(`[Website] ${contactData.subject}`);
+      const bodyLines = [
+        `Name: ${contactData.from_name}`,
+        `Email: ${contactData.from_email}`,
+        `Phone: ${contactData.phone}`,
+        '',
+        contactData.message,
+        '',
+        `Sent: ${contactData.timestamp}`
+      ];
+      const body = encodeURIComponent(bodyLines.join('\n'));
+      const mailto = `mailto:${ownerEmail}?subject=${subject}&body=${body}`;
+      // Use window.open so user can edit before sending
+      window.open(mailto, '_blank');
 
       // Success
       this.showSuccessMessage = true;
@@ -105,11 +118,7 @@ export class ContactComponent implements OnInit {
 
     } catch (error) {
       console.error('Email sending failed:', error);
-      if (error.message.includes('Maximum')) {
-        alert(error.message);
-      } else {
-        alert('Sorry, there was an error sending your message. Please try again later.');
-      }
+      alert('Sorry, there was an error preparing the message. Please try again later.');
     } finally {
       this.isSubmitting = false;
     }
