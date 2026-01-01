@@ -1,12 +1,14 @@
-<nav class="nav">
-  <a routerLink="/" class="logo">Bhakti Pokhrel</a>
-  <button class="nav-toggle" (click)="toggleMenu()">☰</button>
-  <ul [class.open]="menuOpen">
-    <li><a routerLink="/">Home</a></li>
-    <li><a routerLink="/about">About</a></li>
-    <li><a routerLink="/projects">Projects</a></li>
-    <li><a routerLink="/resume">Resume</a></li>
-    <li><a routerLink="/contact">Contact</a></li>
-  </ul>
-  <button class="theme-toggle" (click)="toggleTheme()">🌙</button>
+<nav>
+  <div class="nav">
+    <a routerLink="/" class="logo">BP</a>
+    <ul [class.open]="menuOpen">
+      <li><a routerLink="/" (click)="menuOpen = false">Home</a></li>
+      <li><a routerLink="/about" (click)="menuOpen = false">About</a></li>
+      <li><a routerLink="/projects" (click)="menuOpen = false">Projects</a></li>
+      <li><a routerLink="/resume" (click)="menuOpen = false">Resume</a></li>
+      <li><a routerLink="/contact" (click)="menuOpen = false">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" (click)="toggleMenu()">☰</button>
+    <button class="theme-toggle" (click)="toggleTheme()">🌙</button>
+  </div>
 </nav>
