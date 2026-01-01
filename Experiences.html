@@ -1,101 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Experience | Bhakti Pokhrel</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="images/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Montserrat+Alternates&family=Sacramento&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Experience | Bhakti Pokhrel</title>
+
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" href="./src/images/favicon.ico" />
 </head>
+
+<body>
 <header class="top-container">
   <div class="header-grid">
+    <img class="logo" src="./src/images/favicon.png" alt="Logo">
 
-    <img class="logo" src="./images/favicon.png" alt="Logo">
+    <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
 
-    <!-- HAMBURGER BUTTON (REQUIRED) -->
-    <button class="nav-toggle" aria-label="Toggle navigation">
-      ☰
-    </button>
-
-    <!-- NAVIGATION -->
     <nav class="nav">
       <a href="index.html">Home</a>
       <a href="Projects.html">Projects</a>
-      <a href="Experiences.html">Experience</a>
+      <a class="active" href="Experiences.html">Experience</a>
       <a href="Resume.html">Resume</a>
       <a href="Contact.html">Contact</a>
     </nav>
 
-    <!-- DARK MODE BUTTON -->
-    <button class="theme-toggle" aria-label="Toggle dark mode">
-      🌙
-    </button>
-
+    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
   </div>
+
+  <h1>Experience</h1>
 </header>
 
-<body>
+<main class="middle-container page">
+  <section class="skill-grid">
 
-    <div class="top-container">
-        <a href="index.html"><img class="computer" src="images/favicon.png" alt="computer"></a>
-        <h1 class="Name">My Journey</h1>
-        <p class="index">Professional Experience</p>
-        <img class="cpu" src="images/book.png" alt="cpu">
-        
-        <nav class="sidenav">
-            <a href="index.html">Home</a>
-            <a href="Projects.html">Projects</a>
-            <a href="Experiences.html" class="active">Experience</a>
-            <a href="Resume.html">Resume</a>
-            <a href="Contact.html">Contact</a>
-        </nav>
+    <div class="skill-card">
+      <h3>Software Engineer — Medpace</h3>
+      <p>
+        Building scalable enterprise applications using .NET, Azure, and SQL Server.
+      </p>
     </div>
 
-    <div class="middle-container">
-        <div class="mid-experience1">
-            <h2>Software Engineer</h2>
-            <h3>Medpace | June 2023 – Present</h3>
-            <p style="text-align: left; padding: 0 20px;">
-                Spearheading full-stack web application development using <strong>Angular.js, TypeScript, C#, .NET, and Cosmos DB</strong>.
-            </p>
-            <ul style="text-align: left; padding-right: 20px;">
-                <li>Designed and implemented scalable table structures and optimized SQL queries to improve data retrieval performance.</li>
-                <li>Led development of full-page layouts including wireframing, frontend implementation, and API integration.</li>
-                <li>Collaborated with business owners to gather requirements and ensure alignment with user needs.</li>
-                <li>Developed microservices for handling bulk data updates, ensuring system efficiency.</li>
-            </ul>
-        </div>
-
-        <div class="mid-experience2">
-            <h2>Software Engineer Intern</h2>
-            <h3>Medpace | Sep 2022 – June 2023</h3>
-            <p style="text-align: left; padding: 0 20px;">
-                Contributed to internal projects using Angular, C#, and MSSQL Server.
-            </p>
-            <ul style="text-align: left; padding-right: 20px;">
-                <li>Participated in code reviews, testing, and validation to ensure software quality.</li>
-                <li>Integrated web APIs with user interfaces, adhering to strict UI/UX designs.</li>
-            </ul>
-        </div>
-
-        <div class="mid-experience2">
-            <h2>Software Engineer Intern</h2>
-            <h3>Emerson | Aug 2021 – July 2022</h3>
-            <p style="text-align: left; padding: 0 20px;">
-                Enhanced Vue.js-based web platforms and optimized existing components.
-            </p>
-            <ul style="text-align: left; padding-right: 20px;">
-                <li>Converted legacy Razor pages to responsive Vue.js pages.</li>
-                <li>Designed reusable components for use across the platform.</li>
-                <li>Applied Agile methodologies to meet sprint goals.</li>
-            </ul>
-        </div>
+    <div class="skill-card">
+      <h3>University of Cincinnati</h3>
+      <p>
+        B.S. in Information Technology. Focus on full-stack and cloud systems.
+      </p>
     </div>
 
-    <div class="bottom-container">
-        <p class="bottom-footer">© 2025 Bhakti Pokhrel.</p>
-    </div>
+  </section>
+</main>
 
+<footer class="bottom-container">
+  © 2025 Bhakti Pokhrel
+</footer>
+
+<script src="./site.js" defer></script>
 </body>
 </html>
