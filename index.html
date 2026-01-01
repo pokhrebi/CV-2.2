@@ -1,66 +1,91 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bhakti Pokhrel | Software Engineer</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="images/favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Montserrat+Alternates&family=Sacramento&display=swap" rel="stylesheet">
-</head>
-<body>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <div class="top-container">
-    <a href="index.html"><img class="computer" src="images/favicon.png" alt="computer"></a>
-    <h1 class="Name">I'm Bhakti</h1>
-    <h2 class="subtitle">a <span class="pro">Software Engineer</span>.</h2>
-    <img class="cpu" src="images/book.png" alt="cloud-computing">
-    
-    <nav class="sidenav">
-        <a href="index.html" class="active">Home</a>
-        <a href="Projects.html">Projects</a>
-        <a href="Experiences.html">Experience</a>
-        <a href="Resume.html">Resume</a>
-        <a href="Contact.html">Contact</a>
+  <title>Bhakti Pokhrel | Software Engineer</title>
+  <meta name="description" content="Bhakti Pokhrel — Software Engineer specializing in .NET, Angular, and Azure cloud solutions." />
+  <meta name="theme-color" content="#66BFBF" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Montserrat+Alternates&family=Sacramento&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="images/favicon.ico" />
+</head>
+
+<body>
+<header class="top-container">
+  <div class="header-grid">
+    <img class="logo" src="images/favicon.png" alt="Logo" loading="lazy" />
+
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      ☰
+    </button>
+
+    <nav class="nav">
+      <a class="active" href="index.html">Home</a>
+      <a href="Projects.html">Projects</a>
+      <a href="Experiences.html">Experience</a>
+      <a href="Resume.html">Resume</a>
+      <a href="Contact.html">Contact</a>
     </nav>
   </div>
 
-  <div class="middle-container">
-    <div class="profile">
-      <img class="selfImg" src="images/bhakti.png" alt="Bhakti Profile">
-      <h2>Hello.</h2>
-      <p class="intro">I am a Software Engineer at <strong>Medpace</strong> and a University of Cincinnati graduate. I specialize in building scalable full-stack web applications using the .NET ecosystem and Azure cloud technologies.</p>
-    </div>
+  <h1>I’m Bhakti</h1>
+  <h2 class="subtitle">a <span class="pro">Software Engineer</span></h2>
 
-    <hr>
+  <img class="hero-img" src="images/book.png" alt="Tech Illustration" loading="lazy" />
+</header>
 
-    <div class="skills">
-      <h2>My Tech Stack</h2>
-      <div class="skill-row">
-        <img class="skill-pic" src="https://cdn-icons-png.flaticon.com/512/6132/6132222.png" alt="code-icon">
-        <h3>Full Stack Development</h3>
-        <p>Expertise in <strong>Angular.js, TypeScript, C#, and .NET</strong>. I build responsive front-end layouts and robust back-end APIs that drive enterprise-level applications.</p>
+<main class="middle-container">
+  <section class="profile">
+    <img class="avatar" src="images/bhakti.png" alt="Bhakti Pokhrel" loading="lazy" />
+    <h2>Hello 👋</h2>
+    <p>
+      Software Engineer at <strong>Medpace</strong> and University of Cincinnati graduate.
+      I build scalable full-stack applications using <strong>.NET, Angular, and Azure</strong>.
+    </p>
+  </section>
+
+  <section class="skills">
+    <h2>My Tech Stack</h2>
+
+    <div class="skill-grid">
+      <div class="skill-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/6132/6132222.png" alt="Code" loading="lazy" />
+        <h3>Full-Stack Development</h3>
+        <p>Angular, TypeScript, C#, ASP.NET APIs, responsive UI systems.</p>
       </div>
-      <div class="skill-row">
-        <img class="book" src="https://cdn-icons-png.flaticon.com/512/2906/2906274.png" alt="cloud-icon">
-        <h3>Cloud & Database</h3>
-        <p>Microsoft Azure Certified (<strong>AZ-900, DP-900</strong>). Experienced in designing schemas for <strong>Cosmos DB</strong> and optimizing <strong>SQL Server</strong> queries for performance.</p>
+
+      <div class="skill-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/2906/2906274.png" alt="Cloud" loading="lazy" />
+        <h3>Cloud & Databases</h3>
+        <p>Azure (AZ-900, DP-900), SQL Server, Cosmos DB, performance tuning.</p>
       </div>
     </div>
-    
-    <hr>
-    
-    <div class="contact-me">
-      <h2>Get In Touch</h2>
-      <h3>Currently based in West Chester, OH.</h3>
-      <p class="contact-message">Have a project in mind or want to discuss .NET architecture? Let's connect.</p>
-      <a class="btn" href="Contact.html">CONTACT ME</a>
-    </div>
-  </div>
+  </section>
 
-  <div class="bottom-container">
-    <p class="bottom-footer">© 2025 Bhakti Pokhrel.</p>
-  </div>
+  <section class="cta">
+    <h2>Get In Touch</h2>
+    <p>Based in West Chester, OH — open to collaboration.</p>
+    <a class="btn" href="Contact.html">Contact Me</a>
+  </section>
+</main>
 
+<footer class="bottom-container">
+  <p>© 2025 Bhakti Pokhrel</p>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.nav');
+
+  toggle.addEventListener('click', () => {
+    nav.classList.toggle('open');
+  });
+</script>
 </body>
 </html>
