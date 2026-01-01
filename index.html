@@ -1,29 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Bhakti Pokhrel | Software Engineer</title>
-  <meta name="description" content="Bhakti Pokhrel — Software Engineer specializing in .NET, Angular, and Azure cloud solutions." />
-  <meta name="theme-color" content="#66BFBF" />
+  <meta name="description" content="Bhakti Pokhrel — Software Engineer specializing in .NET, Angular, and Azure cloud solutions.">
 
+  <!-- SEO -->
+  <link rel="canonical" href="https://bhaktipokhrel.com">
+  <meta property="og:title" content="Bhakti Pokhrel | Software Engineer">
+  <meta property="og:description" content="Full-stack engineer specializing in .NET, Angular, and Azure.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Montserrat+Alternates&family=Sacramento&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Sacramento&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="images/favicon.ico" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="images/favicon.ico">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Bhakti Pokhrel",
+    "jobTitle": "Software Engineer",
+    "url": "https://bhaktipokhrel.com",
+    "sameAs": [
+      "https://www.linkedin.com",
+      "https://github.com"
+    ]
+  }
+  </script>
+
+  <!-- Google Analytics (replace ID) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
 </head>
 
-<body>
+<body class="page-transition">
+
 <header class="top-container">
   <div class="header-grid">
-    <img class="logo" src="images/favicon.png" alt="Logo" loading="lazy" />
+    <img class="logo" src="images/favicon.png" alt="Logo">
 
-    <button class="nav-toggle" aria-label="Toggle navigation">
-      ☰
-    </button>
+    <button class="nav-toggle">☰</button>
 
     <nav class="nav">
       <a class="active" href="index.html">Home</a>
@@ -32,60 +61,50 @@
       <a href="Resume.html">Resume</a>
       <a href="Contact.html">Contact</a>
     </nav>
+
+    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
   </div>
 
   <h1>I’m Bhakti</h1>
-  <h2 class="subtitle">a <span class="pro">Software Engineer</span></h2>
+  <h2>a <span class="pro">Software Engineer</span></h2>
 
-  <img class="hero-img" src="images/book.png" alt="Tech Illustration" loading="lazy" />
+  <img class="hero-img" src="images/book.png" alt="Hero image" loading="lazy">
 </header>
 
 <main class="middle-container">
   <section class="profile">
-    <img class="avatar" src="images/bhakti.png" alt="Bhakti Pokhrel" loading="lazy" />
+    <img class="avatar" src="images/bhakti.png" alt="Bhakti Pokhrel">
     <h2>Hello 👋</h2>
     <p>
-      Software Engineer at <strong>Medpace</strong> and University of Cincinnati graduate.
-      I build scalable full-stack applications using <strong>.NET, Angular, and Azure</strong>.
+      Software Engineer at <strong>Medpace</strong>.  
+      I build scalable full-stack applications using <strong>.NET, Angular & Azure</strong>.
     </p>
   </section>
 
   <section class="skills">
     <h2>My Tech Stack</h2>
-
     <div class="skill-grid">
       <div class="skill-card">
-        <img src="https://cdn-icons-png.flaticon.com/512/6132/6132222.png" alt="Code" loading="lazy" />
-        <h3>Full-Stack Development</h3>
-        <p>Angular, TypeScript, C#, ASP.NET APIs, responsive UI systems.</p>
+        <h3>Frontend</h3>
+        <p>Angular, TypeScript, responsive UI systems</p>
       </div>
-
       <div class="skill-card">
-        <img src="https://cdn-icons-png.flaticon.com/512/2906/2906274.png" alt="Cloud" loading="lazy" />
-        <h3>Cloud & Databases</h3>
-        <p>Azure (AZ-900, DP-900), SQL Server, Cosmos DB, performance tuning.</p>
+        <h3>Backend & Cloud</h3>
+        <p>.NET APIs, Azure, SQL Server, Cosmos DB</p>
       </div>
     </div>
   </section>
 
   <section class="cta">
     <h2>Get In Touch</h2>
-    <p>Based in West Chester, OH — open to collaboration.</p>
     <a class="btn" href="Contact.html">Contact Me</a>
   </section>
 </main>
 
 <footer class="bottom-container">
-  <p>© 2025 Bhakti Pokhrel</p>
+  © 2025 Bhakti Pokhrel
 </footer>
 
-<script>
-  const toggle = document.querySelector('.nav-toggle');
-  const nav = document.querySelector('.nav');
-
-  toggle.addEventListener('click', () => {
-    nav.classList.toggle('open');
-  });
-</script>
+<script src="site.js"></script>
 </body>
 </html>
