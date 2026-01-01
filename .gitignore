@@ -9,7 +9,10 @@
 /.angular/
 
 # Ignore built site artifacts (we deploy from CI)
-/docs/
+## Pages build output is committed in docs/
+# (GitHub Pages deploys from main/docs)
+# Do NOT ignore docs anymore
+# /docs/
 
 
 # Node modules
