@@ -1,15 +1,12 @@
-name: Build and Deploy to GitHub Pages
+name: Build and Deploy to GitHub Pages (push to gh-pages)
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
 
     steps:
       - name: Checkout
@@ -26,18 +23,10 @@ jobs:
       - name: Build (production)
         run: npm run build -- --configuration production
 
-      - name: Upload artifact for GitHub Pages
-        uses: actions/upload-pages-artifact@v1
+      - name: Deploy to GitHub Pages (gh-pages branch)
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          path: dist/bhakti-portfolio
-
-  deploy:
-    needs: build-deploy
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-
-    steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+          branch: gh-pages
+          folder: dist/bhakti-portfolio
+          clean: true
+          token: ${{ secrets.GITHUB_TOKEN }}
