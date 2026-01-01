@@ -1,320 +1,218 @@
-body {
-  margin: 0;
-  color: #40514E;
-  text-align: center;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 100%;
-}
-
-h1 {
-  font-size: 5.625rem;
-  color: #66BFBF;
-  margin: 50px auto 0px auto;
-  font-family: 'Sacramento', cursive;
-  line-height: 1;
-}
-
-h2 {
-  color: #66BFBF;
-  font-family: 'Montserrat Alternates', sans-serif;
-  font-weight: normal;
-  padding-top: 10px;
-}
-
-.top-container {
-  background-color: #E4F9F5;
-  position: relative;
-  padding-top: 100px;
-}
-
-.middle-container {
-  margin: 100px 0;
-  background-color: white;
-}
-
-.computer {
-  height: 200px;
-  width: auto;
-  position: absolute;
-  right: 50px;
-  top: 50px;
-}
-
-.cpu {
-  height: 600px;
-  width: auto;
-  margin: 0 auto;
-  padding-top: 100px;
-}
-
-.index {
-  font-size: 1.5rem;
-  color: #66BFBF;
-  font-weight: normal;
-  line-height: .005;
-}
-
-.selfImg {
-  width: 15%;
-  -moz-box-shadow: 10px 10px 5px #ccc;
-  -webkit-box-shadow: 10px 10px 5px #ccc;
-  box-shadow: 10px 10px 5px #ccc;
-  -moz-border-radius: 25px;
-  -webkit-border-radius: 25px;
-  border-radius: 25px;
-}
-
-.cpuImg {
-  width: 35%;
-  -moz-box-shadow: 10px 10px 5px #ccc;
-  -webkit-box-shadow: 10px 10px 5px #ccc;
-  box-shadow: 10px 10px 5px #ccc;
-  -moz-border-radius: 25px;
-  -webkit-border-radius: 25px;
-  border-radius: 25px;
-}
-
-.skill-row {
-  width: 50%;
-  margin: 100px auto 100px auto;
-  text-align: center;
-  line-height: 2;
-}
-
-.sidenav {
-  width: 150px;
-  position: fixed;
-  z-index: 1;
-  top: 25px;
-  left: 15px;
-  overflow-x: hidden;
-  padding: 8px 0;
-}
-
-.sidenav a {
-  padding: 6px 8px 6px 16px;
-  text-decoration: none;
-  font-size: 20px;
-  font-weight: bold;
-  color: #66BFBF;
-  display: block;
-  height: 80px;
-}
-
-.sidenav a:hover {
-  color: #064579;
-}
-
-.bottom-container {
-  background-color: #66BFBF;
-  padding: 50px 0 20px;
-}
-
-.linkedin {
-  text-decoration: none;
-  color: #11999E;
-  display: inline;
-  font-size: 100%;
-  margin: 10px 20px;
-}
-
-.web-link {
-  text-decoration: none;
-  color: #11999E;
-  display: inline;
-  font-size: 100%;
-  margin: 10px 20px;
-}
-
-.bottom-footer {
-  color: #EAF6F6;
-  font-size: 0.75rem;
-  padding: 20px 0;
-}
-
-.download-btn {
-  -moz-box-shadow: inset 0px 1px 0px 0px #E4F9F5;
-  -webkit-box-shadow: inset 0px 1px 0px 0px #E4F9F5;
-  box-shadow: inset 0px 1px 0px 0px #E4F9F5;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #66BFBF), color-stop(1, #11999E));
-  background: -moz-linear-gradient(center top, #66BFBF 5%, #11999E 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#66BFBF', endColorstr='#11999E');
-  background-color: #66BFBF;
-  -webkit-border-top-left-radius: 5px;
-  -moz-border-radius-topleft: 5px;
-  border-top-left-radius: 5px;
-  -webkit-border-top-right-radius: 5px;
-  -moz-border-radius-topright: 5px;
-  border-top-right-radius: 5px;
-  -webkit-border-bottom-right-radius: 5px;
-  -moz-border-radius-bottomright: 5px;
-  border-bottom-right-radius: 5px;
-  -webkit-border-bottom-left-radius: 5px;
-  -moz-border-radius-bottomleft: 5px;
-  border-bottom-left-radius: 5px;
-  text-indent: 0;
-  display: inline-block;
-  color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 15px;
-  font-weight: bold;
-  font-style: normal;
-  height: 50px;
-  line-height: 50px;
-  width: 140px;
-  text-decoration: none;
-  text-align: center;
-  text-shadow: 0px 1px 0px #528009;
-}
-
-.download-btn:hover {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #11999E), color-stop(1, #66BFBF));
-  background: -moz-linear-gradient(center top, #11999E 5%, #66BFBF 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#11999E', endColorstr='#66BFBF');
-  background-color: #11999E;
-}
-
-.download-btn:active {
-  position: relative;
-  top: 1px;
-}
-
-a:hover {
-  text-decoration: underline;
-  text-decoration-color: grey;
-  color: #EAF6F6;
-}
-
-.book {
-  width: 15%;
-  float: right;
-  margin-right: 30px;
-}
-
-.skill-pic {
-  width: 15%;
-  float: left;
-  margin-right: 30px;
-}
-
-/* Form style */
-input, textarea {
-  outline: none;
-}
-
-form {
-  position: relative;
-  width: 80%;
-  border-radius: 30px;
-  background: #E4F9F5;
-  margin: 0 auto;
-  text-align: left;
-}
-
-.form-inner {
-  padding: 40px;
-}
-
-.form-inner input,
-.form-inner textarea {
-  display: block;
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 20px;
-  background: #d0dfe8;
-}
-
-.form-inner textarea {
-  resize: none;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 20px;
-  border-radius: 20px;
-  border: none;
-  border-bottom: 4px solid #11999E;
-  background: #d0dfe8;
-  font-size: 16px;
-  font-weight: 400;
-  color: #66BFBF;
-}
-.mid-project1, .mid-project2, .mid-experience1, .mid-experience2, .mid-project3{
-  position: relative;
-  height: 300px;
-  width: 1500px;
-  background-color: #E4F9F5;
-  margin: 0 auto;
-  -moz-box-shadow: 10px 10px 5px #ccc;
-  -webkit-box-shadow: 10px 10px 5px #ccc;
-  box-shadow: 10px 10px 5px #ccc;
-  -moz-border-radius: 25px;
-  -webkit-border-radius: 25px;
-  border-radius: 25px;
-  padding: 1%;
-}
-
-
-button:hover {
-  background: #66BFBF;
-  background: -moz-linear-gradient(center top, #11999E 5%, #66BFBF 100%);
-  text-decoration: underline;
-  text-decoration-color: grey;
-  color: #EAF6F6;
-}
-
-.formLabel {
-  text-align: center;
-}
-
-
-.live-button{
-  border-right: 200px;
-  margin-left: 200px;
-  border-left: 100px;
-  padding-left: 100px;
-
-}
-
-@media (min-width: 568px) {
-  form {
-    width: 60%;
-  }
-  .mid-project1, .mid-project2, .mid-experience1, .mid-experience2, .mid-project3{
-    width: 60%
-  }
-}
-
+/* --- Global Resets & Typography --- */
 * {
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #f4f7f6; /* Light grey background for contrast */
     margin: 0;
+    color: #40514E;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 100%;
+    background-color: #f4f7f6; /* Light grey background for better contrast */
 }
 
-/* Container Styling */
+h1 {
+    font-size: 5.625rem;
+    color: #66BFBF;
+    margin: 50px auto 0 auto;
+    font-family: 'Sacramento', cursive;
+    line-height: 1;
+}
+
+h2 {
+    color: #66BFBF;
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-weight: normal;
+    padding-top: 10px;
+}
+
+a {
+    color: #11999E;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #EAF6F6;
+    text-decoration: underline;
+    text-decoration-color: grey;
+}
+
+/* --- Layout Containers --- */
+.top-container {
+    background-color: #E4F9F5;
+    position: relative;
+    padding-top: 100px;
+}
+
 .middle-container {
+    /* Updated to Flexbox for better centering on all pages */
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    padding: 50px 20px;
+    margin: 50px 0;
+    padding: 20px;
+    background-color: transparent; /* Changed from white to transparent to show body grey */
 }
 
-/* Card Style for the Form */
+.bottom-container {
+    background-color: #66BFBF;
+    padding: 50px 0 20px;
+}
+
+/* --- Navigation & Footer --- */
+.sidenav {
+    width: 150px;
+    position: fixed;
+    z-index: 1;
+    top: 25px;
+    left: 15px;
+    overflow-x: hidden;
+    padding: 8px 0;
+}
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #66BFBF;
+    display: block;
+    height: 80px;
+}
+
+.sidenav a:hover {
+    color: #064579;
+}
+
+.bottom-footer {
+    color: #EAF6F6;
+    font-size: 0.75rem;
+    padding: 20px 0;
+}
+
+.linkedin, .web-link {
+    color: #11999E;
+    display: inline;
+    margin: 10px 20px;
+}
+
+/* --- Home Page Specifics --- */
+.computer {
+    height: 200px;
+    width: auto;
+    position: absolute;
+    right: 50px;
+    top: 50px;
+}
+
+.cpu {
+    height: 600px;
+    width: auto;
+    margin: 0 auto;
+    padding-top: 100px;
+}
+
+.index {
+    font-size: 1.5rem;
+    color: #66BFBF;
+    font-weight: normal;
+    line-height: .005;
+}
+
+.skill-row {
+    width: 50%;
+    margin: 100px auto;
+    text-align: center;
+    line-height: 2;
+}
+
+.selfImg, .cpuImg {
+    box-shadow: 10px 10px 5px #ccc;
+    border-radius: 25px;
+}
+
+.selfImg { width: 15%; }
+.cpuImg { width: 35%; }
+.book { width: 15%; float: right; margin-right: 30px; }
+.skill-pic { width: 15%; float: left; margin-right: 30px; }
+
+/* --- Projects & Experience Cards --- */
+.mid-project1, .mid-project2, .mid-experience1, .mid-experience2, .mid-project3 {
+    position: relative;
+    /* Removed fixed height so content fits naturally */
+    min-height: 300px; 
+    width: 80%; /* Improved responsiveness */
+    max-width: 1500px;
+    background-color: #E4F9F5;
+    margin: 20px auto;
+    box-shadow: 10px 10px 5px #ccc;
+    border-radius: 25px;
+    padding: 20px;
+}
+
+@media (min-width: 568px) {
+    .mid-project1, .mid-project2, .mid-experience1, .mid-experience2, .mid-project3 {
+        width: 60%;
+    }
+}
+
+/* --- Buttons --- */
+.download-btn {
+    background: linear-gradient(to bottom, #66BFBF 5%, #11999E 100%);
+    background-color: #66BFBF;
+    border-radius: 5px;
+    display: inline-block;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    height: 50px;
+    line-height: 50px;
+    width: 140px;
+    text-shadow: 0px 1px 0px #528009;
+}
+
+.download-btn:hover {
+    background: linear-gradient(to bottom, #11999E 5%, #66BFBF 100%);
+    background-color: #11999E;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 20px;
+    border: none;
+    border-bottom: 4px solid #11999E;
+    background: #d0dfe8; /* Legacy button color */
+    font-size: 16px;
+    font-weight: 400;
+    color: #66BFBF;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #66BFBF;
+    color: #EAF6F6;
+    text-decoration: none;
+}
+
+/* --- NEW CONTACT PAGE STYLES --- */
+
+/* Card Container */
 .contact-card {
     background: white;
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Soft shadow */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 600px;
+    text-align: left; /* Important: Align form text to left */
 }
 
+/* Form Headings */
 .formLabel {
     text-align: center;
     color: #333;
@@ -323,7 +221,7 @@ body {
     font-size: 1.8rem;
 }
 
-/* Input Group Styling */
+/* Form Layout */
 .form-group {
     margin-bottom: 20px;
     width: 100%;
@@ -331,10 +229,9 @@ body {
 
 .form-row {
     display: flex;
-    gap: 20px; /* Space between first and last name */
+    gap: 20px;
 }
 
-/* Responsive row for mobile */
 @media (max-width: 600px) {
     .form-row {
         flex-direction: column;
@@ -350,7 +247,7 @@ label {
     font-size: 0.9rem;
 }
 
-/* Input Fields Styling */
+/* Inputs */
 input[type="text"],
 input[type="email"],
 input[type="tel"],
@@ -361,43 +258,42 @@ textarea {
     border-radius: 5px;
     font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
-    transition: border-color 0.3s ease;
+    background: white; /* Override legacy background */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input:focus, textarea:focus {
     outline: none;
-    border-color: #66bfbf; /* Use your theme color here */
+    border-color: #66bfbf;
     box-shadow: 0 0 5px rgba(102, 191, 191, 0.3);
 }
 
 textarea {
-    resize: vertical; /* Allow user to resize height only */
+    resize: vertical;
 }
 
-/* Button Styling */
-button[type="submit"] {
-    width: 100%;
-    padding: 15px;
-    background-color: #11999E; /* Teal theme color */
+/* Submit Button Override */
+#submit-btn {
+    background-color: #11999E;
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 1.1rem;
+    padding: 15px;
     font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
     margin-top: 10px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-button[type="submit"]:hover {
+#submit-btn:hover {
     background-color: #0e8489;
+    color: white;
 }
 
-button[type="submit"]:active {
+#submit-btn:active {
     transform: scale(0.98);
 }
 
-/* Status Messages */
+/* Form Status Messages */
 #my-form-status {
     margin-top: 20px;
     text-align: center;
