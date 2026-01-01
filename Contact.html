@@ -1,71 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <title>Contact | Bhakti Pokhrel</title>
-  <meta name="description" content="Contact Bhakti Pokhrel — Software Engineer." />
 
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="images/favicon.ico" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" href="./src/images/favicon.ico" />
 </head>
 
 <body>
 <header class="top-container">
   <div class="header-grid">
+    <img class="logo" src="./src/images/favicon.png" alt="Logo">
+    <button class="nav-toggle">☰</button>
 
-    <img class="logo" src="./images/favicon.png" alt="Logo">
-
-    <!-- HAMBURGER BUTTON (REQUIRED) -->
-    <button class="nav-toggle" aria-label="Toggle navigation">
-      ☰
-    </button>
-
-    <!-- NAVIGATION -->
     <nav class="nav">
       <a href="index.html">Home</a>
       <a href="Projects.html">Projects</a>
       <a href="Experiences.html">Experience</a>
       <a href="Resume.html">Resume</a>
-      <a href="Contact.html">Contact</a>
+      <a class="active" href="Contact.html">Contact</a>
     </nav>
 
-    <!-- DARK MODE BUTTON -->
-    <button class="theme-toggle" aria-label="Toggle dark mode">
-      🌙
-    </button>
-
+    <button class="theme-toggle">🌙</button>
   </div>
+
+  <h1>Contact Me</h1>
 </header>
 
-
-<main class="middle-container">
-  <form class="contact-card" action="https://formspree.io/f/mjvjgbop" method="POST">
-    <h2>Send a Message</h2>
-
-    <div class="form-grid">
-      <input type="text" name="First Name" placeholder="First Name" required />
-      <input type="text" name="Last Name" placeholder="Last Name" required />
-    </div>
-
-    <input type="email" name="Email" placeholder="Email" required />
-    <input type="tel" name="Phone" placeholder="Phone (optional)" />
-    <textarea name="Message" placeholder="Your message..." required></textarea>
-
-    <button type="submit">Send Message</button>
+<main class="middle-container page">
+  <form class="contact-card">
+    <input type="text" placeholder="First Name" required>
+    <input type="text" placeholder="Last Name" required>
+    <input type="email" placeholder="Email" required>
+    <textarea placeholder="Message"></textarea>
+    <button type="submit" class="btn">Send</button>
   </form>
 </main>
 
 <footer class="bottom-container">
-  <p>© 2025 Bhakti Pokhrel</p>
+  © 2025 Bhakti Pokhrel
 </footer>
 
-<script>
-  document.querySelector('.nav-toggle')
-    .addEventListener('click', () =>
-      document.querySelector('.nav').classList.toggle('open')
-    );
-</script>
+<script src="./site.js" defer></script>
 </body>
 </html>
