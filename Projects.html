@@ -1,117 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Projects</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="images/favicon.ico">
-      <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Montserrat+Alternates&family=Sacramento&display=swap" rel="stylesheet">
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects | Bhakti Pokhrel</title>
 
-  </head>
-  <header class="top-container">
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" href="./src/images/favicon.ico" />
+</head>
+
+<body>
+<header class="top-container">
   <div class="header-grid">
+    <img class="logo" src="./src/images/favicon.png" alt="Logo">
 
-    <img class="logo" src="./images/favicon.png" alt="Logo">
+    <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
 
-    <!-- HAMBURGER BUTTON (REQUIRED) -->
-    <button class="nav-toggle" aria-label="Toggle navigation">
-      ☰
-    </button>
-
-    <!-- NAVIGATION -->
     <nav class="nav">
       <a href="index.html">Home</a>
-      <a href="Projects.html">Projects</a>
+      <a class="active" href="Projects.html">Projects</a>
       <a href="Experiences.html">Experience</a>
       <a href="Resume.html">Resume</a>
       <a href="Contact.html">Contact</a>
     </nav>
 
-    <!-- DARK MODE BUTTON -->
-    <button class="theme-toggle" aria-label="Toggle dark mode">
-      🌙
-    </button>
-
+    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
   </div>
+
+  <h1>Projects</h1>
 </header>
 
-  <body>
-    <div class="top-container">
-      <a href="index.html"><img class="computer" src="images/favicon.png" alt="computer"></a>
-      <h1 class="Name"> Projects</h1>
-      <br>
-      <p class="index">Here are some of my previous projects</p>
-      <img class="cpuImg" src="images/skill.png" alt="cpu">
+<main class="middle-container page">
+  <section class="skill-grid">
 
-      <div class="sidenav">
-        <a href="index.html">Home</a>
-        <a href="Projects.html">Projects</a>
-        <a href="Experiences.html">Experience</a>
-        <a href="Resume.html">Resume</a>
-        <a href="Contact.html">Contact</a>
-      </div>
-  </div>
-  <div class="middle-container">
-    <div class="mid-project">
-      <div class="mid-project1">
-        <h4>Personal Page 1</h4>
-        <br>
-        <div class="project-pic" style="display:inline;">
-          <img src="images/personalCV.JPG" alt="Peronal project pic" class="skill-pic">
-        </div>
-        <div class="skill-row" style="display: inline;">
-          <p>This is my first web page that I have created</p>
-          <p>I have created this page using self learning courses on youtube and linkedIn</p>
-          <p>I have been happy so for with what I have created from self learning</p>
-        </div>
-        <div class="live-button" style = "display: inline;">
-          <a class="download-btn" href="https://pokhrebi.github.io/CV1.01/" target="_blank" rel="noreferrer noopener">Live</a>
-        </div>
-      </div>
-      <br>
-      <br>
-      <div class="mid-project2">
-        <h4>GitHub</h4>
-        <br>
-        <div class="project-pic">
-          <img src="images/github.png" alt="Peronal project pic" class="skill-pic">
-        </div>
-        <div class="skill-row" style="display: inline;">
-          <p>I have added some smaller projects on to my github page</p>
-          <p>Some of them are problem solving code blocks</p>
-          <p>I have also added class labs in here</p>
-        </div>
-        <div class="live-button" style = "display: inline;">
-          <a class="download-btn" href="https://github.com/pokhrebi" target="_blank" rel="noreferrer noopener">GitHub</a>
-        </div>
-      </div>
-      <br>
-      <br>
-      <div class="mid-project3">
-        <h4>BASO</h4>
-        <br>
-        <div class="project-pic">
-          <img src="images/baso.png" alt="Peronal project pic" class="skill-pic">
-        </div>
-        <div class="skill-row" style="display: inline;">
-          <p>BASO-UC: Bhutanese American Student Organization at University of Cincinnati</p>
-          <p>Planned FAFSA workshop events for high school graduates</p>
-          <p>Planned College workshop for High School Students</p>
-        </div>
-        <div class="live-button" style = "display: inline;">
-          <a class="download-btn" href="https://baso-usa.org/" target="_blank" rel="noreferrer noopener">BASO Main</a>
-        </div>
-      </div>
-      <br>
-      <br>
-      <div>
-        <iframe width="820" height="615" src="https://www.youtube.com/embed/q5yPun3wdcI"></iframe>
-      </div>
+    <div class="skill-card">
+      <h3>MyTravelDiary</h3>
+      <p>
+        Social travel platform built with Angular, ASP.NET, SQL Server, and Azure.
+      </p>
     </div>
-  </div>
-  <div class="bottom-container">
-    <p class="bottom-footer">© 2025 Bhakti Pokhrel.</p>
-  </div>
-  </body>
+
+    <div class="skill-card">
+      <h3>Enterprise API Platform</h3>
+      <p>
+        Secure .NET APIs with Azure AD, role-based auth, and performance tuning.
+      </p>
+    </div>
+
+  </section>
+</main>
+
+<footer class="bottom-container">
+  © 2025 Bhakti Pokhrel
+</footer>
+
+<script src="./site.js" defer></script>
+</body>
 </html>
