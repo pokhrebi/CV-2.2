@@ -129,6 +129,22 @@ nav {
   margin: 2rem auto 0;
 }
 
+/* ==========================
+   PAGE CONTENT
+========================== */
+.page-content {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.middle-container {
+  flex: 1;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
 
 .card-grid {
   display: grid;
