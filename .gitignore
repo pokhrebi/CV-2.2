@@ -8,6 +8,10 @@
 /dist/
 /.angular/
 
+# Ignore built site artifacts (we deploy from CI)
+/docs/
+
+
 # Node modules
 /node_modules/
 
