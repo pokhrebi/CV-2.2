@@ -12,22 +12,33 @@
 </head>
 
 <body>
-<header class="top-container small">
+<header class="top-container">
   <div class="header-grid">
-    <img class="logo" src="images/favicon.png" alt="Logo" />
-    <button class="nav-toggle">☰</button>
+
+    <img class="logo" src="./images/favicon.png" alt="Logo">
+
+    <!-- HAMBURGER BUTTON (REQUIRED) -->
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      ☰
+    </button>
+
+    <!-- NAVIGATION -->
     <nav class="nav">
       <a href="index.html">Home</a>
       <a href="Projects.html">Projects</a>
       <a href="Experiences.html">Experience</a>
       <a href="Resume.html">Resume</a>
-      <a class="active" href="Contact.html">Contact</a>
+      <a href="Contact.html">Contact</a>
     </nav>
-  </div>
 
-  <h1>Contact Me</h1>
-  <p>Let’s build something great.</p>
+    <!-- DARK MODE BUTTON -->
+    <button class="theme-toggle" aria-label="Toggle dark mode">
+      🌙
+    </button>
+
+  </div>
 </header>
+
 
 <main class="middle-container">
   <form class="contact-card" action="https://formspree.io/f/mjvjgbop" method="POST">
