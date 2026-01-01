@@ -1,164 +1,68 @@
-<!DOCTYPE html> <html lang="en" dir="ltr">
-
-<head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>Bhakti Pokhrel</title>
-
-<!-- Corrected CSS path --> <link rel="stylesheet" href="src/css/styles.css">
-
-<!-- Corrected favicon path --> <link rel="icon" href="src/images/favicon.ico">
-
-<link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Montserrat+Alternates&family=Sacramento&display=swap" rel="stylesheet">
-
-<style> /* General image styling for consistent sizing and alignment */ img { max-width: 100%; height: auto; display: block; margin-left: auto; margin-right: auto; }
-  /* Specific image classes adjustments */
-.computer, .cpu, .book, .skill-pic, .selfImg {
-  max-width: 150px;
-  height: auto;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-/* Container adjustments for better layout */
-.top-container {
-  text-align: center;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #ddd;
-}
-
-.middle-container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 30px;
-}
-
-.profile {
-  flex: 1 1 300px;
-  max-width: 350px;
-  text-align: center;
-}
-
-.skill-row {
-  flex: 1 1 300px;
-  max-width: 350px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  text-align: center;
-}
-
-/* Bottom container styling */
-.bottom-container {
-  text-align: center;
-  padding: 20px;
-  background-color: #f1f1f1;
-  border-top: 1px solid #ddd;
-  margin-top: 40px;
-}
-
-/* Link styling in bottom container */
-.bottom-container a {
-  margin: 0 15px;
-  text-decoration: none;
-  color: #0073b1;
-  font-weight: 600;
-  transition: color 0.3s ease;
-}
-
-.bottom-container a:hover {
-  color: #005582;
-}
-
-/* Navigation side bar styling */
-.sidenav {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  flex-wrap: wrap;
-}
-
-.sidenav a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 600;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-}
-
-.sidenav a:hover {
-  background-color: #e0e0e0;
-}
-
-/* Headings styling */
-h1.Name {
-  font-family: 'Montserrat Alternates', sans-serif;
-  font-weight: 700;
-  margin: 10px 0 5px 0;
-  color: #222;
-}
-
-h2, h3 {
-  font-family: 'Montserrat', sans-serif;
-  color: #444;
-  margin-bottom: 10px;
-}
-
-/* Paragraph styling */
-p.index, p.education-p, p.skill-p {
-  font-family: 'Montserrat', sans-serif;
-  color: #555;
-  line-height: 1.5;
-  margin-top: 0;
-}
-
-</style>
-
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bhakti Pokhrel | Software Engineer</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Montserrat+Alternates&family=Sacramento&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="top-container"> <a href="index.html"> <img class="computer" src="src/images/favicon.png" alt="computer"> </a>
-<h1 class="Name"> I'm Bhakti</h1>
-<p class="index">a Software development student</p>
-
-<img class="cpu" src="src/images/cpu.png" alt="cpu">
-
-<div class="sidenav">
-  <a href="index.html">Home</a>
-  <a href="Projects.html">Projects</a>
-  <a href="Experiences.html">Experiences</a>
-  <a href="Resume.html">Resume</a>
-  <a href="Contact.html">Contact</a>
-</div>
-</div>
-<div class="middle-container"> <div class="profile"> <img src="src/images/self.jpg" alt="Bhakti's Resume Picture" class="selfImg"> <h2>Hello</h2>
-  <div class="skill-row">
-    <p>I am a Software development student currently attending University of Cincinnati. A coffee lover.</p>
+  <div class="top-container">
+    <a href="index.html"><img class="computer" src="images/favicon.png" alt="computer"></a>
+    <h1 class="Name">I'm Bhakti</h1>
+    <h2 class="subtitle">a <span class="pro">Software Engineer</span>.</h2>
+    <img class="cpu" src="images/book.png" alt="cloud-computing">
+    
+    <nav class="sidenav">
+        <a href="index.html" class="active">Home</a>
+        <a href="Projects.html">Projects</a>
+        <a href="Experiences.html">Experience</a>
+        <a href="Resume.html">Resume</a>
+        <a href="Contact.html">Contact</a>
+    </nav>
   </div>
-</div>
 
-<div class="skill-row">
-  <img class="book" src="src/images/book.png" alt="Education">
-  <h3>Education</h3>
-  <p class="education-p">I am currently attending University of Cincinnati (UC) for Bachelors in Information Technology (BSIT) with technical speciality in Software development.</p>
-</div>
+  <div class="middle-container">
+    <div class="profile">
+      <img class="selfImg" src="images/bhakti.png" alt="Bhakti Profile">
+      <h2>Hello.</h2>
+      <p class="intro">I am a Software Engineer at <strong>Medpace</strong> and a University of Cincinnati graduate. I specialize in building scalable full-stack web applications using the .NET ecosystem and Azure cloud technologies.</p>
+    </div>
 
-<div class="skill-row">
-  <img class="skill-pic" src="src/images/skill.png" alt="Skill picture">
-  <h3>Process</h3>
-  <p class="skill-p">I started learning how to use a computer when I was 12 years old. After graduating high school, I started learning code.</p>
-</div>
-</div>
+    <hr>
 
-<div class="bottom-container"> <a class="linkedin" href="https://www.linkedin.com/in/bhaktipokhrel" target="_blank" rel="noreferrer noopener">LinkedIn</a> <a class="web-link" href="https://pokhrebi.github.io/CV1.01/" target="_blank" rel="noreferrer noopener">Website 1.0</a> <p class="bottom-footer">© 2021 Bhakti Pokhrel.</p> </div>
+    <div class="skills">
+      <h2>My Tech Stack</h2>
+      <div class="skill-row">
+        <img class="skill-pic" src="https://cdn-icons-png.flaticon.com/512/6132/6132222.png" alt="code-icon">
+        <h3>Full Stack Development</h3>
+        <p>Expertise in <strong>Angular.js, TypeScript, C#, and .NET</strong>. I build responsive front-end layouts and robust back-end APIs that drive enterprise-level applications.</p>
+      </div>
+      <div class="skill-row">
+        <img class="book" src="https://cdn-icons-png.flaticon.com/512/2906/2906274.png" alt="cloud-icon">
+        <h3>Cloud & Database</h3>
+        <p>Microsoft Azure Certified (<strong>AZ-900, DP-900</strong>). Experienced in designing schemas for <strong>Cosmos DB</strong> and optimizing <strong>SQL Server</strong> queries for performance.</p>
+      </div>
+    </div>
+    
+    <hr>
+    
+    <div class="contact-me">
+      <h2>Get In Touch</h2>
+      <h3>Currently based in West Chester, OH.</h3>
+      <p class="contact-message">Have a project in mind or want to discuss .NET architecture? Let's connect.</p>
+      <a class="btn" href="Contact.html">CONTACT ME</a>
+    </div>
+  </div>
 
-</body> </html>
+  <div class="bottom-container">
+    <a class="linkedin" href="https://www.linkedin.com/in/bhaktipokhrel" target="_blank">LinkedIn</a>
+    <a class="web-link" href="https://github.com/pokhrebi" target="_blank">GitHub</a>
+    <p class="bottom-footer">© 2025 Bhakti Pokhrel.</p>
+  </div>
+
+</body>
+</html>
