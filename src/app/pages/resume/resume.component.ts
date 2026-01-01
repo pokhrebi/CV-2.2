@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SeoService } from '../../core/seo.service';
 
 @Component({
-  template: `
-    <h1>Resume</h1>
-
-    <p>
-      Download my resume to learn more about my experience and technical background.
-    </p>
-
-    <a href="assets/Bhakti_Pokhrel_Resume.pdf" target="_blank">
-      Download Resume (PDF)
-    </a>
-  `
+  templateUrl: './resume.component.html'
 })
-export class ResumeComponent {}
+export class ResumeComponent implements OnInit {
+  constructor(private seo: SeoService) {}
+
+  ngOnInit(): void {
+    this.seo.update(
+      'Resume | Bhakti Pokhrel',
+      'Download the resume of Bhakti Pokhrel, a Full-Stack Software Engineer with experience in Angular, ASP.NET, and Azure.'
+    );
+  }
+}

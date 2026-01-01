@@ -1,21 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SeoService } from '../../core/seo.service';
 
 @Component({
-  template: `
-    <h1>Projects</h1>
-
-    <h3>MyTravelDiary</h3>
-    <p>
-      A social travel platform where users can share blogs, photos, and stories,
-      follow other travelers, and manage personalized profiles.
-    </p>
-
-    <ul>
-      <li>Angular frontend</li>
-      <li>ASP.NET Core Web API</li>
-      <li>SQL Server</li>
-      <li>Azure App Services</li>
-    </ul>
-  `
+  templateUrl: './projects.component.html'
 })
-export class ProjectsComponent {}
+export class ProjectsComponent implements OnInit {
+  constructor(private seo: SeoService) {}
+
+  ngOnInit() {
+    this.seo.update(
+      'Projects | Bhakti Pokhrel',
+      'Software projects by Bhakti Pokhrel including Angular and ASP.NET applications.'
+    );
+  }
+}

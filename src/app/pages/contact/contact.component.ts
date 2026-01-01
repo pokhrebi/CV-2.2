@@ -1,19 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SeoService } from '../../core/seo.service';
 
 @Component({
-  template: `
-    <h1>Contact</h1>
-
-    <p>
-      Interested in working together or have a question?
-      Feel free to reach out.
-    </p>
-
-    <ul>
-      <li>Email: <a href="mailto:youremail@example.com">youremail@example.com</a></li>
-      <li>GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></li>
-      <li>LinkedIn: <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a></li>
-    </ul>
-  `
+  templateUrl: './contact.component.html'
 })
-export class ContactComponent {}
+export class ContactComponent implements OnInit {
+  constructor(private seo: SeoService) {}
+
+  ngOnInit(): void {
+    this.seo.update(
+      'Contact | Bhakti Pokhrel',
+      'Contact Bhakti Pokhrel for software engineering opportunities, collaborations, or inquiries.'
+    );
+  }
+}
