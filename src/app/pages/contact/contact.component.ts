@@ -105,7 +105,11 @@ export class ContactComponent implements OnInit {
 
     } catch (error) {
       console.error('Email sending failed:', error);
-      alert('Sorry, there was an error sending your message. Please try again later.');
+      if (error.message.includes('Maximum')) {
+        alert(error.message);
+      } else {
+        alert('Sorry, there was an error sending your message. Please try again later.');
+      }
     } finally {
       this.isSubmitting = false;
     }
