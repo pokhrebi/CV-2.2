@@ -17,11 +17,12 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          path: .
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,9 +35,6 @@ jobs:
 
       - name: Build
         run: npm run build -- --configuration production
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
 
       - name: Add .nojekyll file
         run: touch ./dist/bhakti-portfolio/.nojekyll
