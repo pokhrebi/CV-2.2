@@ -116,10 +116,9 @@ nav {
 ========================== */
 .card {
   background: var(--card);
+  padding: 30px;
   border-radius: 20px;
-  padding: 2.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
 }
 
 /* ==========================
@@ -128,6 +127,13 @@ nav {
 .hero-img {
   max-width: 380px;
   margin: 2rem auto 0;
+}
+
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
 }
 
 .avatar {

@@ -12,6 +12,7 @@ export class NavbarComponent {
   }
 
   toggleTheme() {
-    document.documentElement.toggleAttribute('data-theme', 'dark');
+    const isDark = !document.documentElement.hasAttribute('data-theme');
+    document.documentElement.toggleAttribute('data-theme', isDark);
   }
 }

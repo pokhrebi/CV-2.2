@@ -2,15 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { SeoService } from '../../core/seo.service';
 
 @Component({
+  selector: 'app-projects',
   templateUrl: './projects.component.html'
 })
 export class ProjectsComponent implements OnInit {
-  constructor(private seo: SeoService) {}
 
-  ngOnInit() {
-    this.seo.update(
-      'Projects | Bhakti Pokhrel',
-      'Software projects by Bhakti Pokhrel including Angular and ASP.NET applications.'
-    );
+  constructor(private seo: SeoService) { }
+
+  ngOnInit(): void {
+    this.seo.update('Projects - Bhakti Pokhrel', 'Portfolio projects of Bhakti Pokhrel');
   }
 }

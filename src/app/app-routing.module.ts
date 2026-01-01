@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'projects', component: ProjectsComponent },
   { path: 'resume', component: ResumeComponent },
   { path: 'contact', component: ContactComponent },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' }  // fallback to home
 ];
 
 @NgModule({
