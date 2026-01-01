@@ -1,360 +1,188 @@
-/* --- Global Resets & Typography --- */
+/* ===== RESET ===== */
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ===== BASE ===== */
 body {
-    margin: 0;
-    color: #40514E;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 100%;
-    background-color: #f4f7f6; /* Light grey background for better contrast */
+  font-family: 'Montserrat', sans-serif;
+  background: #f4f7f6;
+  color: #40514E;
+  text-align: center;
+  line-height: 1.6;
 }
 
 h1 {
-    font-size: 5rem;
-    color: #66BFBF;
-    margin: 20px 0;
-    font-family: 'Sacramento', cursive;
+  font-family: 'Sacramento', cursive;
+  font-size: clamp(3rem, 6vw, 5rem);
+  color: #66BFBF;
 }
 
 h2 {
-    color: #66BFBF;
-    font-family: 'Montserrat Alternates', sans-serif;
-    font-weight: normal;
-    padding-top: 10px;
+  color: #66BFBF;
 }
 
 a {
-    color: #11999E;
-    text-decoration: none;
+  color: #11999E;
+  text-decoration: none;
 }
 
-a:hover {
-    color: #EAF6F6;
-    text-decoration: underline;
-    text-decoration-color: grey;
-}
-
-/* --- Layout Containers --- */
+/* ===== HEADER ===== */
 .top-container {
-    background-color: #E4F9F5;
-    padding: 100px 20px 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  background: #E4F9F5;
+  padding: 40px 20px 60px;
 }
 
+.header-grid {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.logo {
+  width: 60px;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+}
+
+.nav a {
+  font-weight: 600;
+}
+
+.nav a:hover {
+  color: #064579;
+}
+
+.nav-toggle {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ===== HERO ===== */
+.hero-img {
+  margin: 40px auto 0;
+  max-width: 400px;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ===== MAIN ===== */
 .middle-container {
-    /* Updated to Flexbox for better centering on all pages */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 50px 0;
-    padding: 20px;
-    background-color: transparent; /* Changed from white to transparent to show body grey */
+  max-width: 1100px;
+  margin: auto;
+  padding: 40px 20px;
 }
 
-.bottom-container {
-    background-color: #66BFBF;
-    padding: 50px 0 20px;
+/* ===== PROFILE ===== */
+.avatar {
+  width: 160px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
 }
 
-/* --- Navigation & Footer --- */
-.sidenav {
-    width: 100%;
-    position: static; /* No longer floating on the left */
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    padding: 20px 0;
-    background-color: #E4F9F5;
+/* ===== SKILLS ===== */
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
 }
 
-.sidenav a {
-    padding: 10px;
-    font-size: 1.1rem;
-    height: auto; /* Remove fixed 80px height */
-    display: inline-block;
+.skill-card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+  transition: transform .3s ease, box-shadow .3s ease;
 }
 
-.sidenav a:hover {
-    color: #064579;
+.skill-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 40px rgba(0,0,0,.15);
 }
 
-.bottom-footer {
-    color: #EAF6F6;
-    font-size: 0.75rem;
-    padding: 20px 0;
+/* ===== CTA ===== */
+.btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 14px 32px;
+  border-radius: 50px;
+  background: #11999E;
+  color: white;
+  font-weight: 700;
+  transition: transform .2s ease, background .3s ease;
 }
 
-.linkedin, .web-link {
-    color: #11999E;
-    display: inline;
-    margin: 10px 20px;
+.btn:hover {
+  background: #0e8489;
+  transform: scale(1.05);
 }
 
-/* --- Home Page Specifics --- */
-.computer {
-    height: 150px;
-    width: auto;
-    margin-bottom: 20px;
-    order: -1; /* Keeps it above the name */
-}
-
-.cpu {
-    height: 600px;
-    width: auto;
-    margin: 0 auto;
-    padding-top: 100px;
-}
-
-.index {
-    font-size: 1.5rem;
-    color: #66BFBF;
-    font-weight: normal;
-    line-height: .005;
-}
-
-.sidenav {
-    width: 100%;
-    position: static; /* No longer floating on the left */
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    padding: 20px 0;
-    background-color: #E4F9F5;
-}
-
-.sidenav a {
-    padding: 10px;
-    font-size: 1.1rem;
-    height: auto; /* Remove fixed 80px height */
-    display: inline-block;
-}
-
-.selfImg { width: 15%; }
-.cpuImg { width: 35%; }
-.book { width: 15%; float: right; margin-right: 30px; }
-.skill-pic { width: 15%; float: left; margin-right: 30px; }
-
-/* --- Projects & Experience Cards --- */
-.mid-project1, .mid-project2, .mid-experience1, .mid-experience2, .mid-project3 {
-    position: relative;
-    /* Removed fixed height so content fits naturally */
-    min-height: 300px; 
-    width: 80%; /* Improved responsiveness */
-    max-width: 1500px;
-    background-color: #E4F9F5;
-    margin: 20px auto;
-    box-shadow: 10px 10px 5px #ccc;
-    border-radius: 25px;
-    padding: 20px;
-}
-
-@media (min-width: 568px) {
-    .mid-project1, .mid-project2, .mid-experience1, .mid-experience2, .mid-project3 {
-        width: 60%;
-    }
-}
-
-/* --- Buttons --- */
-.download-btn {
-    background: linear-gradient(to bottom, #66BFBF 5%, #11999E 100%);
-    background-color: #66BFBF;
-    border-radius: 5px;
-    display: inline-block;
-    color: #ffffff;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 15px;
-    font-weight: bold;
-    height: 50px;
-    line-height: 50px;
-    width: 140px;
-    text-shadow: 0px 1px 0px #528009;
-}
-
-.download-btn:hover {
-    background: linear-gradient(to bottom, #11999E 5%, #66BFBF 100%);
-    background-color: #11999E;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 20px;
-    border-radius: 20px;
-    border: none;
-    border-bottom: 4px solid #11999E;
-    background: #d0dfe8; /* Legacy button color */
-    font-size: 16px;
-    font-weight: 400;
-    color: #66BFBF;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #66BFBF;
-    color: #EAF6F6;
-    text-decoration: none;
-}
-
-/* --- NEW CONTACT PAGE STYLES --- */
-
-/* Card Container */
+/* ===== CONTACT ===== */
 .contact-card {
+  background: white;
+  max-width: 600px;
+  margin: auto;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.1);
+}
+
+.contact-card input,
+.contact-card textarea {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* ===== FOOTER ===== */
+.bottom-container {
+  background: #66BFBF;
+  color: white;
+  padding: 20px;
+  font-size: .8rem;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .nav {
+    position: absolute;
+    top: 80px;
+    right: 20px;
     background: white;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 600px;
-    text-align: left; /* Important: Align form text to left */
-}
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 12px;
+    display: none;
+  }
 
-/* Form Headings */
-.formLabel {
-    text-align: center;
-    color: #333;
-    font-family: 'Montserrat Alternates', sans-serif;
-    margin-bottom: 30px;
-    font-size: 1.8rem;
-}
-
-/* Form Layout */
-.form-group {
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-.form-row {
+  .nav.open {
     display: flex;
-    gap: 20px;
-}
+  }
 
-@media (max-width: 600px) {
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
-}
-
-label {
+  .nav-toggle {
     display: block;
-    margin-bottom: 8px;
-    color: #666;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-/* Inputs */
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-textarea {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    background: white; /* Override legacy background */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-input:focus, textarea:focus {
-    outline: none;
-    border-color: #66bfbf;
-    box-shadow: 0 0 5px rgba(102, 191, 191, 0.3);
-}
-
-textarea {
-    resize: vertical;
-}
-
-/* Submit Button Override */
-#submit-btn {
-    background-color: #11999E;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 15px;
-    font-weight: bold;
-    margin-top: 10px;
-    transition: background-color 0.3s ease, transform 0.1s ease;
-}
-
-#submit-btn:hover {
-    background-color: #0e8489;
-    color: white;
-}
-
-#submit-btn:active {
-    transform: scale(0.98);
-}
-
-/* Form Status Messages */
-#my-form-status {
-    margin-top: 20px;
-    text-align: center;
-    font-weight: bold;
-    border-radius: 5px;
-}
-
-.success {
-    color: #155724;
-    background-color: #d4edda;
-    padding: 10px;
-}
-
-.error {
-    color: #721c24;
-    background-color: #f8d7da;
-    padding: 10px;
-}
-
-/* --- Resume Page Enhancements --- */
-.resume-viewer-card {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    width: 90%;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.resume-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.pdf-container {
-    margin-top: 20px;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-/* Ensure the download button looks consistent */
-.download-btn {
-    padding: 12px 25px;
-    background-color: #11999E;
-    color: white !important;
-    border-radius: 50px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.download-btn:hover {
-    background-color: #40514E;
-    text-decoration: none;
+  }
 }
