@@ -80,9 +80,8 @@ export class ContactComponent implements OnInit {
     this.isSubmitting = true;
 
     try {
-      // Prepare email data
-      const emailData = {
-        to_email: 'myphotosfirst@gmail.com',
+      // Prepare contact data
+      const contactData = {
         from_name: this.name,
         from_email: this.email,
         phone: this.phone,
@@ -91,8 +90,8 @@ export class ContactComponent implements OnInit {
         timestamp: new Date().toISOString()
       };
 
-      // Send email using the contact service
-      await this.contactService.sendContactEmail(emailData);
+      // Submit form via EmailJS
+      await this.contactService.submitContact(contactData);
 
       // Success
       this.showSuccessMessage = true;

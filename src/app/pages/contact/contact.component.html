@@ -38,7 +38,7 @@
 
           <!-- Anti-bot: Math question -->
           <div class="form-group">
-            <label for="math">Human Verification: What is {{mathNum1}} + {{mathNum2}}? *</label>
+            <label for="math">What is {{mathNum1}} + {{mathNum2}}? *</label>
             <input type="text" id="math" placeholder="Enter the sum" required [(ngModel)]="userMathAnswer" name="mathAnswer" #mathInput="ngModel">
             <div class="error-message" *ngIf="mathInput.invalid && mathInput.touched">Please solve the math problem</div>
             <small class="help-text">This helps us prevent spam messages</small>
