@@ -312,3 +312,46 @@ textarea {
     background-color: #f8d7da;
     padding: 10px;
 }
+
+/* --- Resume Page Enhancements --- */
+.resume-viewer-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.resume-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.pdf-container {
+    margin-top: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Ensure the download button looks consistent */
+.download-btn {
+    padding: 12px 25px;
+    background-color: #11999E;
+    color: white !important;
+    border-radius: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.download-btn:hover {
+    background-color: #40514E;
+    text-decoration: none;
+}
