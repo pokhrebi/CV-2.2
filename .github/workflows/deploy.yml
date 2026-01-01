@@ -32,9 +32,9 @@ jobs:
 
       - name: Build
         run: |
-          sed -i "s/SERVICE_ID_PLACEHOLDER/${{ secrets.EMAILJS_SERVICE_ID }}/g" src/environments/environment.prod.ts
-          sed -i "s/TEMPLATE_ID_PLACEHOLDER/${{ secrets.EMAILJS_TEMPLATE_ID }}/g" src/environments/environment.prod.ts
-          sed -i "s/PUBLIC_KEY_PLACEHOLDER/${{ secrets.EMAILJS_PUBLIC_KEY }}/g" src/environments/environment.prod.ts
+          sed -i "s/SERVICE_ID_PLACEHOLDER/${{ secrets.EMAILJS_SERVICE_ID || 'service_7lz3f1q' }}/g" src/environments/environment.prod.ts
+          sed -i "s/TEMPLATE_ID_PLACEHOLDER/${{ secrets.EMAILJS_TEMPLATE_ID || 'template_1s7afwq' }}/g" src/environments/environment.prod.ts
+          sed -i "s/PUBLIC_KEY_PLACEHOLDER/${{ secrets.EMAILJS_PUBLIC_KEY || 'Y18-lybahLDWpU9y9' }}/g" src/environments/environment.prod.ts
           npm run build -- --configuration production
 
       - name: Setup Pages
