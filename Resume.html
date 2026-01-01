@@ -1,80 +1,49 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Resume | Bhakti Pokhrel</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="images/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Montserrat+Alternates&family=Sacramento&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resume | Bhakti Pokhrel</title>
+
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" href="./src/images/favicon.ico" />
 </head>
-    <header class="top-container">
+
+<body>
+<header class="top-container">
   <div class="header-grid">
+    <img class="logo" src="./src/images/favicon.png" alt="Logo">
 
-    <img class="logo" src="./images/favicon.png" alt="Logo">
+    <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
 
-    <!-- HAMBURGER BUTTON (REQUIRED) -->
-    <button class="nav-toggle" aria-label="Toggle navigation">
-      ☰
-    </button>
-
-    <!-- NAVIGATION -->
     <nav class="nav">
       <a href="index.html">Home</a>
       <a href="Projects.html">Projects</a>
       <a href="Experiences.html">Experience</a>
-      <a href="Resume.html">Resume</a>
+      <a class="active" href="Resume.html">Resume</a>
       <a href="Contact.html">Contact</a>
     </nav>
 
-    <!-- DARK MODE BUTTON -->
-    <button class="theme-toggle" aria-label="Toggle dark mode">
-      🌙
-    </button>
-
+    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
   </div>
+
+  <h1>Resume</h1>
 </header>
 
-<body>
+<main class="middle-container page">
+  <section class="contact-card">
+    <h2>Download Resume</h2>
 
-    <div class="top-container">
-        <a href="index.html"><img class="computer" src="images/favicon.png" alt="computer"></a>
-        <h1 class="Name">Resume</h1>
-        <p class="index">Software Engineer | .NET & Azure Specialist</p>
-        <img class="cpu" src="images/book.png" alt="cpu">
-        
-        <nav class="sidenav">
-            <a href="index.html">Home</a>
-            <a href="Projects.html">Projects</a>
-            <a href="Experiences.html">Experience</a>
-            <a href="Resume.html" class="active">Resume</a>
-            <a href="Contact.html">Contact</a>
-        </nav>
-    </div>
+    <a class="btn" href="./src/Bhakti_Pokhrel_Resume.pdf" download>
+      Download PDF
+    </a>
+  </section>
+</main>
 
-    <main class="middle-container">
-        <div class="resume-viewer-card">
-            <div class="resume-header">
-                <h2>Bhakti Pokhrel, BS</h2>
-                <p>AZ-900 & DP-900 Certified Engineer</p>
-                <a download class="download-btn">Download PDF</a>
-            </div>
+<footer class="bottom-container">
+  © 2025 Bhakti Pokhrel
+</footer>
 
-            <hr>
-
-            <div class="pdf-container">
-                <iframe src="Bhakti_Pokhrel_Resume.pdf" width="100%" height="800px" style="border: none;">
-                    <p>Your browser does not support PDFs. 
-                       <a href="Bhakti_Pokhrel_Resume.pdf">Download the PDF</a> to view it.
-                    </p>
-                </iframe>
-            </div>
-        </div>
-    </main>
-
-    <footer class="bottom-container">
-        <p class="bottom-footer">© 2025 Bhakti Pokhrel.</p>
-    </footer>
-
+<script src="./site.js" defer></script>
 </body>
 </html>
