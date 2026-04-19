@@ -1,7 +1,313 @@
 <section>
   <div class="container">
-    <span class="eyebrow reveal">Selected work</span>
-    <h1 class="reveal" style="margin-bottom: 3rem;">Experience &amp; projects.</h1>
+    <span class="eyebrow reveal">Selected projects</span>
+    <h1 class="reveal" style="margin-bottom: 3rem;">Things I've built.</h1>
+
+    <div class="project-showcase" style="margin-bottom: 4rem;">
+      <article class="project-card reveal">
+        <div class="project-visual trackcm-visual" aria-hidden="true">
+          <!-- Detailed analytics dashboard mockup -->
+          <div class="browser">
+            <div class="browser-chrome">
+              <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              <div class="url-bar">
+                <span class="lock">🔒</span>
+                <span class="url-text">app.trackcm.io/analytics</span>
+              </div>
+            </div>
+            <div class="browser-body">
+              <aside class="dash-sidebar-full">
+                <div class="brand">
+                  <div class="logo-mark">T</div>
+                  <span class="brand-name">TrackCM</span>
+                </div>
+                <nav class="side-nav">
+                  <div class="nav-group-label">Workspace</div>
+                  <div class="nav-item"><span class="ni-icon">◇</span> Overview</div>
+                  <div class="nav-item active"><span class="ni-icon">▣</span> Analytics</div>
+                  <div class="nav-item"><span class="ni-icon">◈</span> Pages</div>
+                  <div class="nav-item"><span class="ni-icon">◐</span> Leads</div>
+                  <div class="nav-item"><span class="ni-icon">◑</span> Funnels</div>
+                  <div class="nav-group-label">Settings</div>
+                  <div class="nav-item"><span class="ni-icon">○</span> Team</div>
+                  <div class="nav-item"><span class="ni-icon">⬡</span> Billing</div>
+                </nav>
+                <div class="tenant-card">
+                  <div class="tenant-avatar">AC</div>
+                  <div class="tenant-info">
+                    <div class="tenant-name">Acme Corp</div>
+                    <div class="tenant-plan">Pro plan</div>
+                  </div>
+                </div>
+              </aside>
+
+              <section class="dash-main-full">
+                <header class="dash-header">
+                  <div>
+                    <div class="dash-crumbs">Analytics › Overview</div>
+                    <h4 class="dash-title">Live performance</h4>
+                  </div>
+                  <div class="dash-actions">
+                    <span class="chip">Last 7 days</span>
+                    <span class="chip primary">+ Export</span>
+                  </div>
+                </header>
+
+                <div class="kpi-grid">
+                  <div class="kpi">
+                    <span class="kpi-label">Visitors</span>
+                    <span class="kpi-value">12,408</span>
+                    <span class="kpi-delta up">↑ 18.2%</span>
+                    <svg class="kpi-spark" viewBox="0 0 80 24" preserveAspectRatio="none">
+                      <path d="M0,18 L10,15 L20,17 L30,12 L40,14 L50,8 L60,10 L70,5 L80,7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <div class="kpi">
+                    <span class="kpi-label">Leads</span>
+                    <span class="kpi-value">284</span>
+                    <span class="kpi-delta up">↑ 9.4%</span>
+                    <svg class="kpi-spark" viewBox="0 0 80 24" preserveAspectRatio="none">
+                      <path d="M0,20 L10,18 L20,14 L30,16 L40,10 L50,13 L60,8 L70,9 L80,5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <div class="kpi">
+                    <span class="kpi-label">Conversion</span>
+                    <span class="kpi-value">2.29%</span>
+                    <span class="kpi-delta down">↓ 1.2%</span>
+                    <svg class="kpi-spark" viewBox="0 0 80 24" preserveAspectRatio="none">
+                      <path d="M0,8 L10,10 L20,7 L30,12 L40,11 L50,15 L60,13 L70,18 L80,16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="chart-card">
+                  <div class="chart-head">
+                    <div>
+                      <div class="chart-title">Visitors vs Leads</div>
+                      <div class="chart-legend">
+                        <span class="legend-item"><i class="dot-a"></i>Visitors</span>
+                        <span class="legend-item"><i class="dot-b"></i>Leads</span>
+                      </div>
+                    </div>
+                    <span class="chip small">Daily</span>
+                  </div>
+                  <svg class="area-chart" viewBox="0 0 320 100" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="gradA" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="currentColor" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <g class="grid">
+                      <line x1="0" y1="25" x2="320" y2="25"/>
+                      <line x1="0" y1="50" x2="320" y2="50"/>
+                      <line x1="0" y1="75" x2="320" y2="75"/>
+                    </g>
+                    <path d="M0,80 L40,65 L80,68 L120,48 L160,52 L200,32 L240,38 L280,18 L320,22 L320,100 L0,100 Z" fill="url(#gradA)"/>
+                    <path class="line-a" d="M0,80 L40,65 L80,68 L120,48 L160,52 L200,32 L240,38 L280,18 L320,22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path class="line-b" d="M0,90 L40,86 L80,82 L120,78 L160,74 L200,70 L240,65 L280,62 L320,58" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"/>
+                    <circle cx="280" cy="18" r="3" fill="currentColor"/>
+                  </svg>
+                </div>
+
+                <div class="bottom-grid">
+                  <div class="funnel-card">
+                    <div class="chart-title">Conversion funnel</div>
+                    <div class="funnel-step">
+                      <span class="fs-label">Visited</span>
+                      <div class="fs-bar"><div class="fs-fill" style="width: 100%;"></div></div>
+                      <span class="fs-val">12.4k</span>
+                    </div>
+                    <div class="funnel-step">
+                      <span class="fs-label">Engaged</span>
+                      <div class="fs-bar"><div class="fs-fill" style="width: 68%;"></div></div>
+                      <span class="fs-val">8.4k</span>
+                    </div>
+                    <div class="funnel-step">
+                      <span class="fs-label">Form view</span>
+                      <div class="fs-bar"><div class="fs-fill" style="width: 38%;"></div></div>
+                      <span class="fs-val">4.7k</span>
+                    </div>
+                    <div class="funnel-step">
+                      <span class="fs-label">Lead</span>
+                      <div class="fs-bar"><div class="fs-fill" style="width: 14%;"></div></div>
+                      <span class="fs-val">284</span>
+                    </div>
+                  </div>
+
+                  <div class="sources-card">
+                    <div class="chart-title">Top sources</div>
+                    <div class="source-row"><span class="src-dot" style="background:#111"></span><span class="src-name">Direct</span><span class="src-bar-wrap"><span class="src-bar" style="width: 78%"></span></span><span class="src-val">42%</span></div>
+                    <div class="source-row"><span class="src-dot" style="background:#555"></span><span class="src-name">Google</span><span class="src-bar-wrap"><span class="src-bar" style="width: 52%"></span></span><span class="src-val">28%</span></div>
+                    <div class="source-row"><span class="src-dot" style="background:#888"></span><span class="src-name">LinkedIn</span><span class="src-bar-wrap"><span class="src-bar" style="width: 34%"></span></span><span class="src-val">18%</span></div>
+                    <div class="source-row"><span class="src-dot" style="background:#bbb"></span><span class="src-name">Other</span><span class="src-bar-wrap"><span class="src-bar" style="width: 22%"></span></span><span class="src-val">12%</span></div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+        <div class="project-content">
+          <span class="eyebrow">SaaS Platform · 2025–26</span>
+          <h3>TrackCM</h3>
+          <p>
+            A multi-tenant SaaS landing page platform with a full page builder, lead capture, real-time
+            analytics (funnels, cohort analysis, session replay), multi-tenant isolation and Azure AD B2C
+            auth. CI/CD deployed on Azure.
+          </p>
+          <ul class="project-features">
+            <li>Multi-tenant architecture with strict tenant isolation</li>
+            <li>Drag-and-drop page builder with reusable section CMS</li>
+            <li>Real-time analytics: funnels, cohorts, session replay</li>
+            <li>Azure AD B2C auth and role-based permissions</li>
+            <li>GitHub Actions CI/CD to Azure App Service</li>
+          </ul>
+          <div class="exp-tags" style="max-width: none; justify-content: flex-start;">
+            <span class="exp-tag">Angular 19</span>
+            <span class="exp-tag">.NET 8</span>
+            <span class="exp-tag">Azure SQL</span>
+            <span class="exp-tag">App Service</span>
+            <span class="exp-tag">Azure AD B2C</span>
+            <span class="exp-tag">CI/CD</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card reversed reveal">
+        <div class="project-visual gold-visual" aria-hidden="true">
+          <!-- Stack of two iPhone mockups showing different states -->
+          <div class="phones-stack">
+            <div class="phone phone-back">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="phone-statusbar">
+                  <span>9:41</span>
+                  <span class="status-icons">􀙇 􀋦 􀛨</span>
+                </div>
+                <div class="phone-header">
+                  <div>
+                    <div class="phone-subtitle">Watchlist</div>
+                    <div class="phone-title">Silver</div>
+                  </div>
+                  <span class="phone-refresh">↻</span>
+                </div>
+                <div class="phone-tabs">
+                  <span class="tab">Gold</span>
+                  <span class="tab active silver-active">Silver</span>
+                  <span class="tab">Plat.</span>
+                </div>
+                <div class="detail-card silver-card">
+                  <div class="detail-head">
+                    <div>
+                      <div class="detail-name">Silver · XAG</div>
+                      <div class="detail-price">$28.14<span class="unit">/oz</span></div>
+                    </div>
+                    <span class="delta-pill down">−0.24%</span>
+                  </div>
+                  <svg class="big-chart" viewBox="0 0 200 70" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="silverGrad" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#bfc3c8" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#bfc3c8" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M0,20 L15,24 L30,18 L45,28 L60,22 L75,34 L90,28 L105,40 L120,32 L135,44 L150,38 L165,48 L180,42 L200,52 L200,70 L0,70 Z" fill="url(#silverGrad)"/>
+                    <path d="M0,20 L15,24 L30,18 L45,28 L60,22 L75,34 L90,28 L105,40 L120,32 L135,44 L150,38 L165,48 L180,42 L200,52" fill="none" stroke="#bfc3c8" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  <div class="timeframes">
+                    <span>1D</span><span class="tf-active">1W</span><span>1M</span><span>3M</span><span>1Y</span>
+                  </div>
+                </div>
+                <div class="stats-row">
+                  <div><span>High</span><b>$28.52</b></div>
+                  <div><span>Low</span><b>$27.98</b></div>
+                  <div><span>Vol</span><b>42k</b></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="phone phone-front">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="phone-statusbar">
+                  <span>9:41</span>
+                  <span class="status-icons">􀙇 􀋦 􀛨</span>
+                </div>
+                <div class="phone-header">
+                  <div>
+                    <div class="phone-subtitle">Watchlist</div>
+                    <div class="phone-title">Gold</div>
+                  </div>
+                  <span class="phone-refresh gold-refresh">↻</span>
+                </div>
+                <div class="phone-tabs">
+                  <span class="tab active gold-active">Gold</span>
+                  <span class="tab">Silver</span>
+                  <span class="tab">Plat.</span>
+                </div>
+                <div class="detail-card gold-card">
+                  <div class="detail-head">
+                    <div>
+                      <div class="detail-name">Gold · XAU</div>
+                      <div class="detail-price">$2,418.50<span class="unit">/oz</span></div>
+                    </div>
+                    <span class="delta-pill up">+0.83%</span>
+                  </div>
+                  <svg class="big-chart" viewBox="0 0 200 70" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="goldGrad" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#d4b04a" stop-opacity="0.45"/>
+                        <stop offset="100%" stop-color="#d4b04a" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M0,50 L15,46 L30,52 L45,40 L60,44 L75,32 L90,36 L105,24 L120,28 L135,18 L150,22 L165,14 L180,16 L200,8 L200,70 L0,70 Z" fill="url(#goldGrad)"/>
+                    <path d="M0,50 L15,46 L30,52 L45,40 L60,44 L75,32 L90,36 L105,24 L120,28 L135,18 L150,22 L165,14 L180,16 L200,8" fill="none" stroke="#d4b04a" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="200" cy="8" r="3" fill="#d4b04a"/>
+                  </svg>
+                  <div class="timeframes">
+                    <span>1D</span><span class="tf-active">1W</span><span>1M</span><span>3M</span><span>1Y</span>
+                  </div>
+                </div>
+                <div class="stats-row">
+                  <div><span>High</span><b>$2,432</b></div>
+                  <div><span>Low</span><b>$2,396</b></div>
+                  <div><span>Vol</span><b>128k</b></div>
+                </div>
+                <div class="phone-footnote">Live · updated just now</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-content">
+          <span class="eyebrow">iOS App · 2026</span>
+          <h3>GoldTracker</h3>
+          <p>
+            A SwiftUI iOS app that pulls live spot prices for gold and silver, rendering them in
+            minimal price cards with tabbed metals, sparkline trends, historical timeframes and
+            real-time refresh. Built to practice MVVM architecture and async networking on Apple
+            platforms.
+          </p>
+          <ul class="project-features">
+            <li>Live spot prices via async REST API</li>
+            <li>Tabbed view across Gold, Silver and Platinum</li>
+            <li>1D / 1W / 1M / 3M / 1Y historical trend charts</li>
+            <li>Clean MVVM separation: Models, ViewModels, Views</li>
+            <li>Native SwiftUI with light animations and pull-to-refresh</li>
+          </ul>
+          <div class="exp-tags" style="max-width: none; justify-content: flex-start;">
+            <span class="exp-tag">Swift</span>
+            <span class="exp-tag">SwiftUI</span>
+            <span class="exp-tag">MVVM</span>
+            <span class="exp-tag">Async / Await</span>
+            <span class="exp-tag">REST API</span>
+            <span class="exp-tag">iOS</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <span class="eyebrow reveal">Experience</span>
+    <h2 class="reveal" style="margin-bottom: 2rem;">Where I've worked.</h2>
 
     <div class="experience-list">
       <article class="exp-row reveal">
