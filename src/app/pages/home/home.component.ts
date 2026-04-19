@@ -10,6 +10,9 @@ export class HomeComponent implements OnInit {
   constructor(private seo: SeoService) { }
 
   ngOnInit(): void {
-    this.seo.update('Home - Bhakti Pokhrel', 'Portfolio homepage of Bhakti Pokhrel');
+    this.seo.update(
+      'Bhakti Pokhrel — Software Engineer',
+      'Full-stack engineer crafting scalable, human-centered web applications with Angular, .NET and Azure.'
+    );
   }
 }

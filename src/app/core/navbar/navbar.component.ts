@@ -6,33 +6,38 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
   menuOpen = false;
+  isDark = false;
 
-  toggleMenu() {
+  toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
+    document.body.style.overflow = this.menuOpen ? 'hidden' : '';
   }
 
-  toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme');
-    const isDark = current !== 'dark';
-    if (isDark) {
+  closeMenu(): void {
+    this.menuOpen = false;
+    document.body.style.overflow = '';
+  }
+
+  toggleTheme(): void {
+    this.isDark = !this.isDark;
+    if (this.isDark) {
       document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.removeAttribute('data-theme');
-      localStorage.removeItem('theme');
+      localStorage.setItem('theme', 'light');
     }
   }
 
   ngOnInit(): void {
-    // Initialize theme from localStorage or system preference
     const saved = localStorage.getItem('theme');
+    // Default to light unless user explicitly saved dark
     if (saved === 'dark') {
+      this.isDark = true;
       document.documentElement.setAttribute('data-theme', 'dark');
-    } else if (!saved) {
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (prefersDark) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
+    } else {
+      this.isDark = false;
+      document.documentElement.removeAttribute('data-theme');
     }
   }
 }
