@@ -1,79 +1,170 @@
-<section>
+<section class="work-section">
   <div class="container">
-    <span class="eyebrow reveal">Selected projects</span>
-    <h1 class="reveal" style="margin-bottom: 3rem;">Things I've built.</h1>
+    <div class="work-header-wrap reveal">
+      <div>
+        <span class="eyebrow">Interactive Portfolio</span>
+        <h1 class="page-headline">Featured Engineering Work</h1>
+        <p class="work-lead-text">
+          Explore interactive prototypes and systems below. Click buttons, toggle views, switch data sets, and test live behaviors.
+        </p>
+      </div>
 
-    <div class="project-showcase" style="margin-bottom: 4rem;">
-      <article class="project-card reveal">
-        <div class="project-visual trackcm-visual" aria-hidden="true">
-          <!-- Detailed analytics dashboard mockup -->
+      <!-- Category Filter Tabs -->
+      <div class="project-filter-tabs">
+        <button
+          class="filter-pill"
+          [class.active]="activeFilter === 'all'"
+          (click)="setFilter('all')">
+          All Projects (2)
+        </button>
+        <button
+          class="filter-pill"
+          [class.active]="activeFilter === 'saas'"
+          (click)="setFilter('saas')">
+          Full-Stack SaaS (TrackCM)
+        </button>
+        <button
+          class="filter-pill"
+          [class.active]="activeFilter === 'mobile'"
+          (click)="setFilter('mobile')">
+          Native iOS (GoldTracker)
+        </button>
+      </div>
+    </div>
+
+    <div class="project-showcase">
+      <!-- PROJECT 1: TrackCM (Interactive SaaS Platform) -->
+      <article class="project-card reveal" *ngIf="activeFilter === 'all' || activeFilter === 'saas'">
+        <div class="project-visual trackcm-visual">
+          <!-- Interactive SaaS Browser Mockup -->
           <div class="browser">
             <div class="browser-chrome">
               <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
               <div class="url-bar">
                 <span class="lock">🔒</span>
-                <span class="url-text">app.trackcm.io/analytics</span>
+                <span class="url-text">app.trackcm.io/{{ trackCmTab }}</span>
+              </div>
+              <div class="browser-view-switch">
+                <button
+                  class="mockup-tab-btn"
+                  [class.active]="trackCmTab === 'analytics'"
+                  (click)="setTrackCmTab('analytics')"
+                  title="View Live Analytics & Funnels">
+                  Analytics
+                </button>
+                <button
+                  class="mockup-tab-btn"
+                  [class.active]="trackCmTab === 'builder'"
+                  (click)="setTrackCmTab('builder')"
+                  title="Interactive Page Builder">
+                  Page CMS
+                </button>
+                <button
+                  class="mockup-tab-btn"
+                  [class.active]="trackCmTab === 'leads'"
+                  (click)="setTrackCmTab('leads')"
+                  title="Live Leads Stream">
+                  Leads ({{ tenants[activeTenantIndex].leads }})
+                </button>
               </div>
             </div>
+
             <div class="browser-body">
+              <!-- Interactive Tenant Sidebar -->
               <aside class="dash-sidebar-full">
                 <div class="brand">
                   <div class="logo-mark">T</div>
                   <span class="brand-name">TrackCM</span>
                 </div>
                 <nav class="side-nav">
-                  <div class="nav-group-label">Workspace</div>
-                  <div class="nav-item"><span class="ni-icon">◇</span> Overview</div>
-                  <div class="nav-item active"><span class="ni-icon">▣</span> Analytics</div>
-                  <div class="nav-item"><span class="ni-icon">◈</span> Pages</div>
-                  <div class="nav-item"><span class="ni-icon">◐</span> Leads</div>
-                  <div class="nav-item"><span class="ni-icon">◑</span> Funnels</div>
-                  <div class="nav-group-label">Settings</div>
-                  <div class="nav-item"><span class="ni-icon">○</span> Team</div>
-                  <div class="nav-item"><span class="ni-icon">⬡</span> Billing</div>
-                </nav>
-                <div class="tenant-card">
-                  <div class="tenant-avatar">AC</div>
-                  <div class="tenant-info">
-                    <div class="tenant-name">Acme Corp</div>
-                    <div class="tenant-plan">Pro plan</div>
+                  <div class="nav-group-label">Views</div>
+                  <button
+                    class="nav-item"
+                    [class.active]="trackCmTab === 'analytics'"
+                    (click)="setTrackCmTab('analytics')">
+                    <span class="ni-icon">▣</span> Live Analytics
+                  </button>
+                  <button
+                    class="nav-item"
+                    [class.active]="trackCmTab === 'builder'"
+                    (click)="setTrackCmTab('builder')">
+                    <span class="ni-icon">◈</span> Page Builder
+                  </button>
+                  <button
+                    class="nav-item"
+                    [class.active]="trackCmTab === 'leads'"
+                    (click)="setTrackCmTab('leads')">
+                    <span class="ni-icon">◐</span> Ingested Leads
+                  </button>
+
+                  <div class="nav-group-label" style="margin-top: 0.75rem;">Switch Tenant</div>
+                  <div class="tenant-switcher-list">
+                    <button
+                      *ngFor="let t of tenants; let idx = index"
+                      class="tenant-switch-btn"
+                      [class.active]="activeTenantIndex === idx"
+                      (click)="switchTenant(idx)"
+                      title="Switch to {{ t.name }}">
+                      <span class="t-initials">{{ t.name.substring(0, 2) }}</span>
+                      <div class="t-meta">
+                        <span class="t-title">{{ t.name }}</span>
+                        <span class="t-sub">{{ t.plan }}</span>
+                      </div>
+                    </button>
                   </div>
-                </div>
+                </nav>
               </aside>
 
-              <section class="dash-main-full">
+              <!-- VIEW 1: Analytics & Funnels -->
+              <section class="dash-main-full" *ngIf="trackCmTab === 'analytics'">
                 <header class="dash-header">
                   <div>
-                    <div class="dash-crumbs">Analytics › Overview</div>
-                    <h4 class="dash-title">Live performance</h4>
+                    <div class="dash-crumbs">Workspace › {{ tenants[activeTenantIndex].name }} › Overview</div>
+                    <h4 class="dash-title">Campaign Attribution</h4>
                   </div>
                   <div class="dash-actions">
-                    <span class="chip">Last 7 days</span>
-                    <span class="chip primary">+ Export</span>
+                    <button
+                      class="chip"
+                      [class.primary]="selectedTimeRange === '24h'"
+                      (click)="setTimeRange('24h')">
+                      24h
+                    </button>
+                    <button
+                      class="chip"
+                      [class.primary]="selectedTimeRange === '7d'"
+                      (click)="setTimeRange('7d')">
+                      7d
+                    </button>
+                    <button
+                      class="chip"
+                      [class.primary]="selectedTimeRange === '30d'"
+                      (click)="setTimeRange('30d')">
+                      30d
+                    </button>
                   </div>
                 </header>
 
                 <div class="kpi-grid">
                   <div class="kpi">
-                    <span class="kpi-label">Visitors</span>
-                    <span class="kpi-value">12,408</span>
+                    <span class="kpi-label">Unique Visitors</span>
+                    <span class="kpi-value">{{ tenants[activeTenantIndex].visitors }}</span>
                     <span class="kpi-delta up">↑ 18.2%</span>
                     <svg class="kpi-spark" viewBox="0 0 80 24" preserveAspectRatio="none">
                       <path d="M0,18 L10,15 L20,17 L30,12 L40,14 L50,8 L60,10 L70,5 L80,7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                   </div>
                   <div class="kpi">
-                    <span class="kpi-label">Leads</span>
-                    <span class="kpi-value">284</span>
+                    <span class="kpi-label">Qualified Leads</span>
+                    <span class="kpi-value">{{ tenants[activeTenantIndex].leads }}</span>
                     <span class="kpi-delta up">↑ 9.4%</span>
                     <svg class="kpi-spark" viewBox="0 0 80 24" preserveAspectRatio="none">
                       <path d="M0,20 L10,18 L20,14 L30,16 L40,10 L50,13 L60,8 L70,9 L80,5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                   </div>
                   <div class="kpi">
-                    <span class="kpi-label">Conversion</span>
-                    <span class="kpi-value">2.29%</span>
-                    <span class="kpi-delta down">↓ 1.2%</span>
+                    <span class="kpi-label">Attribution Rate</span>
+                    <span class="kpi-value">{{ tenants[activeTenantIndex].rate }}</span>
+                    <span class="kpi-delta up">↑ 0.4%</span>
                     <svg class="kpi-spark" viewBox="0 0 80 24" preserveAspectRatio="none">
                       <path d="M0,8 L10,10 L20,7 L30,12 L40,11 L50,15 L60,13 L70,18 L80,16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
@@ -83,17 +174,17 @@
                 <div class="chart-card">
                   <div class="chart-head">
                     <div>
-                      <div class="chart-title">Visitors vs Leads</div>
+                      <div class="chart-title">Visitors vs Attributed Leads ({{ selectedTimeRange }})</div>
                       <div class="chart-legend">
-                        <span class="legend-item"><i class="dot-a"></i>Visitors</span>
-                        <span class="legend-item"><i class="dot-b"></i>Leads</span>
+                        <span class="legend-item"><i class="dot-a"></i>Traffic Ingestion</span>
+                        <span class="legend-item"><i class="dot-b"></i>Form Conversions</span>
                       </div>
                     </div>
-                    <span class="chip small">Daily</span>
+                    <span class="chip small">Tenant #{{ tenants[activeTenantIndex].id }}</span>
                   </div>
                   <svg class="area-chart" viewBox="0 0 320 100" preserveAspectRatio="none">
                     <defs>
-                      <linearGradient id="gradA" x1="0" x2="0" y1="0" y2="1">
+                      <linearGradient id="gradSaas" x1="0" x2="0" y1="0" y2="1">
                         <stop offset="0%" stop-color="currentColor" stop-opacity="0.35"/>
                         <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
                       </linearGradient>
@@ -103,8 +194,8 @@
                       <line x1="0" y1="50" x2="320" y2="50"/>
                       <line x1="0" y1="75" x2="320" y2="75"/>
                     </g>
-                    <path d="M0,80 L40,65 L80,68 L120,48 L160,52 L200,32 L240,38 L280,18 L320,22 L320,100 L0,100 Z" fill="url(#gradA)"/>
-                    <path class="line-a" d="M0,80 L40,65 L80,68 L120,48 L160,52 L200,32 L240,38 L280,18 L320,22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path [attr.d]="tenants[activeTenantIndex].sparkline + ' L320,100 L0,100 Z'" fill="url(#gradSaas)"/>
+                    <path class="line-a" [attr.d]="tenants[activeTenantIndex].sparkline" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                     <path class="line-b" d="M0,90 L40,86 L80,82 L120,78 L160,74 L200,70 L240,65 L280,62 L320,58" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"/>
                     <circle cx="280" cy="18" r="3" fill="currentColor"/>
                   </svg>
@@ -112,197 +203,370 @@
 
                 <div class="bottom-grid">
                   <div class="funnel-card">
-                    <div class="chart-title">Conversion funnel</div>
+                    <div class="chart-title">Conversion Milestones</div>
                     <div class="funnel-step">
-                      <span class="fs-label">Visited</span>
+                      <span class="fs-label">1. Visited</span>
                       <div class="fs-bar"><div class="fs-fill" style="width: 100%;"></div></div>
-                      <span class="fs-val">12.4k</span>
+                      <span class="fs-val">{{ tenants[activeTenantIndex].visitors }}</span>
                     </div>
                     <div class="funnel-step">
-                      <span class="fs-label">Engaged</span>
+                      <span class="fs-label">2. Engaged</span>
                       <div class="fs-bar"><div class="fs-fill" style="width: 68%;"></div></div>
-                      <span class="fs-val">8.4k</span>
+                      <span class="fs-val">68%</span>
                     </div>
                     <div class="funnel-step">
-                      <span class="fs-label">Form view</span>
+                      <span class="fs-label">3. Form View</span>
                       <div class="fs-bar"><div class="fs-fill" style="width: 38%;"></div></div>
-                      <span class="fs-val">4.7k</span>
+                      <span class="fs-val">38%</span>
                     </div>
                     <div class="funnel-step">
-                      <span class="fs-label">Lead</span>
+                      <span class="fs-label">4. Captured</span>
                       <div class="fs-bar"><div class="fs-fill" style="width: 14%;"></div></div>
-                      <span class="fs-val">284</span>
+                      <span class="fs-val">{{ tenants[activeTenantIndex].leads }}</span>
                     </div>
                   </div>
 
                   <div class="sources-card">
-                    <div class="chart-title">Top sources</div>
-                    <div class="source-row"><span class="src-dot" style="background:#111"></span><span class="src-name">Direct</span><span class="src-bar-wrap"><span class="src-bar" style="width: 78%"></span></span><span class="src-val">42%</span></div>
-                    <div class="source-row"><span class="src-dot" style="background:#555"></span><span class="src-name">Google</span><span class="src-bar-wrap"><span class="src-bar" style="width: 52%"></span></span><span class="src-val">28%</span></div>
-                    <div class="source-row"><span class="src-dot" style="background:#888"></span><span class="src-name">LinkedIn</span><span class="src-bar-wrap"><span class="src-bar" style="width: 34%"></span></span><span class="src-val">18%</span></div>
-                    <div class="source-row"><span class="src-dot" style="background:#bbb"></span><span class="src-name">Other</span><span class="src-bar-wrap"><span class="src-bar" style="width: 22%"></span></span><span class="src-val">12%</span></div>
+                    <div class="chart-title">Attribution Channels</div>
+                    <div class="source-row"><span class="src-dot" style="background:#111"></span><span class="src-name">Direct UTM</span><span class="src-bar-wrap"><span class="src-bar" style="width: 78%"></span></span><span class="src-val">42%</span></div>
+                    <div class="source-row"><span class="src-dot" style="background:#555"></span><span class="src-name">Organic</span><span class="src-bar-wrap"><span class="src-bar" style="width: 52%"></span></span><span class="src-val">28%</span></div>
+                    <div class="source-row"><span class="src-dot" style="background:#888"></span><span class="src-name">LinkedIn Ads</span><span class="src-bar-wrap"><span class="src-bar" style="width: 34%"></span></span><span class="src-val">18%</span></div>
+                    <div class="source-row"><span class="src-dot" style="background:#bbb"></span><span class="src-name">Email Flow</span><span class="src-bar-wrap"><span class="src-bar" style="width: 22%"></span></span><span class="src-val">12%</span></div>
                   </div>
+                </div>
+              </section>
+
+              <!-- VIEW 2: Interactive Page CMS Builder -->
+              <section class="dash-main-full cms-builder-box" *ngIf="trackCmTab === 'builder'">
+                <header class="dash-header">
+                  <div>
+                    <div class="dash-crumbs">Page CMS › Dynamic Section Composition</div>
+                    <h4 class="dash-title">Visual Block Hydration</h4>
+                  </div>
+                  <div class="dash-actions">
+                    <button class="chip primary" (click)="simulateLeadCapture()">
+                      + Simulate Lead Ingestion
+                    </button>
+                  </div>
+                </header>
+
+                <div *ngIf="liveLeadCountNotice" class="lead-toast-banner">
+                  ⚡ Lead captured! Tenant {{ tenants[activeTenantIndex].name }} counter updated to {{ tenants[activeTenantIndex].leads }}.
+                </div>
+
+                <div class="builder-columns">
+                  <!-- Block Toggles -->
+                  <div class="builder-controls">
+                    <div class="ctrl-header">Toggle Page Blocks:</div>
+                    <button
+                      class="block-toggle-btn"
+                      [class.on]="builderBlocks.hero"
+                      (click)="toggleBlock('hero')">
+                      <span>Hero Section</span>
+                      <b>{{ builderBlocks.hero ? 'ON' : 'OFF' }}</b>
+                    </button>
+                    <button
+                      class="block-toggle-btn"
+                      [class.on]="builderBlocks.features"
+                      (click)="toggleBlock('features')">
+                      <span>Feature Grid</span>
+                      <b>{{ builderBlocks.features ? 'ON' : 'OFF' }}</b>
+                    </button>
+                    <button
+                      class="block-toggle-btn"
+                      [class.on]="builderBlocks.form"
+                      (click)="toggleBlock('form')">
+                      <span>Lead Opt-in Form</span>
+                      <b>{{ builderBlocks.form ? 'ON' : 'OFF' }}</b>
+                    </button>
+                    <button
+                      class="block-toggle-btn"
+                      [class.on]="builderBlocks.pricing"
+                      (click)="toggleBlock('pricing')">
+                      <span>Pricing Tier Table</span>
+                      <b>{{ builderBlocks.pricing ? 'ON' : 'OFF' }}</b>
+                    </button>
+                  </div>
+
+                  <!-- Real-time Canvas Rendering Preview -->
+                  <div class="builder-canvas">
+                    <div class="canvas-screen">
+                      <!-- Hero Block -->
+                      <div class="canvas-block block-hero" *ngIf="builderBlocks.hero">
+                        <span class="canvas-badge">NEW RELEASE</span>
+                        <h5>Scale Your Campaign Funnels</h5>
+                        <p>Enterprise attribution with sub-second ingestion.</p>
+                      </div>
+
+                      <!-- Features Block -->
+                      <div class="canvas-block block-features" *ngIf="builderBlocks.features">
+                        <div class="feat-col"><span>⚡ Fast</span></div>
+                        <div class="feat-col"><span>🔒 Isolated</span></div>
+                        <div class="feat-col"><span>📊 Real-time</span></div>
+                      </div>
+
+                      <!-- Form Block -->
+                      <div class="canvas-block block-form" *ngIf="builderBlocks.form">
+                        <div class="mini-form-row">
+                          <span class="form-mock-input">work&#64;company.com</span>
+                          <button class="form-mock-submit" (click)="simulateLeadCapture()">Submit</button>
+                        </div>
+                      </div>
+
+                      <!-- Pricing Block -->
+                      <div class="canvas-block block-pricing" *ngIf="builderBlocks.pricing">
+                        <div class="mini-price-tier">
+                          <b>{{ tenants[activeTenantIndex].plan }} Plan</b> · Custom Multi-Tenancy
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- VIEW 3: Live Ingested Leads -->
+              <section class="dash-main-full leads-stream-box" *ngIf="trackCmTab === 'leads'">
+                <header class="dash-header">
+                  <div>
+                    <div class="dash-crumbs">Leads CRM › Ingested Pipeline</div>
+                    <h4 class="dash-title">{{ tenants[activeTenantIndex].name }} ({{ tenants[activeTenantIndex].leads }} total)</h4>
+                  </div>
+                  <div class="dash-actions">
+                    <button class="chip primary" (click)="simulateLeadCapture()">
+                      + Add Demo Lead
+                    </button>
+                  </div>
+                </header>
+
+                <div class="leads-table-wrap">
+                  <table class="leads-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Company</th>
+                        <th>Attribution Source</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let lead of recentLeads">
+                        <td class="lead-id">{{ lead.id }}</td>
+                        <td class="lead-name"><b>{{ lead.name }}</b></td>
+                        <td class="lead-comp">{{ lead.company }}</td>
+                        <td class="lead-src"><span class="src-pill">{{ lead.source }}</span></td>
+                        <td>
+                          <span class="status-pill" [class.qual]="lead.status === 'Qualified'">
+                            {{ lead.status }}
+                          </span>
+                        </td>
+                        <td class="lead-time">{{ lead.time }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </section>
             </div>
           </div>
         </div>
+
+        <!-- Project Details -->
         <div class="project-content">
-          <span class="eyebrow">SaaS Platform · 2025–26</span>
-          <h3>TrackCM</h3>
-          <p>
-            A multi-tenant SaaS landing page platform with a full page builder, lead capture, real-time
-            analytics (funnels, cohort analysis, session replay), multi-tenant isolation and Azure AD B2C
-            auth. CI/CD deployed on Azure.
+          <div class="proj-badge-row">
+            <span class="eyebrow">Enterprise Multi-Tenant SaaS · 2025–2026</span>
+            <span class="live-indicator"><span class="pulse-dot"></span> Interactive Sandbox</span>
+          </div>
+
+          <h3 class="proj-main-title">TrackCM</h3>
+          <p class="proj-lead-desc">
+            <strong>TrackCM</strong> is an enterprise multi-tenant Campaign &amp; Conversion Intelligence Platform. It provides marketing and growth engineering teams with visual drag-and-drop landing page composition, automated lead capture pipelines, and sub-second analytics attribution while maintaining rigorous tenant data isolation.
           </p>
+
+          <!-- Core Architectural Pillars -->
+          <div class="tech-spec-grid">
+            <div class="spec-item">
+              <span class="spec-label">Multi-Tenant Isolation</span>
+              <span class="spec-detail">Row-Level Security (RLS) with SESSION_CONTEXT in Azure SQL Database</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Drag-and-Drop CMS</span>
+              <span class="spec-detail">Dynamic Angular 19 component outlet with real-time reactive signals</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Attribution Engine</span>
+              <span class="spec-detail">Full-funnel conversion tracking, UTM touchpoint logs, and cohort analysis</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Cloud Infrastructure</span>
+              <span class="spec-detail">Containerized .NET 8 Web API on Azure App Service with Redis distributed cache</span>
+            </div>
+          </div>
+
           <ul class="project-features">
-            <li>Multi-tenant architecture with strict tenant isolation</li>
-            <li>Drag-and-drop page builder with reusable section CMS</li>
-            <li>Real-time analytics: funnels, cohorts, session replay</li>
-            <li>Azure AD B2C auth and role-based permissions</li>
-            <li>GitHub Actions CI/CD to Azure App Service</li>
+            <li><strong>Database-Level Isolation:</strong> Complete tenant protection via Azure SQL row-level security predicates and tenant-aware DbContext dispatching.</li>
+            <li><strong>Dynamic Block Hydration:</strong> Modular visual block builder with real-time DOM hydration, reusable marketing sections, and atomic design tokens.</li>
+            <li><strong>High-Velocity Event Ingestion:</strong> Pipeline processing page interactions, form submissions, and multi-step drop-offs with Redis distributed caching.</li>
+            <li><strong>Enterprise Identity &amp; RBAC:</strong> Seamless Azure AD B2C integration supporting OAuth 2.0 / OIDC with granular role permissions.</li>
           </ul>
+
+          <!-- Tech Tags -->
           <div class="exp-tags" style="max-width: none; justify-content: flex-start;">
             <span class="exp-tag">Angular 19</span>
             <span class="exp-tag">.NET 8</span>
-            <span class="exp-tag">Azure SQL</span>
-            <span class="exp-tag">App Service</span>
+            <span class="exp-tag">C#</span>
+            <span class="exp-tag">Azure SQL (RLS)</span>
             <span class="exp-tag">Azure AD B2C</span>
-            <span class="exp-tag">CI/CD</span>
+            <span class="exp-tag">Redis Cache</span>
+            <span class="exp-tag">MediatR CQRS</span>
+            <span class="exp-tag">Azure App Service</span>
           </div>
         </div>
       </article>
 
+      <!-- Ad Banner -->
       <div class="reveal" style="margin: 3.5rem 0;">
         <app-ad-banner format="auto" minHeight="120px"></app-ad-banner>
       </div>
 
-      <article class="project-card reversed reveal">
-        <div class="project-visual gold-visual" aria-hidden="true">
-          <!-- Stack of two iPhone mockups showing different states -->
+      <!-- PROJECT 2: GoldTracker (Interactive Native iOS Application) -->
+      <article class="project-card reversed reveal" *ngIf="activeFilter === 'all' || activeFilter === 'mobile'">
+        <div class="project-visual gold-visual">
           <div class="phones-stack">
-            <div class="phone phone-back">
+            <!-- Interactive Front Phone -->
+            <div class="phone phone-front interactive-phone">
               <div class="phone-notch"></div>
               <div class="phone-screen">
                 <div class="phone-statusbar">
                   <span>9:41</span>
                   <span class="status-icons">􀙇 􀋦 􀛨</span>
                 </div>
+                
                 <div class="phone-header">
                   <div>
-                    <div class="phone-subtitle">Watchlist</div>
-                    <div class="phone-title">Silver</div>
+                    <div class="phone-subtitle">Live Spot Feed</div>
+                    <div class="phone-title">{{ metalsData[activeMetal].name }} · Spot</div>
                   </div>
-                  <span class="phone-refresh">↻</span>
+                  <button
+                    class="phone-refresh-btn"
+                    [class.spinning]="isRefreshingPrice"
+                    (click)="refreshPrice()"
+                    title="Simulate live tick">
+                    ↻
+                  </button>
                 </div>
-                <div class="phone-tabs">
-                  <span class="tab">Gold</span>
-                  <span class="tab active silver-active">Silver</span>
-                  <span class="tab">Plat.</span>
-                </div>
-                <div class="detail-card silver-card">
-                  <div class="detail-head">
-                    <div>
-                      <div class="detail-name">Silver · XAG</div>
-                      <div class="detail-price">$28.14<span class="unit">/oz</span></div>
-                    </div>
-                    <span class="delta-pill down">−0.24%</span>
-                  </div>
-                  <svg class="big-chart" viewBox="0 0 200 70" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="silverGrad" x1="0" x2="0" y1="0" y2="1">
-                        <stop offset="0%" stop-color="#bfc3c8" stop-opacity="0.35"/>
-                        <stop offset="100%" stop-color="#bfc3c8" stop-opacity="0"/>
-                      </linearGradient>
-                    </defs>
-                    <path d="M0,20 L15,24 L30,18 L45,28 L60,22 L75,34 L90,28 L105,40 L120,32 L135,44 L150,38 L165,48 L180,42 L200,52 L200,70 L0,70 Z" fill="url(#silverGrad)"/>
-                    <path d="M0,20 L15,24 L30,18 L45,28 L60,22 L75,34 L90,28 L105,40 L120,32 L135,44 L150,38 L165,48 L180,42 L200,52" fill="none" stroke="#bfc3c8" stroke-width="1.8" stroke-linecap="round"/>
-                  </svg>
-                  <div class="timeframes">
-                    <span>1D</span><span class="tf-active">1W</span><span>1M</span><span>3M</span><span>1Y</span>
-                  </div>
-                </div>
-                <div class="stats-row">
-                  <div><span>High</span><b>$28.52</b></div>
-                  <div><span>Low</span><b>$27.98</b></div>
-                  <div><span>Vol</span><b>42k</b></div>
-                </div>
-              </div>
-            </div>
 
-            <div class="phone phone-front">
-              <div class="phone-notch"></div>
-              <div class="phone-screen">
-                <div class="phone-statusbar">
-                  <span>9:41</span>
-                  <span class="status-icons">􀙇 􀋦 􀛨</span>
-                </div>
-                <div class="phone-header">
-                  <div>
-                    <div class="phone-subtitle">Watchlist</div>
-                    <div class="phone-title">Gold</div>
-                  </div>
-                  <span class="phone-refresh gold-refresh">↻</span>
-                </div>
+                <!-- Interactive Asset Tabs -->
                 <div class="phone-tabs">
-                  <span class="tab active gold-active">Gold</span>
-                  <span class="tab">Silver</span>
-                  <span class="tab">Plat.</span>
+                  <button
+                    class="tab-metal-btn"
+                    [class.active]="activeMetal === 'gold'"
+                    (click)="setMetal('gold')">
+                    Gold
+                  </button>
+                  <button
+                    class="tab-metal-btn"
+                    [class.active]="activeMetal === 'silver'"
+                    (click)="setMetal('silver')">
+                    Silver
+                  </button>
+                  <button
+                    class="tab-metal-btn"
+                    [class.active]="activeMetal === 'platinum'"
+                    (click)="setMetal('platinum')">
+                    Plat.
+                  </button>
                 </div>
-                <div class="detail-card gold-card">
+
+                <!-- Live Price Detail Card -->
+                <div class="detail-card" [class.is-gold]="activeMetal === 'gold'" [class.is-silver]="activeMetal === 'silver'" [class.is-plat]="activeMetal === 'platinum'">
                   <div class="detail-head">
                     <div>
-                      <div class="detail-name">Gold · XAU</div>
-                      <div class="detail-price">$2,418.50<span class="unit">/oz</span></div>
+                      <div class="detail-name">{{ metalsData[activeMetal].name }} · {{ metalsData[activeMetal].symbol }}</div>
+                      <div class="detail-price">
+                        {{ getDisplayPrice(metalsData[activeMetal].priceOz) }}
+                        <span class="unit">{{ isGramUnit ? '/g' : '/oz' }}</span>
+                      </div>
                     </div>
-                    <span class="delta-pill up">+0.83%</span>
+                    <span class="delta-pill" [class.up]="metalsData[activeMetal].isPositive" [class.down]="!metalsData[activeMetal].isPositive">
+                      {{ metalsData[activeMetal].isPositive ? '+' : '' }}{{ metalsData[activeMetal].changePercent }}%
+                    </span>
                   </div>
+
+                  <!-- Interactive SVG Path based on Timeframe -->
                   <svg class="big-chart" viewBox="0 0 200 70" preserveAspectRatio="none">
                     <defs>
-                      <linearGradient id="goldGrad" x1="0" x2="0" y1="0" y2="1">
-                        <stop offset="0%" stop-color="#d4b04a" stop-opacity="0.45"/>
-                        <stop offset="100%" stop-color="#d4b04a" stop-opacity="0"/>
+                      <linearGradient id="metalGrad" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="currentColor" stop-opacity="0.4"/>
+                        <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
                       </linearGradient>
                     </defs>
-                    <path d="M0,50 L15,46 L30,52 L45,40 L60,44 L75,32 L90,36 L105,24 L120,28 L135,18 L150,22 L165,14 L180,16 L200,8 L200,70 L0,70 Z" fill="url(#goldGrad)"/>
-                    <path d="M0,50 L15,46 L30,52 L45,40 L60,44 L75,32 L90,36 L105,24 L120,28 L135,18 L150,22 L165,14 L180,16 L200,8" fill="none" stroke="#d4b04a" stroke-width="1.8" stroke-linecap="round"/>
-                    <circle cx="200" cy="8" r="3" fill="#d4b04a"/>
+                    <path [attr.d]="metalsData[activeMetal].charts[activeTimeframe].fill" fill="url(#metalGrad)"/>
+                    <path [attr.d]="metalsData[activeMetal].charts[activeTimeframe].path" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="200" cy="8" r="3" fill="currentColor"/>
                   </svg>
+
+                  <!-- Timeframe Switcher -->
                   <div class="timeframes">
-                    <span>1D</span><span class="tf-active">1W</span><span>1M</span><span>3M</span><span>1Y</span>
+                    <button
+                      class="tf-btn"
+                      [class.tf-active]="activeTimeframe === '1D'"
+                      (click)="setTimeframe('1D')">1D</button>
+                    <button
+                      class="tf-btn"
+                      [class.tf-active]="activeTimeframe === '1W'"
+                      (click)="setTimeframe('1W')">1W</button>
+                    <button
+                      class="tf-btn"
+                      [class.tf-active]="activeTimeframe === '1M'"
+                      (click)="setTimeframe('1M')">1M</button>
+                    <button
+                      class="tf-btn"
+                      [class.tf-active]="activeTimeframe === '1Y'"
+                      (click)="setTimeframe('1Y')">1Y</button>
                   </div>
                 </div>
+
+                <!-- Stats Row -->
                 <div class="stats-row">
-                  <div><span>High</span><b>$2,432</b></div>
-                  <div><span>Low</span><b>$2,396</b></div>
-                  <div><span>Vol</span><b>128k</b></div>
+                  <div><span>High</span><b>${{ metalsData[activeMetal].high }}</b></div>
+                  <div><span>Low</span><b>${{ metalsData[activeMetal].low }}</b></div>
+                  <div><span>Vol</span><b>{{ metalsData[activeMetal].vol }}</b></div>
                 </div>
-                <div class="phone-footnote">Live · updated just now</div>
+
+                <!-- Unit Toggle Bar -->
+                <div class="phone-unit-bar">
+                  <button class="unit-toggle-btn" (click)="toggleUnit()">
+                    Unit: <b>{{ isGramUnit ? 'Grams (g)' : 'Troy Ounce (oz)' }}</b> (Click to toggle)
+                  </button>
+                  <span class="phone-status-note">{{ lastUpdatedTime }}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         <div class="project-content">
-          <span class="eyebrow">iOS App · 2026</span>
-          <h3>GoldTracker</h3>
-          <p>
-            A SwiftUI iOS app that pulls live spot prices for gold and silver, rendering them in
-            minimal price cards with tabbed metals, sparkline trends, historical timeframes and
-            real-time refresh. Built to practice MVVM architecture and async networking on Apple
-            platforms.
+          <div class="proj-badge-row">
+            <span class="eyebrow">Native iOS App · SwiftUI · 2026</span>
+            <span class="live-indicator"><span class="pulse-dot"></span> Interactive Simulator</span>
+          </div>
+          <h3 class="proj-main-title">GoldTracker</h3>
+          <p class="proj-lead-desc">
+            A native SwiftUI iOS application engineered to monitor live market spot prices for gold, silver, and platinum. Built using the MVVM pattern with async/await concurrency, interactive historical sparklines, and precision numerical normalization.
           </p>
           <ul class="project-features">
-            <li>Live spot prices via async REST API</li>
-            <li>Tabbed view across Gold, Silver and Platinum</li>
-            <li>1D / 1W / 1M / 3M / 1Y historical trend charts</li>
-            <li>Clean MVVM separation: Models, ViewModels, Views</li>
-            <li>Native SwiftUI with light animations and pull-to-refresh</li>
+            <li><strong>Asynchronous REST Streaming:</strong> Live spot market rates fetched via Swift async/await with robust error handling and pull-to-refresh.</li>
+            <li><strong>MVVM Architecture:</strong> Clean unidirectional data flow decoupling view rendering from price calculations and time-series normalization.</li>
+            <li><strong>Interactive Charts:</strong> Dynamic 1D / 1W / 1M / 1Y historical range calculations with custom SwiftUI path rendering.</li>
+            <li><strong>Apple Design Polish:</strong> Dark/light mode fidelity, haptic feedback on asset tab switching, and native SF Symbols iconography.</li>
           </ul>
           <div class="exp-tags" style="max-width: none; justify-content: flex-start;">
-            <span class="exp-tag">Swift</span>
+            <span class="exp-tag">Swift 5.10</span>
             <span class="exp-tag">SwiftUI</span>
             <span class="exp-tag">MVVM</span>
             <span class="exp-tag">Async / Await</span>
+            <span class="exp-tag">Combine</span>
             <span class="exp-tag">REST API</span>
             <span class="exp-tag">iOS</span>
           </div>
@@ -310,138 +574,83 @@
       </article>
     </div>
 
-    <span class="eyebrow reveal">Experience</span>
-    <h2 class="reveal" style="margin-bottom: 2rem;">Where I've worked.</h2>
+    <!-- Career Experience Timeline -->
+    <div class="experience-section-wrap">
+      <span class="eyebrow reveal">Career Journey</span>
+      <h2 class="reveal" style="margin-bottom: 2rem;">Where I've worked.</h2>
 
-    <div class="experience-list">
-      <article class="exp-row reveal">
-        <div class="exp-date">2025 — Now</div>
-        <div class="exp-body">
-          <h3>Software Engineer II</h3>
-          <span class="exp-company">MedPace</span>
-          <ul>
-            <li>Leading full-stack architecture and feature delivery for internal research platforms.</li>
-            <li>Mentoring junior engineers and driving code-review culture.</li>
-            <li>Optimizing database queries and API performance at scale.</li>
-          </ul>
-        </div>
-        <div class="exp-tags">
-          <span class="exp-tag">Angular</span>
-          <span class="exp-tag">.NET</span>
-          <span class="exp-tag">Azure</span>
-        </div>
-      </article>
+      <div class="experience-list">
+        <article class="exp-row reveal">
+          <div class="exp-date">2025 — Present</div>
+          <div class="exp-body">
+            <h3>Software Engineer II</h3>
+            <span class="exp-company">MedPace</span>
+            <ul>
+              <li>Leading full-stack architecture and feature delivery for internal clinical research platforms.</li>
+              <li>Mentoring associate engineers, conducting code reviews, and enforcing clean code practices.</li>
+              <li>Optimizing enterprise database schemas, LINQ queries, and API response times under strict SLAs.</li>
+            </ul>
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag">Angular</span>
+            <span class="exp-tag">.NET 8</span>
+            <span class="exp-tag">Azure</span>
+            <span class="exp-tag">SQL Server</span>
+          </div>
+        </article>
 
-      <article class="exp-row reveal">
-        <div class="exp-date">2023 — 2025</div>
-        <div class="exp-body">
-          <h3>Software Engineer</h3>
-          <span class="exp-company">MedPace</span>
-          <ul>
-            <li>Spearheaded full-stack web development across Angular, TypeScript, C#, .NET.</li>
-            <li>Designed scalable table structures and multi-step page layouts.</li>
-            <li>Led schema design ensuring data integrity and performance.</li>
-            <li>Developed microservices for bulk data updates and efficiency.</li>
-            <li>Optimized SQL and LINQ for demanding real-world workloads.</li>
-          </ul>
-        </div>
-        <div class="exp-tags">
-          <span class="exp-tag">TypeScript</span>
-          <span class="exp-tag">SQL Server</span>
-          <span class="exp-tag">Microservices</span>
-        </div>
-      </article>
+        <article class="exp-row reveal">
+          <div class="exp-date">2023 — 2025</div>
+          <div class="exp-body">
+            <h3>Software Engineer</h3>
+            <span class="exp-company">MedPace</span>
+            <ul>
+              <li>Spearheaded full-stack development across Angular, TypeScript, C#, and .NET microservices.</li>
+              <li>Engineered high-performance data tables and multi-step wizard layouts handling complex regulatory workflows.</li>
+              <li>Implemented background microservices for bulk patient updates, reducing runtime by over 40%.</li>
+            </ul>
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag">TypeScript</span>
+            <span class="exp-tag">C#</span>
+            <span class="exp-tag">Microservices</span>
+            <span class="exp-tag">T-SQL</span>
+          </div>
+        </article>
 
-      <article class="exp-row reveal">
-        <div class="exp-date">2022 — 2023</div>
-        <div class="exp-body">
-          <h3>Software Engineer Intern</h3>
-          <span class="exp-company">MedPace</span>
-          <ul>
-            <li>Shipped features for internal projects using Angular, C#, .NET, MSSQL.</li>
-            <li>Participated in code reviews and testing to ensure quality.</li>
-            <li>Integrated web APIs with production user interfaces.</li>
-          </ul>
-        </div>
-        <div class="exp-tags">
-          <span class="exp-tag">Angular</span>
-          <span class="exp-tag">.NET</span>
-        </div>
-      </article>
+        <article class="exp-row reveal">
+          <div class="exp-date">2022 — 2023</div>
+          <div class="exp-body">
+            <h3>Software Engineer Intern</h3>
+            <span class="exp-company">MedPace</span>
+            <ul>
+              <li>Delivered features for internal clinical research tooling using Angular, C#, and Microsoft SQL Server.</li>
+              <li>Participated in daily Agile standups, rigorous peer reviews, and automated unit testing.</li>
+            </ul>
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag">Angular</span>
+            <span class="exp-tag">.NET</span>
+            <span class="exp-tag">MSSQL</span>
+          </div>
+        </article>
 
-      <article class="exp-row reveal">
-        <div class="exp-date">2021 — 2022</div>
-        <div class="exp-body">
-          <h3>Software Engineer Intern</h3>
-          <span class="exp-company">Emerson</span>
-          <ul>
-            <li>Enhanced a Vue.js platform with new features and performance wins.</li>
-            <li>Designed reusable components used across multiple pages.</li>
-            <li>Converted Razor pages into responsive Vue (desktop, tablet, mobile).</li>
-            <li>Applied Agile practices to deliver high-quality releases.</li>
-          </ul>
-        </div>
-        <div class="exp-tags">
-          <span class="exp-tag">Vue.js</span>
-          <span class="exp-tag">Responsive</span>
-        </div>
-      </article>
-    </div>
-
-    <div class="reveal" style="margin-top: 3.5rem;">
-      <app-ad-banner format="auto" minHeight="120px"></app-ad-banner>
-    </div>
-  </div>
-</section>
-
-<hr class="section-divider" />
-
-<section>
-  <div class="container">
-    <span class="eyebrow reveal">Toolkit</span>
-    <h2 class="reveal" style="margin-bottom: 2rem;">Skills &amp; technologies.</h2>
-
-    <div class="skills-wrap">
-      <div class="skill-col reveal">
-        <span class="eyebrow">Frontend</span>
-        <ul>
-          <li>Angular</li>
-          <li>TypeScript</li>
-          <li>Vue.js</li>
-          <li>HTML / SCSS</li>
-          <li>Responsive design</li>
-        </ul>
-      </div>
-
-      <div class="skill-col reveal">
-        <span class="eyebrow">Backend</span>
-        <ul>
-          <li>C#</li>
-          <li>.NET</li>
-          <li>Entity Framework</li>
-          <li>REST APIs</li>
-          <li>Microservices</li>
-        </ul>
-      </div>
-
-      <div class="skill-col reveal">
-        <span class="eyebrow">Data</span>
-        <ul>
-          <li>SQL Server</li>
-          <li>Cosmos DB</li>
-          <li>LINQ</li>
-          <li>Query optimization</li>
-        </ul>
-      </div>
-
-      <div class="skill-col reveal">
-        <span class="eyebrow">Cloud &amp; tools</span>
-        <ul>
-          <li>Azure</li>
-          <li>Azure DevOps</li>
-          <li>Git</li>
-          <li>Agile / Scrum</li>
-        </ul>
+        <article class="exp-row reveal">
+          <div class="exp-date">2021 — 2022</div>
+          <div class="exp-body">
+            <h3>Software Engineer Intern</h3>
+            <span class="exp-company">Emerson</span>
+            <ul>
+              <li>Modernized enterprise industrial tooling by transitioning legacy Razor templates into modular, responsive Vue.js components.</li>
+              <li>Collaborated across engineering teams in sprint cycles delivering accessible user interfaces.</li>
+            </ul>
+          </div>
+          <div class="exp-tags">
+            <span class="exp-tag">Vue.js</span>
+            <span class="exp-tag">JavaScript</span>
+            <span class="exp-tag">Responsive UI</span>
+          </div>
+        </article>
       </div>
     </div>
   </div>
