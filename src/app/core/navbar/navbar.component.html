@@ -1,4 +1,4 @@
-<nav class="nav-wrap" [class.scrolled]="scrolled">
+<nav class="nav-wrap" [class.scrolled]="scrolled" [class.menu-is-open]="menuOpen">
   <div class="nav">
     <a routerLink="/" class="logo" (click)="closeMenu()">Bhakti Pokhrel</a>
 
@@ -40,7 +40,7 @@
   </div>
 </nav>
 
-<!-- Seamless Mobile Menu Drawer -->
+<!-- Seamless Mobile Menu Drawer (Complete Navigations) -->
 <div
   class="mobile-menu"
   [class.open]="menuOpen"
@@ -51,47 +51,90 @@
   [attr.aria-hidden]="!menuOpen">
   
   <div class="mobile-menu-inner">
-    <div class="mobile-nav-eyebrow">Navigation</div>
+    <div class="mobile-nav-eyebrow">
+      <span>Menu &amp; Pages</span>
+      <span class="eyebrow-count">7 destinations</span>
+    </div>
 
+    <!-- All Primary Navigations Clearly Visible -->
     <ul class="mobile-menu-links">
       <li class="menu-item" style="--item-index: 1">
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">
-          <span class="item-num">01</span>
-          <span class="item-text">Home</span>
+          <div class="item-left">
+            <span class="item-num">01</span>
+            <span class="item-text">Home</span>
+          </div>
           <span class="item-arrow">→</span>
         </a>
       </li>
+
       <li class="menu-item" style="--item-index: 2">
         <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">
-          <span class="item-num">02</span>
-          <span class="item-text">About</span>
+          <div class="item-left">
+            <span class="item-num">02</span>
+            <span class="item-text">About</span>
+          </div>
+          <span class="item-badge">Background &amp; Story</span>
           <span class="item-arrow">→</span>
         </a>
       </li>
+
       <li class="menu-item" style="--item-index: 3">
         <a routerLink="/projects" routerLinkActive="active" (click)="closeMenu()">
-          <span class="item-num">03</span>
-          <span class="item-text">Selected Work</span>
+          <div class="item-left">
+            <span class="item-num">03</span>
+            <span class="item-text">Selected Work</span>
+          </div>
+          <span class="item-badge">Projects &amp; SaaS</span>
           <span class="item-arrow">→</span>
         </a>
       </li>
+
       <li class="menu-item" style="--item-index: 4">
-        <a routerLink="/resume" routerLinkActive="active" (click)="closeMenu()">
-          <span class="item-num">04</span>
-          <span class="item-text">Resume</span>
+        <a routerLink="/about" fragment="skills-section" (click)="closeMenu()">
+          <div class="item-left">
+            <span class="item-num">04</span>
+            <span class="item-text">Skills Matrix</span>
+          </div>
+          <span class="item-badge">D3 Visualizer</span>
           <span class="item-arrow">→</span>
         </a>
       </li>
+
       <li class="menu-item" style="--item-index: 5">
+        <a routerLink="/resume" routerLinkActive="active" (click)="closeMenu()">
+          <div class="item-left">
+            <span class="item-num">05</span>
+            <span class="item-text">Resume</span>
+          </div>
+          <span class="item-badge">CV &amp; MedPace</span>
+          <span class="item-arrow">→</span>
+        </a>
+      </li>
+
+      <li class="menu-item" style="--item-index: 6">
         <a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">
-          <span class="item-num">05</span>
-          <span class="item-text">Contact</span>
+          <div class="item-left">
+            <span class="item-num">06</span>
+            <span class="item-text">Contact</span>
+          </div>
+          <span class="item-badge">Get in touch</span>
+          <span class="item-arrow">→</span>
+        </a>
+      </li>
+
+      <li class="menu-item" style="--item-index: 7">
+        <a routerLink="/privacy" routerLinkActive="active" (click)="closeMenu()">
+          <div class="item-left">
+            <span class="item-num">07</span>
+            <span class="item-text">Privacy &amp; Disclosure</span>
+          </div>
           <span class="item-arrow">→</span>
         </a>
       </li>
     </ul>
 
-    <!-- Mobile Quick Actions & Metadata -->
+    <!-- Quick Action Footer -->
     <div class="mobile-menu-footer">
       <div class="mobile-quick-actions">
         <a class="btn btn-primary mobile-act-btn" href="assets/resume.pdf" download="Bhakti-Pokhrel-Resume.pdf" (click)="closeMenu()">
@@ -112,7 +155,7 @@
       <div class="mobile-meta-row">
         <div class="mobile-status-dot">
           <span class="pulse-dot"></span>
-          <span>Open to opportunities</span>
+          <span>Open to conversations</span>
         </div>
         <a href="https://www.linkedin.com/in/bhaktipokhrel" target="_blank" rel="noopener" class="mobile-linkedin">
           LinkedIn ↗

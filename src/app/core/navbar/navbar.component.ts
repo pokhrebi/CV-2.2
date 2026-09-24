@@ -47,7 +47,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   @HostListener('window:resize')
   onResize(): void {
-    if (window.innerWidth > 768 && this.menuOpen) {
+    if (window.innerWidth > 860 && this.menuOpen) {
       this.closeMenu();
     }
   }
