@@ -1,4 +1,57 @@
 <section class="work-section">
+  <!-- Reusable Language & Technology SVG Icons Sprite -->
+  <svg style="display: none;" aria-hidden="true">
+    <defs>
+      <symbol id="tech-angular" viewBox="0 0 24 24">
+        <path d="M12 2L2 5.5l1.5 12.5L12 22l8.5-4L22 5.5 12 2z" fill="#E23237"/>
+        <path d="M12 2v20l8.5-4L22 5.5 12 2z" fill="#B52E31"/>
+        <path d="M12 5.2l5.7 12.8h-2.1l-1.2-3.1h-4.8l-1.2 3.1H6.3L12 5.2zm2 7.7L12 7.8l-2 5.1h4z" fill="#fff"/>
+      </symbol>
+      <symbol id="tech-dotnet" viewBox="0 0 24 24">
+        <rect width="22" height="22" x="1" y="1" rx="5" fill="#512BD4"/>
+        <path fill="#fff" d="M4 16.5V7.5h2.2l3.4 5.3V7.5h2.2v9H9.6L6.2 11.2v5.3H4zm9.3 0V7.5h5.8v1.8h-3.6v1.8h3.3v1.8h-3.3v1.8h3.7v1.8h-5.9zm8.5 0h-2.2V7.5h2.2v9z"/>
+      </symbol>
+      <symbol id="tech-csharp" viewBox="0 0 24 24">
+        <path fill="#9B4993" d="M12 2.5l8 4.62v9.24L12 21L4 16.36V7.12L12 2.5z"/>
+        <text x="12" y="15.2" fill="#fff" font-size="9" font-family="system-ui, -apple-system, sans-serif" font-weight="900" text-anchor="middle">C#</text>
+      </symbol>
+      <symbol id="tech-ts" viewBox="0 0 24 24">
+        <rect width="22" height="22" x="1" y="1" rx="4" fill="#3178C6"/>
+        <path fill="#fff" d="M11.5 10.5h-5V8.8h12.5v1.7h-5v10.5h-2.5V10.5zm3.7 7.7l1.7-1.3c.7.9 1.6 1.4 2.7 1.4 1.1 0 1.8-.5 1.8-1.3 0-.8-.6-1.2-1.9-1.6-1.9-.6-3.1-1.3-3.1-2.9 0-1.7 1.4-2.9 3.4-2.9 1.4 0 2.5.5 3.3 1.4l-1.5 1.4c-.6-.7-1.3-1-2-1-.9 0-1.5.5-1.5 1.1 0 .7.5 1 1.7 1.4 2.1.7 3.3 1.4 3.3 3.1 0 1.8-1.5 3.1-3.7 3.1-1.7 0-3.1-.7-4.2-2.4z"/>
+      </symbol>
+      <symbol id="tech-azure" viewBox="0 0 24 24">
+        <path fill="#0089D6" d="M13.05 2.5l-6.3 11.25 4.8 3.95 7.9-15.2z"/>
+        <path fill="#0078D4" d="M3.2 16.5l3.55 5h14.05l-4.5-5z"/>
+        <path fill="#1490DF" d="M6.75 13.75l-3.55 2.75 4.8 3.95 2.3-3.95z"/>
+      </symbol>
+      <symbol id="tech-redis" viewBox="0 0 24 24">
+        <path fill="#D82C20" d="M2 7.5L12 3l10 4.5v9L12 21 2 16.5v-9zm10-2.3L4.4 8.6 12 12l7.6-3.4L12 5.2zM4 10.3v5.1l7 3.2v-5.1L4 10.3zm16 0l-7 3.2v5.1l7-3.2v-5.1z"/>
+      </symbol>
+      <symbol id="tech-sql" viewBox="0 0 24 24">
+        <ellipse cx="12" cy="6" rx="9" ry="3" fill="#CC292B"/>
+        <path fill="#E65100" d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6c0 1.66-4.03 3-9 3S3 7.66 3 6z"/>
+        <path fill="#F57C00" d="M3 11v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4c0 1.66-4.03 3-9 3s-9-1.34-9-3z"/>
+        <path fill="#FFB74D" d="M3 16v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4c0 1.66-4.03 3-9 3s-9-1.34-9-3z"/>
+      </symbol>
+      <symbol id="tech-swift" viewBox="0 0 24 24">
+        <path fill="#F05138" d="M21.5 17.8c-.1-.2-2.1-4.2-5.7-6.5-1.8-1.2-3.8-1.8-5.3-2 3.1 1.6 5.2 4.4 5.4 4.7-3.8-3.4-8.8-4.4-11.8-4.2 3.7 1.8 6.4 5.4 6.7 5.8-5.1-4.3-9.5-2.2-9.8-2 .1.2 3.8 6.6 9.8 8.8 4.7 1.7 10 .7 10.7-.6z"/>
+        <path fill="#F05138" d="M19.8 19.4c-2.4 2.5-6.7 3.5-10.8 2.2 4.9.4 8.7-1.5 10.8-2.2z"/>
+      </symbol>
+      <symbol id="tech-swiftui" viewBox="0 0 24 24">
+        <path fill="#0071e3" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 2.2a7.8 7.8 0 017.8 7.8c0 1.8-.6 3.4-1.6 4.7-1.1-.9-2.5-1.7-4.2-2.3 1.4-.7 2.4-2 2.6-3.6-2.5 1.5-5.3 1.7-7.2.8 1.5.9 2.5 2.3 2.7 3.9-3.3-.4-5.6-2-6.5-3.3 1.8.8 3.8 1 5.4.3-3.6-1.5-4.8-4.6-4.9-5A7.8 7.8 0 0112 4.2z"/>
+      </symbol>
+      <symbol id="tech-ios" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.67-.82 1.13-1.96 1.01-3.1-.98.04-2.17.65-2.87 1.47-.62.72-1.16 1.88-1.02 2.99 1.1.09 2.21-.54 2.88-1.36z"/>
+      </symbol>
+      <symbol id="tech-api" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-3.5H8v-2h3V7.5l5 4.5-5 4.5z"/>
+      </symbol>
+      <symbol id="tech-cqrs" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+      </symbol>
+    </defs>
+  </svg>
+
   <div class="container">
     <div class="work-header-wrap reveal">
       <div>
@@ -34,8 +87,18 @@
 
     <div class="project-showcase">
       <!-- PROJECT 1: TrackCM (Interactive SaaS Platform) -->
-      <article class="project-card reveal" *ngIf="activeFilter === 'all' || activeFilter === 'saas'">
+      <article
+        class="project-card tilt-card reveal"
+        [class.is-tilting]="cardTilts.trackcm.active"
+        [style.--rx.deg]="cardTilts.trackcm.rx"
+        [style.--ry.deg]="cardTilts.trackcm.ry"
+        [style.--glare-x.%]="cardTilts.trackcm.glareX"
+        [style.--glare-y.%]="cardTilts.trackcm.glareY"
+        (mousemove)="onCardMouseMove($event, 'trackcm')"
+        (mouseleave)="onCardMouseLeave('trackcm')"
+        *ngIf="activeFilter === 'all' || activeFilter === 'saas'">
         <div class="project-visual trackcm-visual">
+          <div class="tilt-glare" aria-hidden="true"></div>
           <!-- Interactive SaaS Browser Mockup -->
           <div class="browser">
             <div class="browser-chrome">
@@ -375,10 +438,22 @@
         <div class="project-content">
           <div class="proj-badge-row">
             <span class="eyebrow">Enterprise Multi-Tenant SaaS · 2025–2026</span>
-            <span class="live-indicator"><span class="pulse-dot"></span> Interactive Sandbox</span>
+            <div class="badge-actions-group">
+              <span class="live-indicator"><span class="pulse-dot"></span> Interactive Sandbox</span>
+              <button
+                class="btn-expand-pill"
+                (click)="openProjectModal('trackcm')"
+                title="Expand TrackCM case study and key achievements">
+                <span>Expand Details</span>
+                <span class="pill-arrow">↗</span>
+              </button>
+            </div>
           </div>
 
-          <h3 class="proj-main-title">TrackCM</h3>
+          <h3 class="proj-main-title clickable-title" (click)="openProjectModal('trackcm')">
+            TrackCM
+            <span class="title-expand-icon" aria-hidden="true">↗</span>
+          </h3>
           <p class="proj-lead-desc">
             <strong>TrackCM</strong> is an enterprise multi-tenant Campaign &amp; Conversion Intelligence Platform. It provides marketing and growth engineering teams with visual drag-and-drop landing page composition, automated lead capture pipelines, and sub-second analytics attribution while maintaining rigorous tenant data isolation.
           </p>
@@ -410,16 +485,22 @@
             <li><strong>Enterprise Identity &amp; RBAC:</strong> Seamless Azure AD B2C integration supporting OAuth 2.0 / OIDC with granular role permissions.</li>
           </ul>
 
-          <!-- Tech Tags -->
-          <div class="exp-tags" style="max-width: none; justify-content: flex-start;">
-            <span class="exp-tag">Angular 19</span>
-            <span class="exp-tag">.NET 8</span>
-            <span class="exp-tag">C#</span>
-            <span class="exp-tag">Azure SQL (RLS)</span>
-            <span class="exp-tag">Azure AD B2C</span>
-            <span class="exp-tag">Redis Cache</span>
-            <span class="exp-tag">MediatR CQRS</span>
-            <span class="exp-tag">Azure App Service</span>
+          <!-- Tech Tags with Language & Framework Icons -->
+          <div class="exp-tags" style="max-width: none; justify-content: flex-start; margin-bottom: 1.1rem;">
+            <span *ngFor="let t of trackCmTech" class="exp-tag tech-pill-badge">
+              <svg class="tech-icon-svg" aria-hidden="true"><use [attr.href]="'#tech-' + t.icon"></use></svg>
+              <span>{{ t.name }}</span>
+            </span>
+          </div>
+
+          <!-- Explicit Expand Action Row -->
+          <div class="card-expand-cta-row">
+            <button
+              class="btn-expand-full"
+              (click)="openProjectModal('trackcm')">
+              <span class="icon-expand">⤢</span>
+              <span>Expand TrackCM Case Study &amp; Achievements</span>
+            </button>
           </div>
         </div>
       </article>
@@ -430,8 +511,18 @@
       </div>
 
       <!-- PROJECT 2: GoldTracker (Interactive Native iOS Application) -->
-      <article class="project-card reversed reveal" *ngIf="activeFilter === 'all' || activeFilter === 'mobile'">
+      <article
+        class="project-card reversed tilt-card reveal"
+        [class.is-tilting]="cardTilts.goldtracker.active"
+        [style.--rx.deg]="cardTilts.goldtracker.rx"
+        [style.--ry.deg]="cardTilts.goldtracker.ry"
+        [style.--glare-x.%]="cardTilts.goldtracker.glareX"
+        [style.--glare-y.%]="cardTilts.goldtracker.glareY"
+        (mousemove)="onCardMouseMove($event, 'goldtracker')"
+        (mouseleave)="onCardMouseLeave('goldtracker')"
+        *ngIf="activeFilter === 'all' || activeFilter === 'mobile'">
         <div class="project-visual gold-visual">
+          <div class="tilt-glare" aria-hidden="true"></div>
           <div class="phones-stack">
             <!-- Interactive Front Phone -->
             <div class="phone phone-front interactive-phone">
@@ -549,9 +640,22 @@
         <div class="project-content">
           <div class="proj-badge-row">
             <span class="eyebrow">Native iOS App · SwiftUI · 2026</span>
-            <span class="live-indicator"><span class="pulse-dot"></span> Interactive Simulator</span>
+            <div class="badge-actions-group">
+              <span class="live-indicator"><span class="pulse-dot"></span> Interactive Simulator</span>
+              <button
+                class="btn-expand-pill"
+                (click)="openProjectModal('goldtracker')"
+                title="Expand GoldTracker case study and key achievements">
+                <span>Expand Details</span>
+                <span class="pill-arrow">↗</span>
+              </button>
+            </div>
           </div>
-          <h3 class="proj-main-title">GoldTracker</h3>
+
+          <h3 class="proj-main-title clickable-title" (click)="openProjectModal('goldtracker')">
+            GoldTracker
+            <span class="title-expand-icon" aria-hidden="true">↗</span>
+          </h3>
           <p class="proj-lead-desc">
             A native SwiftUI iOS application engineered to monitor live market spot prices for gold, silver, and platinum. Built using the MVVM pattern with async/await concurrency, interactive historical sparklines, and precision numerical normalization.
           </p>
@@ -561,14 +665,22 @@
             <li><strong>Interactive Charts:</strong> Dynamic 1D / 1W / 1M / 1Y historical range calculations with custom SwiftUI path rendering.</li>
             <li><strong>Apple Design Polish:</strong> Dark/light mode fidelity, haptic feedback on asset tab switching, and native SF Symbols iconography.</li>
           </ul>
-          <div class="exp-tags" style="max-width: none; justify-content: flex-start;">
-            <span class="exp-tag">Swift 5.10</span>
-            <span class="exp-tag">SwiftUI</span>
-            <span class="exp-tag">MVVM</span>
-            <span class="exp-tag">Async / Await</span>
-            <span class="exp-tag">Combine</span>
-            <span class="exp-tag">REST API</span>
-            <span class="exp-tag">iOS</span>
+          <!-- Tech Tags with Language & Framework Icons -->
+          <div class="exp-tags" style="max-width: none; justify-content: flex-start; margin-bottom: 1.1rem;">
+            <span *ngFor="let t of goldTrackerTech" class="exp-tag tech-pill-badge">
+              <svg class="tech-icon-svg" aria-hidden="true"><use [attr.href]="'#tech-' + t.icon"></use></svg>
+              <span>{{ t.name }}</span>
+            </span>
+          </div>
+
+          <!-- Explicit Expand Action Row -->
+          <div class="card-expand-cta-row">
+            <button
+              class="btn-expand-full"
+              (click)="openProjectModal('goldtracker')">
+              <span class="icon-expand">⤢</span>
+              <span>Expand GoldTracker Case Study &amp; Achievements</span>
+            </button>
           </div>
         </div>
       </article>
@@ -655,3 +767,106 @@
     </div>
   </div>
 </section>
+
+<!-- Detailed Project Expand Modal Overlay -->
+<div
+  *ngIf="expandedProject"
+  class="project-modal-backdrop"
+  (click)="closeProjectModal()"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="projectModals[expandedProject].title + ' Case Study & Key Achievements'">
+  <div class="project-modal-dialog" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <header class="pmodal-header">
+      <div class="pmodal-header-text">
+        <div class="pmodal-meta">
+          <span class="pmodal-cat">{{ projectModals[expandedProject].category }}</span>
+          <span class="pmodal-dot">·</span>
+          <span class="pmodal-role">{{ projectModals[expandedProject].role }}</span>
+          <span class="pmodal-dot">·</span>
+          <span class="pmodal-duration">{{ projectModals[expandedProject].duration }}</span>
+        </div>
+        <h2 class="pmodal-title">{{ projectModals[expandedProject].title }}</h2>
+        <p class="pmodal-tagline">{{ projectModals[expandedProject].tagline }}</p>
+      </div>
+      <button
+        class="pmodal-close"
+        (click)="closeProjectModal()"
+        aria-label="Close project modal">
+        ✕
+      </button>
+    </header>
+
+    <!-- Modal Scrollable Body -->
+    <div class="pmodal-body">
+      <!-- Key Achievements Metric Grid -->
+      <div class="pmodal-section">
+        <div class="section-badge-title">
+          <span class="sec-badge">MEASURABLE IMPACT</span>
+          <h3 class="pmodal-section-title">Key Engineering Achievements</h3>
+        </div>
+        <div class="achievements-grid">
+          <div
+            *ngFor="let ach of projectModals[expandedProject].achievements"
+            class="achievement-card">
+            <span class="ach-metric">{{ ach.metric }}</span>
+            <span class="ach-label">{{ ach.label }}</span>
+            <p class="ach-desc">{{ ach.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Problem vs Solution Narrative -->
+      <div class="pmodal-narrative-grid">
+        <div class="narrative-card problem-card">
+          <h4 class="narrative-heading">
+            <span class="heading-icon">⚠</span> The Engineering Problem
+          </h4>
+          <p class="narrative-text">{{ projectModals[expandedProject].problem }}</p>
+        </div>
+        <div class="narrative-card solution-card">
+          <h4 class="narrative-heading">
+            <span class="heading-icon">💡</span> The Architectural Solution
+          </h4>
+          <p class="narrative-text">{{ projectModals[expandedProject].solution }}</p>
+        </div>
+      </div>
+
+      <!-- Architectural Highlights List -->
+      <div class="pmodal-section">
+        <div class="section-badge-title">
+          <span class="sec-badge">SYSTEM ARCHITECTURE</span>
+          <h3 class="pmodal-section-title">Implementation &amp; Security Highlights</h3>
+        </div>
+        <ul class="pmodal-feature-list">
+          <li *ngFor="let highlight of projectModals[expandedProject].architectureHighlights">
+            {{ highlight }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Complete Tech Stack Tags with Language Icons -->
+      <div class="pmodal-section" style="margin-bottom: 0;">
+        <div class="section-badge-title">
+          <span class="sec-badge">CORE STACK</span>
+          <h3 class="pmodal-section-title">Technologies &amp; Infrastructure</h3>
+        </div>
+        <div class="exp-tags" style="max-width: none; justify-content: flex-start;">
+          <span *ngFor="let tech of projectModals[expandedProject].techStack" class="exp-tag tech-pill-badge">
+            <svg class="tech-icon-svg" aria-hidden="true"><use [attr.href]="'#tech-' + tech.icon"></use></svg>
+            <span>{{ tech.name }}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <footer class="pmodal-footer">
+      <div class="pmodal-footer-note">Press <kbd>Esc</kbd> or click outside to dismiss</div>
+      <button class="btn btn-secondary" (click)="closeProjectModal()">
+        Close Case Study
+      </button>
+    </footer>
+  </div>
+</div>

@@ -5,6 +5,26 @@ export type ProjectFilter = 'all' | 'saas' | 'mobile';
 export type TrackCmTab = 'analytics' | 'builder' | 'leads';
 export type MetalType = 'gold' | 'silver' | 'platinum';
 export type Timeframe = '1D' | '1W' | '1M' | '1Y';
+export type ExpandedProjectKey = 'trackcm' | 'goldtracker' | null;
+
+export type TechIconType =
+  | 'angular'
+  | 'dotnet'
+  | 'csharp'
+  | 'azure'
+  | 'redis'
+  | 'swift'
+  | 'swiftui'
+  | 'ts'
+  | 'sql'
+  | 'ios'
+  | 'api'
+  | 'cqrs';
+
+export interface TechBadge {
+  name: string;
+  icon: TechIconType;
+}
 
 interface Tenant {
   id: string;
@@ -37,12 +57,160 @@ interface MetalData {
   charts: Record<Timeframe, { path: string; fill: string; returnText: string }>;
 }
 
+export interface ProjectDetailModal {
+  key: 'trackcm' | 'goldtracker';
+  title: string;
+  category: string;
+  tagline: string;
+  role: string;
+  duration: string;
+  overview: string;
+  problem: string;
+  solution: string;
+  achievements: {
+    metric: string;
+    label: string;
+    description: string;
+  }[];
+  architectureHighlights: string[];
+  techStack: TechBadge[];
+}
+
 @Component({
   selector: 'app-projects',
-  templateUrl: './projects.component.html'
+  templateUrl: './projects.component.html',
+  host: {
+    '(window:keydown.escape)': 'onEscapePressed()'
+  }
 })
 export class ProjectsComponent implements OnInit {
   activeFilter: ProjectFilter = 'all';
+
+  // --- Tech Badges with Language & Framework Icons ---
+  trackCmTech: TechBadge[] = [
+    { name: 'Angular 19', icon: 'angular' },
+    { name: '.NET 8', icon: 'dotnet' },
+    { name: 'C#', icon: 'csharp' },
+    { name: 'TypeScript', icon: 'ts' },
+    { name: 'Azure SQL (RLS)', icon: 'sql' },
+    { name: 'Azure AD B2C', icon: 'azure' },
+    { name: 'Redis Cache', icon: 'redis' },
+    { name: 'MediatR CQRS', icon: 'cqrs' },
+    { name: 'Azure App Service', icon: 'azure' }
+  ];
+
+  goldTrackerTech: TechBadge[] = [
+    { name: 'Swift 5.10', icon: 'swift' },
+    { name: 'SwiftUI', icon: 'swiftui' },
+    { name: 'MVVM', icon: 'cqrs' },
+    { name: 'Async / Await', icon: 'api' },
+    { name: 'Combine', icon: 'api' },
+    { name: 'REST API', icon: 'api' },
+    { name: 'iOS SDK', icon: 'ios' }
+  ];
+
+  // --- Modal Expand State ---
+  expandedProject: ExpandedProjectKey = null;
+
+  projectModals: Record<'trackcm' | 'goldtracker', ProjectDetailModal> = {
+    trackcm: {
+      key: 'trackcm',
+      title: 'TrackCM',
+      category: 'Enterprise Multi-Tenant SaaS Platform',
+      tagline: 'Sub-second conversion tracking, visual dynamic block page hydration, and multi-tenant RLS isolation.',
+      role: 'Lead Full-Stack Software Engineer',
+      duration: '2025 — 2026',
+      overview: 'TrackCM is a specialized multi-tenant campaign attribution and landing page composition platform designed to bridge marketing agility with enterprise data security. It empowers growth teams to compose high-converting landing pages with dynamic block schemas while providing real-time attribution analytics across every visitor touchpoint.',
+      problem: 'Traditional marketing CMS solutions either compromise data security by storing multi-tenant records without kernel-level database isolation, or rely on heavy iframe embeds that introduce render latency, cumulative layout shifts, and attribution blindspots across multi-step campaign funnels.',
+      solution: 'Engineered a decoupled modern cloud architecture pairing an Angular 19 SPA client with an ASP.NET Core 8 Web API backend and Azure SQL Row-Level Security (RLS). When user requests arrive, verified JWT claims set SESSION_CONTEXT to guarantee complete cryptographic and logical tenant separation at the database engine level, while Angular signals hydrate dynamic layout blocks with zero iframe overhead.',
+      achievements: [
+        {
+          metric: '< 48ms',
+          label: 'P95 Ingestion Latency',
+          description: 'Sub-50ms event ingestion throughput processing high-frequency conversion events with Redis distributed caching.'
+        },
+        {
+          metric: '100%',
+          label: 'Tenant Data Isolation',
+          description: 'Zero data leakage across multi-tenant boundaries enforced by Azure SQL Row-Level Security predicates.'
+        },
+        {
+          metric: '62%',
+          label: 'Render Speedup',
+          description: 'Reduced initial page load and block mutation latency by 62% using Angular 19 dynamic component outlets.'
+        },
+        {
+          metric: '99.9%',
+          label: 'Availability SLA',
+          description: 'Containerized deployment to Azure App Service with automated GitHub Actions CI/CD and health-check slot swaps.'
+        }
+      ],
+      architectureHighlights: [
+        'Database-Enforced Multi-Tenancy: T-SQL security predicates dynamically evaluate SESSION_CONTEXT("TenantId") on every SELECT, UPDATE, and DELETE query.',
+        'Dynamic Component Hydration: Angular 19 standalone signals drive atomic layout re-renders without full document tears or third-party iframe bottlenecks.',
+        'Attribution Engine: Asynchronous event ingestion pipeline capturing UTM touchpoints, time-on-page, form views, and qualified leads.',
+        'Enterprise Identity & Security: Azure Key Vault zero-secret codebase with Azure AD B2C OAuth 2.0 / OpenID Connect tokens.'
+      ],
+      techStack: [
+        { name: 'Angular 19', icon: 'angular' },
+        { name: 'TypeScript', icon: 'ts' },
+        { name: '.NET 8', icon: 'dotnet' },
+        { name: 'C#', icon: 'csharp' },
+        { name: 'Azure SQL (RLS)', icon: 'sql' },
+        { name: 'Redis Cache', icon: 'redis' },
+        { name: 'MediatR CQRS', icon: 'cqrs' },
+        { name: 'Azure App Service', icon: 'azure' }
+      ]
+    },
+    goldtracker: {
+      key: 'goldtracker',
+      title: 'GoldTracker',
+      category: 'Native iOS Application (SwiftUI)',
+      tagline: 'Real-time precious metals spot monitoring, multi-timeframe sparkline telemetry, and offline resilience.',
+      role: 'iOS Mobile Engineer & Designer',
+      duration: '2026',
+      overview: 'GoldTracker is a native iOS application engineered to provide commodity traders, jewelers, and retail investors with live spot rates for Gold (XAU), Silver (XAG), and Platinum (XPT). It pairs high-frequency REST updates with custom SwiftUI chart paths and instantaneous unit normalization.',
+      problem: 'Existing precious metal tracking apps are often cluttered with advertisements, rely on sluggish webview wrappers, fail to maintain state during intermittent cell connectivity, and suffer from micro-stutters during time-series recalculations.',
+      solution: 'Architected an Apple-first native client utilizing SwiftUI and Swift 5.10 concurrency (async/await and actors). Decoupled the time-series mathematical normalization into an isolated MVVM ViewModel, ensuring smooth 120Hz ProMotion animations during live quote updates and interactive timeframe pivots.',
+      achievements: [
+        {
+          metric: '120 FPS',
+          label: 'ProMotion Fidelity',
+          description: 'Silky smooth gesture interactions and chart path interpolations powered by SwiftUI custom vector paths.'
+        },
+        {
+          metric: '0 ms',
+          label: 'Offline Stutter',
+          description: 'Local snapshot caching guarantees zero cold-start delay even during total cellular connection drops.'
+        },
+        {
+          metric: '3 Metals',
+          label: 'Real-Time Feeds',
+          description: 'Instantaneous price normalization across Troy Ounces and Grams with spread tracking.'
+        },
+        {
+          metric: 'iOS 17+',
+          label: 'Modern APIs',
+          description: 'Utilizes Swift Concurrency, Combine pipelines, dynamic type sizing, and native SF Symbols 6.'
+        }
+      ],
+      architectureHighlights: [
+        'Unidirectional Data Flow: MVVM architecture ensures price updates never trigger unnecessary view hierarchy rebuilds.',
+        'Vector Chart Engine: Custom SwiftUI Shape protocols render time-series curves mathematically without heavy third-party chart dependencies.',
+        'Haptic & Visual Feedback: Integrated Apple UIImpactFeedbackGenerator triggers subtle tactile ticks on asset and timeframe switches.',
+        'Dark & Light Parity: Native semantic color tokens adapt to ambient system illumination with high-contrast legibility.'
+      ],
+      techStack: [
+        { name: 'Swift 5.10', icon: 'swift' },
+        { name: 'SwiftUI', icon: 'swiftui' },
+        { name: 'MVVM', icon: 'cqrs' },
+        { name: 'Async / Await', icon: 'api' },
+        { name: 'Combine', icon: 'api' },
+        { name: 'REST API', icon: 'api' },
+        { name: 'iOS SDK', icon: 'ios' }
+      ]
+    }
+  };
 
   // --- TrackCM Interactive SaaS State ---
   trackCmTab: TrackCmTab = 'analytics';
@@ -212,6 +380,27 @@ export class ProjectsComponent implements OnInit {
     this.activeFilter = filter;
   }
 
+  // --- Modal Methods ---
+  openProjectModal(key: 'trackcm' | 'goldtracker'): void {
+    this.expandedProject = key;
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  closeProjectModal(): void {
+    this.expandedProject = null;
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
+  }
+
+  onEscapePressed(): void {
+    if (this.expandedProject) {
+      this.closeProjectModal();
+    }
+  }
+
   // --- TrackCM Methods ---
   setTrackCmTab(tab: TrackCmTab): void {
     this.trackCmTab = tab;
@@ -289,5 +478,34 @@ export class ProjectsComponent implements OnInit {
       return `$${priceGram.toFixed(2)}`;
     }
     return `$${priceOz.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
+  // --- Parallax & 3D Tilt Hover State ---
+  cardTilts = {
+    trackcm: { rx: 0, ry: 0, glareX: 50, glareY: 50, active: false },
+    goldtracker: { rx: 0, ry: 0, glareX: 50, glareY: 50, active: false }
+  };
+
+  onCardMouseMove(event: MouseEvent, cardKey: 'trackcm' | 'goldtracker'): void {
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: none)').matches) {
+      return;
+    }
+    const card = event.currentTarget as HTMLElement;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+
+    // Subtle tilt: max ±7 degrees
+    const rx = Number(((0.5 - y) * 9).toFixed(2));
+    const ry = Number(((x - 0.5) * 9).toFixed(2));
+    const glareX = Number((x * 100).toFixed(1));
+    const glareY = Number((y * 100).toFixed(1));
+
+    this.cardTilts[cardKey] = { rx, ry, glareX, glareY, active: true };
+  }
+
+  onCardMouseLeave(cardKey: 'trackcm' | 'goldtracker'): void {
+    this.cardTilts[cardKey] = { rx: 0, ry: 0, glareX: 50, glareY: 50, active: false };
   }
 }
