@@ -1,57 +1,398 @@
-<section>
-  <div class="container-narrow">
-    <div class="resume-hero reveal">
-      <span class="eyebrow">Resume</span>
-      <h1>The full story, <em style="font-style: italic; color: var(--text-muted);">on paper.</em></h1>
-      <p style="font-size: 1.05rem; margin-top: 1rem;">
-        Experience, education, skills and certifications — all in one place.
-      </p>
-      <a class="btn" href="assets/resume.pdf" download="Bhakti-Pokhrel-Resume.pdf">
-        Download PDF <span class="arrow">↓</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<hr class="section-divider" />
-
-<section>
+<section class="resume-page-section">
   <div class="container">
-    <span class="eyebrow reveal">Quick highlights</span>
-    <h2 class="reveal" style="margin-bottom: 2rem;">At a glance.</h2>
+    <!-- Top Action Toolbar (Interactive Controls) -->
+    <div class="resume-toolbar-wrap reveal">
+      <div class="resume-toolbar-left">
+        <span class="eyebrow">Curriculum Vitae</span>
+        <h1 class="resume-page-title">Resume</h1>
+        <p class="resume-page-subtitle">
+          Full-stack Software Engineer II with experience across Angular, .NET, Azure, and SQL Server.
+        </p>
+      </div>
 
-    <div class="timeline">
-      <article class="timeline-item reveal">
-        <h4>Education</h4>
-        <p><strong>B.S. Information Technology</strong></p>
-        <p>University of Cincinnati</p>
-        <span class="date">Graduated June 2023</span>
-      </article>
+      <div class="resume-actions-group">
+        <a class="btn btn-primary" href="assets/resume.pdf" download="Bhakti-Pokhrel-Resume.pdf" title="Download Official PDF">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download PDF</span>
+        </a>
 
-      <article class="timeline-item reveal">
-        <h4>Current role</h4>
-        <p><strong>Software Engineer II</strong></p>
-        <p>MedPace</p>
-        <span class="date">June 2025 — Present</span>
-      </article>
+        <button type="button" class="btn btn-secondary" (click)="printResume()" title="Print or save as PDF via browser print dialog">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span>Print / Save PDF</span>
+        </button>
 
-      <article class="timeline-item reveal">
-        <h4>Certifications</h4>
-        <p>Microsoft Azure Fundamentals (AZ-900)</p>
-        <p>Azure Data Fundamentals (DP-900)</p>
-        <span class="date">Microsoft Certified</span>
-      </article>
-
-      <article class="timeline-item reveal">
-        <h4>Tech stack</h4>
-        <p>Angular · TypeScript · C# · .NET</p>
-        <p>SQL Server · Azure · Git</p>
-        <span class="date">Full-stack focus</span>
-      </article>
+        <button type="button" class="btn btn-secondary share-btn" (click)="copyShareLink()" title="Copy shareable link to clipboard">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+          <span>{{ copiedLink ? 'Link Copied!' : 'Share Link' }}</span>
+        </button>
+      </div>
     </div>
 
-    <div class="reveal" style="margin-top: 3.5rem;">
+    <!-- Quick Filter Tabs (Screen Only) -->
+    <div class="resume-nav-tabs reveal" role="tablist" aria-label="Resume Sections">
+      <button
+        *ngFor="let tab of filterTabs"
+        type="button"
+        class="tab-btn"
+        [class.active]="activeFilter === tab.id"
+        (click)="setFilter(tab.id)">
+        {{ tab.label }}
+      </button>
+    </div>
+
+    <!-- Printable Resume Document Paper Canvas -->
+    <div class="resume-paper reveal" id="resume-document">
+      
+      <!-- Resume Header Section -->
+      <header class="doc-header">
+        <div class="doc-header-main">
+          <h2 class="doc-name">Bhakti Pokhrel</h2>
+          <div class="doc-role">Software Engineer II · Full-Stack &amp; Cloud Systems</div>
+        </div>
+
+        <div class="doc-contact-meta">
+          <span class="meta-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Cincinnati, Ohio
+          </span>
+          <span class="meta-sep">·</span>
+          <a class="meta-item link-item" href="https://www.linkedin.com/in/bhaktipokhrel" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+              <rect x="2" y="9" width="4" height="12"></rect>
+              <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+            linkedin.com/in/bhaktipokhrel
+          </a>
+          <span class="meta-sep">·</span>
+          <a class="meta-item link-item" routerLink="/contact">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            Direct Contact Form
+          </a>
+          <span class="meta-sep">·</span>
+          <span class="meta-item badge-item">Azure AZ-900 &amp; DP-900 Certified</span>
+        </div>
+      </header>
+
+      <!-- Executive Summary -->
+      <section class="doc-section summary-section" *ngIf="activeFilter === 'all' || activeFilter === 'experience'">
+        <h3 class="section-title">Professional Summary</h3>
+        <p class="summary-paragraph">
+          Software Engineer II with 4+ years of professional and internship software engineering experience building resilient,
+          high-performance web applications and enterprise microservices. Proven track record at MedPace leading full-stack
+          feature implementations across Angular, TypeScript, C#, and .NET Core. Microsoft Azure certified with demonstrated
+          mastery in database schema architecture, SQL Server query optimization, asynchronous processing, and clean architecture
+          in fast-paced Agile environments.
+        </p>
+      </section>
+
+      <!-- Work Experience -->
+      <section class="doc-section experience-section" *ngIf="activeFilter === 'all' || activeFilter === 'experience'">
+        <h3 class="section-title">Work Experience</h3>
+
+        <!-- Job 1 -->
+        <article class="job-item">
+          <div class="job-header">
+            <div>
+              <h4 class="job-role">Software Engineer II</h4>
+              <div class="job-company">MedPace <span class="job-location">· Cincinnati, OH</span></div>
+            </div>
+            <div class="job-period">June 2025 — Present</div>
+          </div>
+          <ul class="job-bullets">
+            <li>
+              Lead full-stack architecture and feature delivery for core clinical research platforms supporting global multi-center trials and regulatory compliance workflows.
+            </li>
+            <li>
+              Architect and optimize high-throughput ASP.NET Core Web APIs and SQL Server relational schemas, reducing complex query latency by up to <strong>35%</strong> on high-traffic reporting endpoints.
+            </li>
+            <li>
+              Spearhead adoption of modern Angular reactive architecture (Signals, zoneless-ready components, custom RxJS pipelines) to elevate interface responsiveness and state predictability.
+            </li>
+            <li>
+              Mentor junior engineers through structured 1-on-1 pairing sessions, drive comprehensive code reviews, and champion clean architecture, SOLID principles, and unit testing practices.
+            </li>
+            <li>
+              Partner with cross-functional product owners, database administrators, and QA analysts in 2-week Agile sprints to consistently ship reliable releases on schedule.
+            </li>
+          </ul>
+          <div class="job-tags">
+            <span class="j-tag">Angular 18/19</span>
+            <span class="j-tag">TypeScript</span>
+            <span class="j-tag">C#</span>
+            <span class="j-tag">.NET 8</span>
+            <span class="j-tag">SQL Server</span>
+            <span class="j-tag">Azure</span>
+            <span class="j-tag">Microservices</span>
+            <span class="j-tag">CI/CD</span>
+          </div>
+        </article>
+
+        <!-- Job 2 -->
+        <article class="job-item">
+          <div class="job-header">
+            <div>
+              <h4 class="job-role">Software Engineer</h4>
+              <div class="job-company">MedPace <span class="job-location">· Cincinnati, OH</span></div>
+            </div>
+            <div class="job-period">June 2023 — June 2025</div>
+          </div>
+          <ul class="job-bullets">
+            <li>
+              Spearheaded full-stack web development across Angular, TypeScript, C#, and .NET Core for mission-critical enterprise applications.
+            </li>
+            <li>
+              Engineered decoupled microservices responsible for asynchronous bulk data processing, background job orchestration, and reliable multi-system synchronization.
+            </li>
+            <li>
+              Designed scalable relational database tables, indexed views, and complex stored procedures ensuring rigorous data integrity, ACID compliance, and low latency.
+            </li>
+            <li>
+              Refactored legacy modules into modular, reusable UI components adhering strictly to corporate design systems and accessibility standards (WCAG 2.1 AA).
+            </li>
+            <li>
+              Tuned LINQ queries and Entity Framework Core projection queries to eliminate N+1 bottlenecks and optimize memory footprints on large result sets.
+            </li>
+          </ul>
+          <div class="job-tags">
+            <span class="j-tag">Angular</span>
+            <span class="j-tag">TypeScript</span>
+            <span class="j-tag">C# / .NET</span>
+            <span class="j-tag">SQL Server</span>
+            <span class="j-tag">Entity Framework Core</span>
+            <span class="j-tag">REST APIs</span>
+            <span class="j-tag">Git</span>
+          </div>
+        </article>
+
+        <!-- Job 3 -->
+        <article class="job-item">
+          <div class="job-header">
+            <div>
+              <h4 class="job-role">Software Engineer Intern</h4>
+              <div class="job-company">MedPace <span class="job-location">· Cincinnati, OH</span></div>
+            </div>
+            <div class="job-period">May 2022 — May 2023</div>
+          </div>
+          <ul class="job-bullets">
+            <li>
+              Developed and shipped production UI features and back-end integration endpoints using Angular, C#, and Microsoft SQL Server.
+            </li>
+            <li>
+              Authored automated unit tests with xUnit and Jasmine/Karma to prevent regressions and improve release confidence.
+            </li>
+            <li>
+              Participated actively in sprint planning, retrospectives, daily standups, and developer peer code audits.
+            </li>
+          </ul>
+          <div class="job-tags">
+            <span class="j-tag">Angular</span>
+            <span class="j-tag">C#</span>
+            <span class="j-tag">.NET</span>
+            <span class="j-tag">MSSQL</span>
+            <span class="j-tag">Unit Testing</span>
+          </div>
+        </article>
+
+        <!-- Job 4 -->
+        <article class="job-item">
+          <div class="job-header">
+            <div>
+              <h4 class="job-role">Software Engineer Intern</h4>
+              <div class="job-company">Emerson <span class="job-location">· Cincinnati, OH</span></div>
+            </div>
+            <div class="job-period">May 2021 — May 2022</div>
+          </div>
+          <ul class="job-bullets">
+            <li>
+              Modernized internal enterprise platforms by converting legacy server-side ASP.NET Razor views into interactive, modular Vue.js single-page interfaces.
+            </li>
+            <li>
+              Constructed flexible responsive CSS layouts guaranteeing cross-browser and mobile/tablet fidelity for field technicians.
+            </li>
+            <li>
+              Collaborated within an Agile development workflow to iterate rapidly based on direct user feedback.
+            </li>
+          </ul>
+          <div class="job-tags">
+            <span class="j-tag">Vue.js</span>
+            <span class="j-tag">JavaScript</span>
+            <span class="j-tag">HTML5 / SCSS</span>
+            <span class="j-tag">Razor Pages</span>
+            <span class="j-tag">Agile</span>
+          </div>
+        </article>
+      </section>
+
+      <!-- Technical Skills Matrix -->
+      <section class="doc-section skills-section" *ngIf="activeFilter === 'all' || activeFilter === 'skills'">
+        <h3 class="section-title">Technical Skills &amp; Competencies</h3>
+
+        <div class="skills-grid-matrix">
+          <div class="skill-category-card">
+            <h4 class="category-heading">Frontend Engineering</h4>
+            <ul class="skill-list">
+              <li><strong>Frameworks:</strong> Angular (v14–v19), Vue.js, Razor</li>
+              <li><strong>Languages:</strong> TypeScript, JavaScript (ES2022+)</li>
+              <li><strong>UI &amp; Styling:</strong> HTML5, CSS3, SCSS, Tailwind CSS, Responsive Web Design, WCAG 2.1 AA Accessibility</li>
+              <li><strong>State &amp; Reactivity:</strong> Signals, RxJS Observables, NgRx / Component Store</li>
+            </ul>
+          </div>
+
+          <div class="skill-category-card">
+            <h4 class="category-heading">Backend &amp; Architecture</h4>
+            <ul class="skill-list">
+              <li><strong>Platforms:</strong> C#, .NET 8 / 9, .NET Core, ASP.NET Core</li>
+              <li><strong>APIs:</strong> RESTful Web APIs, Minimal APIs, Microservices, Asynchronous Workflows</li>
+              <li><strong>Design Patterns:</strong> Clean Architecture, Repository / Unit of Work, SOLID, Dependency Injection</li>
+              <li><strong>Testing:</strong> xUnit, NUnit, Moq, Integration Testing</li>
+            </ul>
+          </div>
+
+          <div class="skill-category-card">
+            <h4 class="category-heading">Cloud &amp; DevOps</h4>
+            <ul class="skill-list">
+              <li><strong>Cloud Platform:</strong> Microsoft Azure (App Services, Functions, Cosmos DB, Blob Storage, Key Vault)</li>
+              <li><strong>Identity &amp; Auth:</strong> Azure AD B2C, JWT Bearer Tokens, RBAC</li>
+              <li><strong>CI / CD:</strong> Azure DevOps Pipelines, GitHub Actions, Docker containers</li>
+              <li><strong>Tools:</strong> Git, Visual Studio, VS Code, Postman, SQL Server Management Studio (SSMS)</li>
+            </ul>
+          </div>
+
+          <div class="skill-category-card">
+            <h4 class="category-heading">Databases &amp; Storage</h4>
+            <ul class="skill-list">
+              <li><strong>Relational DBs:</strong> Microsoft SQL Server, T-SQL, PostgreSQL</li>
+              <li><strong>ORM &amp; Data Access:</strong> Entity Framework Core, Drizzle, LINQ, ADO.NET</li>
+              <li><strong>Optimization:</strong> Index Design, Execution Plan Profiling, Query Tuning, ACID Transactions</li>
+              <li><strong>NoSQL:</strong> Azure Cosmos DB, Redis Caching</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Certifications -->
+      <section class="doc-section cert-section" *ngIf="activeFilter === 'all' || activeFilter === 'certifications'">
+        <h3 class="section-title">Certifications &amp; Accreditations</h3>
+
+        <div class="cert-grid">
+          <div class="cert-card">
+            <div class="cert-badge-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+            </div>
+            <div class="cert-info">
+              <h4 class="cert-name">Microsoft Certified: Azure Fundamentals (AZ-900)</h4>
+              <div class="cert-issuer">Microsoft · Issued 2024</div>
+              <p class="cert-desc">
+                Demonstrated foundational knowledge of cloud concepts, Azure security, compliance, governance, architecture, and cloud economics.
+              </p>
+            </div>
+          </div>
+
+          <div class="cert-card">
+            <div class="cert-badge-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+            </div>
+            <div class="cert-info">
+              <h4 class="cert-name">Microsoft Certified: Azure Data Fundamentals (DP-900)</h4>
+              <div class="cert-issuer">Microsoft · Issued 2024</div>
+              <p class="cert-desc">
+                Demonstrated expertise in relational and non-relational database concepts, big data warehousing, and real-time analytical workloads on Azure.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section class="doc-section edu-section" *ngIf="activeFilter === 'all' || activeFilter === 'education'">
+        <h3 class="section-title">Education</h3>
+
+        <div class="edu-item">
+          <div class="edu-header">
+            <div>
+              <h4 class="edu-degree">Bachelor of Science in Information Technology</h4>
+              <div class="edu-track">Software Development Track · Dean's List Recognition</div>
+              <div class="edu-school">University of Cincinnati — Cincinnati, OH</div>
+            </div>
+            <div class="edu-date">Graduated June 2023</div>
+          </div>
+          <div class="edu-details">
+            <p><strong>Relevant Coursework:</strong> Data Structures &amp; Algorithms, Relational Database Systems, Enterprise Web Architecture, Cloud Computing Infrastructure, Software Engineering Methodologies, Network Security.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Selected Key Projects -->
+      <section class="doc-section projects-section" *ngIf="activeFilter === 'all' || activeFilter === 'projects'">
+        <h3 class="section-title">Selected Featured Engineering Projects</h3>
+
+        <div class="resume-proj-grid">
+          <div class="resume-proj-card">
+            <div class="proj-header-row">
+              <h4 class="proj-title">TrackCM</h4>
+              <span class="proj-badge">Multi-Tenant SaaS · 2025–26</span>
+            </div>
+            <p class="proj-summary">
+              Enterprise multi-tenant landing page and lead-gen platform with drag-and-drop page builder, strict tenant data isolation, real-time analytics funnels, and Azure AD B2C authentication.
+            </p>
+            <div class="proj-tech">
+              <span>Angular 19</span> · <span>.NET 8</span> · <span>Azure SQL</span> · <span>App Service</span> · <span>CI/CD</span>
+            </div>
+          </div>
+
+          <div class="resume-proj-card">
+            <div class="proj-header-row">
+              <h4 class="proj-title">GoldTracker</h4>
+              <span class="proj-badge">Native iOS App · 2026</span>
+            </div>
+            <p class="proj-summary">
+              SwiftUI iOS application pulling live spot prices for precious metals with historical trend sparklines, tabbed asset switching, clean MVVM separation, and async/await network architecture.
+            </p>
+            <div class="proj-tech">
+              <span>Swift</span> · <span>SwiftUI</span> · <span>MVVM</span> · <span>REST API</span> · <span>iOS</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Doc Footer (Print friendly) -->
+      <footer class="doc-footer">
+        <div class="doc-footer-text">
+          References, detailed study metrics, and verification credentials available upon request.
+        </div>
+        <div class="doc-footer-links">
+          <span>bhaktipokhrel.com</span> · <span>linkedin.com/in/bhaktipokhrel</span>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- Ad banner for web visitors -->
+    <div class="reveal screen-only-ad" style="margin-top: 3.5rem;">
       <app-ad-banner format="auto" minHeight="120px"></app-ad-banner>
     </div>
+
   </div>
 </section>

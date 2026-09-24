@@ -84,7 +84,7 @@ import { Component, OnInit } from '@angular/core';
       .cookie-banner {
         left: 1rem;
         right: 1rem;
-        bottom: 1rem;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 0.85rem);
         max-width: none;
       }
     }

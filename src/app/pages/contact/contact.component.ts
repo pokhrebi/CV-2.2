@@ -31,7 +31,11 @@ export class ContactComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.seo.update('Contact - Bhakti Pokhrel', 'Contact Bhakti Pokhrel');
+    this.seo.update(
+      'Contact — Bhakti Pokhrel | Software Engineer',
+      'Get in touch with Software Engineer Bhakti Pokhrel for full-stack engineering collaborations, software development opportunities, or consulting inquiries.',
+      '/contact'
+    );
   }
 
   generateMathQuestion(): void {

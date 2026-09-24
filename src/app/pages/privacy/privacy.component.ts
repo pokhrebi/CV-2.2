@@ -11,8 +11,9 @@ export class PrivacyComponent implements OnInit {
 
   ngOnInit(): void {
     this.seo.update(
-      'Privacy & Ad Disclosure — Bhakti Pokhrel',
-      'Privacy policy, cookie disclosures, and advertising practices compliant with Google AdSense and international privacy regulations.'
+      'Privacy & Advertising Disclosure — Bhakti Pokhrel | Software Engineer',
+      'Privacy policy, cookie consent disclosures, and Google AdSense advertising transparency statements for Bhakti Pokhrel\'s software engineer portfolio.',
+      '/privacy'
     );
   }
 }

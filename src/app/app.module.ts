@@ -14,6 +14,7 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
 import { AdBannerComponent } from './shared/ad-banner/ad-banner.component';
 import { CookieConsentComponent } from './shared/cookie-consent/cookie-consent.component';
+import { SkillsChartComponent } from './pages/about/skills-chart/skills-chart.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { CookieConsentComponent } from './shared/cookie-consent/cookie-consent.c
     ContactComponent,
     PrivacyComponent,
     AdBannerComponent,
-    CookieConsentComponent
+    CookieConsentComponent,
+    SkillsChartComponent
   ],
   imports: [
     BrowserModule,

@@ -10,6 +10,10 @@ export class ProjectsComponent implements OnInit {
   constructor(private seo: SeoService) { }
 
   ngOnInit(): void {
-    this.seo.update('Projects - Bhakti Pokhrel', 'Portfolio projects of Bhakti Pokhrel');
+    this.seo.update(
+      'Selected Work & Software Projects — Bhakti Pokhrel | Software Engineer',
+      'Explore software engineering projects by Bhakti Pokhrel: TrackCM (multi-tenant SaaS platform with Angular 19 & .NET 8), GoldTracker (native SwiftUI iOS app), and enterprise clinical platform architecture.',
+      '/projects'
+    );
   }
 }
