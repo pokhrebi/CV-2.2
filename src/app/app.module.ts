@@ -11,6 +11,9 @@ import { AboutComponent } from './pages/about/about.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { ResumeComponent } from './pages/resume/resume.component';
 import { ContactComponent } from './pages/contact/contact.component';
+import { PrivacyComponent } from './pages/privacy/privacy.component';
+import { AdBannerComponent } from './shared/ad-banner/ad-banner.component';
+import { CookieConsentComponent } from './shared/cookie-consent/cookie-consent.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,10 @@ import { ContactComponent } from './pages/contact/contact.component';
     AboutComponent,
     ProjectsComponent,
     ResumeComponent,
-    ContactComponent
+    ContactComponent,
+    PrivacyComponent,
+    AdBannerComponent,
+    CookieConsentComponent
   ],
   imports: [
     BrowserModule,

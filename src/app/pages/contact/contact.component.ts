@@ -12,6 +12,7 @@ export class ContactComponent implements OnInit {
   subject: string = '';
   message: string = '';
   showSuccessMessage: boolean = false;
+  formError: string = '';
   isSubmitting: boolean = false;
 
   // Anti-bot measures
@@ -72,10 +73,11 @@ export class ContactComponent implements OnInit {
     // Rate limiting check
     const now = Date.now();
     if (now - this.lastSubmissionTime < this.SUBMISSION_COOLDOWN) {
-      alert('Please wait 30 seconds before sending another message.');
+      this.formError = 'Please wait 30 seconds before sending another message.';
       return;
     }
 
+    this.formError = '';
     this.isSubmitting = true;
 
     try {
@@ -103,8 +105,12 @@ export class ContactComponent implements OnInit {
       ];
       const body = encodeURIComponent(bodyLines.join('\n'));
       const mailto = `mailto:${ownerEmail}?subject=${subject}&body=${body}`;
-      // Use window.open so user can edit before sending
-      window.open(mailto, '_blank');
+      
+      try {
+        window.location.href = mailto;
+      } catch {
+        // Fallback if navigation blocked
+      }
 
       // Success
       this.showSuccessMessage = true;
@@ -118,7 +124,7 @@ export class ContactComponent implements OnInit {
 
     } catch (error) {
       console.error('Email sending failed:', error);
-      alert('Sorry, there was an error preparing the message. Please try again later.');
+      this.formError = 'Sorry, there was an error preparing the message. Please try again later.';
     } finally {
       this.isSubmitting = false;
     }
@@ -132,6 +138,7 @@ export class ContactComponent implements OnInit {
     this.message = '';
     this.userMathAnswer = '';
     this.honeypot = '';
+    this.formError = '';
     this.generateMathQuestion();
   }
 }

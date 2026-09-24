@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Specifically allow Google AdSense crawler
+User-agent: Mediapartners-Google
+Allow: /
+
+# Specifically allow Google Display Ads Bot
+User-agent: Google-Display-Ads-Bot
+Allow: /
+
+Sitemap: https://www.bhaktipokhrel.com/sitemap.xml

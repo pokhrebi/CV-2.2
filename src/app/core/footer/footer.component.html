@@ -15,5 +15,12 @@
       </a>
     </div>
   </div>
-  <p class="footer-copy" style="margin-top: 2rem;">© {{ currentYear }} Bhakti Pokhrel. Crafted with care.</p>
+  <div class="footer-meta-row" style="margin-top: 2rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; font-size: 0.85rem; color: var(--text-muted); border-top: 1px solid var(--line); padding-top: 1.5rem;">
+    <p class="footer-copy" style="margin: 0;">© {{ currentYear }} Bhakti Pokhrel. Crafted with care.</p>
+    <div class="footer-legal-links" style="display: flex; gap: 1rem; align-items: center;">
+      <a routerLink="/privacy" style="color: var(--text-muted); font-size: 0.8rem; border-bottom: 1px dotted var(--line);">Privacy &amp; Ad Disclosure</a>
+      <span aria-hidden="true" style="opacity: 0.3;">·</span>
+      <a href="/ads.txt" target="_blank" style="color: var(--text-muted); font-size: 0.8rem; border-bottom: 1px dotted var(--line);">ads.txt</a>
+    </div>
+  </div>
 </footer>

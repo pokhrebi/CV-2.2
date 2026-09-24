@@ -1108,27 +1108,9 @@ FodyWeavers.xsd
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,macos,windows,aspnetcore,angular
 .vs/FreshBook/v17/.suo
-.vs/FreshBook/v17/.suo
 *.props
-*.json
-*.json
-*.json
-*.json
-.vs/FreshBook/v17/.suo
 *.v2
 *.vsidx
-.vs/FreshBook/v17/.suo
-.vs/FreshBook/v17/.suo
-*.json
-*.json
-*.json
-*.json
-*.json
-*.props
-*.v2
-.vs/FreshBook/v17/.suo
-.vs/FreshBook/v17/.suo
-.vs/FreshBook/v17/.suo
 bin/Debug/net6.0/FreshBook.dll
 bin/Debug/net6.0/FreshBook.pdb
 obj/Debug/net6.0/FreshBook.csproj.CoreCompileInputs.cache
