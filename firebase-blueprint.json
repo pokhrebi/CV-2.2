@@ -1,0 +1,159 @@
+{
+  "entities": {
+    "BlogPost": {
+      "title": "Blog Post",
+      "description": "A blog article supporting image, title, body content, sources, social links, public/private status, scheduling, and multi-tenant scoping.",
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Tenant identifier for multi-tenant isolation"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "Title of the blog post"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "Short summary or description"
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50000,
+          "description": "Markdown or full formatted blog post content"
+        },
+        "body": {
+          "type": "string",
+          "maxLength": 50000,
+          "description": "Full blog post body text"
+        },
+        "imageUrl": {
+          "type": "string",
+          "maxLength": 2048,
+          "description": "Featured header image URL for the post"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["public", "private"],
+          "description": "Visibility status of post"
+        },
+        "scheduledAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Optional ISO timestamp when scheduled to go public"
+        },
+        "scheduledDate": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Target publication date string (ISO format)"
+        },
+        "sourceLinks": {
+          "type": "array",
+          "description": "List of reference sources"
+        },
+        "socialLinks": {
+          "type": "array",
+          "description": "List of social links"
+        },
+        "authorId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Firebase UID of author"
+        },
+        "authorName": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Display name or email of author"
+        },
+        "authorEmail": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Email of author"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "ISO timestamp of creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "ISO timestamp of last update"
+        }
+      },
+      "required": ["tenantId", "title", "content", "status", "authorId", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User profile with role and approval status for authoring blog posts",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Firebase user ID"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "User email address"
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Display name"
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 2048,
+          "description": "Avatar photo URL"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "author", "reader"],
+          "description": "User permission role"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected"],
+          "description": "Approval status for authoring"
+        },
+        "approved": {
+          "type": "boolean",
+          "description": "Whether user is approved by administrator"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Account registration timestamp"
+        },
+        "approvedAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Timestamp when approved"
+        },
+        "approvedBy": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Email of admin who approved"
+        }
+      },
+      "required": ["uid", "email", "role", "status", "approved", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/posts/{postId}": {
+      "schema": "BlogPost",
+      "description": "Collection of blog articles"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Collection of user profiles and author approvals"
+    }
+  }
+}

@@ -15,6 +15,11 @@ import { PrivacyComponent } from './pages/privacy/privacy.component';
 import { AdBannerComponent } from './shared/ad-banner/ad-banner.component';
 import { CookieConsentComponent } from './shared/cookie-consent/cookie-consent.component';
 import { SkillsChartComponent } from './pages/about/skills-chart/skills-chart.component';
+import { BlogListComponent } from './pages/blog/blog-list/blog-list.component';
+import { BlogPostDetailComponent } from './pages/blog/blog-post-detail/blog-post-detail.component';
+import { BlogEditorComponent } from './pages/blog/blog-editor/blog-editor.component';
+import { AuthModalComponent } from './pages/blog/auth-modal/auth-modal.component';
+import { BlogAdminComponent } from './pages/blog/blog-admin/blog-admin.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +34,12 @@ import { SkillsChartComponent } from './pages/about/skills-chart/skills-chart.co
     PrivacyComponent,
     AdBannerComponent,
     CookieConsentComponent,
-    SkillsChartComponent
+    SkillsChartComponent,
+    BlogListComponent,
+    BlogPostDetailComponent,
+    BlogEditorComponent,
+    AuthModalComponent,
+    BlogAdminComponent
   ],
   imports: [
     BrowserModule,

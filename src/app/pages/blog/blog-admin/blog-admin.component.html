@@ -1,0 +1,639 @@
+<div class="admin-page-container">
+  <!-- Header Bar -->
+  <header class="admin-header">
+    <div class="admin-header-left">
+      <a routerLink="/blog" class="back-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        <span>Back to Blog</span>
+      </a>
+      <div class="admin-title-group">
+        <span class="admin-eyebrow">ADMIN CONSOLE</span>
+        <h1 class="admin-title">Manage Blog Content</h1>
+        <p class="admin-subtitle">
+          Search, filter, paginate, and batch manage all Firestore articles, drafts, and scheduled releases.
+        </p>
+      </div>
+    </div>
+
+    <div class="admin-header-actions">
+      <!-- Session Indicator -->
+      <div class="admin-user-pill">
+        <ng-container *ngIf="authService.isAuthenticated; else loginPrompt">
+          <span class="user-status-dot"></span>
+          <span class="user-name">{{ authService.currentUser?.displayName || authService.currentUser?.email || 'Admin' }}</span>
+          <button type="button" class="btn btn-sm btn-ghost" (click)="authService.signOut()" title="Sign Out">
+            Sign Out
+          </button>
+        </ng-container>
+        <ng-template #loginPrompt>
+          <button type="button" class="btn btn-sm btn-primary" (click)="showAuthModal = true">
+            Sign In as Admin
+          </button>
+        </ng-template>
+      </div>
+
+      <button type="button" class="btn btn-primary new-post-btn" (click)="openNewPost()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        <span>New Article</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Notification Banners -->
+  <div *ngIf="successMsg" class="admin-alert success-alert" role="status">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+    <span>{{ successMsg }}</span>
+    <button type="button" class="alert-close-btn" (click)="successMsg = ''">&times;</button>
+  </div>
+
+  <div *ngIf="errorMsg" class="admin-alert error-alert" role="alert">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <span>{{ errorMsg }}</span>
+    <button type="button" class="alert-close-btn" (click)="errorMsg = ''">&times;</button>
+  </div>
+
+  <!-- Section Tabs (Articles vs Author Approvals) -->
+  <div class="admin-section-nav" *ngIf="authService.isAdmin">
+    <button
+      type="button"
+      class="admin-nav-tab"
+      [class.active]="activeSection === 'posts'"
+      (click)="activeSection = 'posts'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+      </svg>
+      <span>Articles ({{ filteredPosts.length }})</span>
+    </button>
+
+    <button
+      type="button"
+      class="admin-nav-tab"
+      [class.active]="activeSection === 'authors'"
+      (click)="activeSection = 'authors'; loadUsers()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      <span>Author Approvals</span>
+      <span *ngIf="pendingUsersCount > 0" class="pending-badge">{{ pendingUsersCount }}</span>
+    </button>
+  </div>
+
+  <!-- Articles Management Section -->
+  <ng-container *ngIf="activeSection === 'posts'">
+  <!-- Search & Filter Controls -->
+  <section class="admin-controls-card">
+    <div class="controls-row">
+      <!-- Search Input -->
+      <div class="search-box">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="text"
+          class="admin-search-input"
+          placeholder="Search by title, description, or author..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearchOrFilterChange()"
+        />
+        <button
+          *ngIf="searchQuery"
+          type="button"
+          class="clear-search-btn"
+          (click)="searchQuery = ''; onSearchOrFilterChange()"
+          aria-label="Clear search">
+          &times;
+        </button>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="filter-group">
+        <label for="status-filter-select" class="control-label">Status:</label>
+        <select
+          id="status-filter-select"
+          class="admin-select"
+          [(ngModel)]="statusFilter"
+          (change)="onSearchOrFilterChange()">
+          <option value="all">All Statuses</option>
+          <option value="public">Public Only</option>
+          <option value="private">Private (Drafts)</option>
+          <option value="scheduled">Scheduled Only</option>
+        </select>
+      </div>
+
+      <!-- Tenant Filter -->
+      <div class="filter-group">
+        <label for="tenant-filter-select" class="control-label">Tenant:</label>
+        <select
+          id="tenant-filter-select"
+          class="admin-select"
+          [(ngModel)]="tenantFilter"
+          (change)="onSearchOrFilterChange()">
+          <option *ngFor="let t of availableTenants" [value]="t">
+            {{ t === 'all' ? 'All Tenants' : '#' + t }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Refresh Button -->
+      <button
+        type="button"
+        class="btn btn-secondary refresh-btn"
+        (click)="loadPosts()"
+        [disabled]="isLoading"
+        title="Reload from Firestore">
+        <svg [class.spin]="isLoading" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"/>
+          <polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        <span>Refresh</span>
+      </button>
+    </div>
+
+    <!-- Batch Operations Floating / Docked Bar -->
+    <div *ngIf="selectedPostIds.size > 0" class="batch-actions-bar">
+      <div class="batch-left">
+        <span class="selection-count-badge">
+          {{ selectedPostIds.size }} {{ selectedPostIds.size === 1 ? 'post' : 'posts' }} selected
+        </span>
+        <button type="button" class="btn btn-sm btn-ghost" (click)="clearSelection()">
+          Deselect All
+        </button>
+      </div>
+
+      <div class="batch-right">
+        <button
+          type="button"
+          class="btn btn-sm btn-secondary"
+          (click)="batchSetStatus('public')"
+          [disabled]="isLoading">
+          Mark Public
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-secondary"
+          (click)="batchSetStatus('private')"
+          [disabled]="isLoading">
+          Mark Private
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-danger"
+          (click)="confirmBatchDelete()"
+          [disabled]="isLoading">
+          Delete Selected
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Table Content -->
+  <main class="table-container-card">
+    <div *ngIf="isLoading && allPosts.length === 0" class="loading-state">
+      <div class="admin-spinner"></div>
+      <p>Loading posts from Firestore...</p>
+    </div>
+
+    <div *ngIf="!isLoading && filteredPosts.length === 0" class="empty-state">
+      <div class="empty-icon-wrap">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+      </div>
+      <h3>No matching blog posts found</h3>
+      <p>Try adjusting your search query, status, or tenant filters.</p>
+      <button type="button" class="btn btn-primary" (click)="openNewPost()">
+        + Write First Article
+      </button>
+    </div>
+
+    <!-- The Content Table -->
+    <div *ngIf="filteredPosts.length > 0" class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th class="col-checkbox">
+              <input
+                type="checkbox"
+                [checked]="isAllSelectedOnPage()"
+                (change)="toggleSelectAllOnPage()"
+                aria-label="Select all on page"
+              />
+            </th>
+            <th class="col-cover">Cover</th>
+            <th class="col-article">Article Details</th>
+            <th class="col-status">Status</th>
+            <th class="col-tenant">Tenant</th>
+            <th class="col-author">Author</th>
+            <th class="col-date">Date</th>
+            <th class="col-links">Links</th>
+            <th class="col-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let post of paginatedPosts" [class.row-selected]="post.id && selectedPostIds.has(post.id)">
+            <!-- Select Checkbox -->
+            <td class="col-checkbox">
+              <input
+                type="checkbox"
+                [checked]="post.id ? selectedPostIds.has(post.id) : false"
+                (change)="togglePostSelection(post.id)"
+                aria-label="Select post"
+              />
+            </td>
+
+            <!-- Cover Thumbnail -->
+            <td class="col-cover">
+              <div class="table-thumb-wrap">
+                <img
+                  *ngIf="post.imageUrl"
+                  [src]="post.imageUrl"
+                  [alt]="post.title"
+                  class="table-thumb"
+                  referrerpolicy="no-referrer"
+                />
+                <div *ngIf="!post.imageUrl" class="table-thumb-fallback">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                </div>
+              </div>
+            </td>
+
+            <!-- Title & Summary -->
+            <td class="col-article">
+              <div class="article-info">
+                <a [routerLink]="['/blog', post.id]" class="table-post-title" target="_blank" title="View live post">
+                  {{ post.title }}
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
+                </a>
+                <p *ngIf="post.description" class="table-post-desc">
+                  {{ post.description }}
+                </p>
+                <div class="table-post-id-tag">
+                  ID: <code>{{ post.id }}</code>
+                </div>
+              </div>
+            </td>
+
+            <!-- Status Pill -->
+            <td class="col-status">
+              <div class="status-stack">
+                <button
+                  type="button"
+                  class="status-toggle-badge"
+                  [class.badge-public]="post.status === 'public'"
+                  [class.badge-private]="post.status === 'private'"
+                  (click)="quickToggleStatus(post)"
+                  title="Click to toggle Public/Private">
+                  <span class="status-dot"></span>
+                  <span>{{ post.status | uppercase }}</span>
+                </button>
+
+                <span *ngIf="isScheduledPost(post)" class="scheduled-pill" title="Scheduled to go public">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  <span>{{ formatDate(post.scheduledDate || post.scheduledAt) }}</span>
+                </span>
+              </div>
+            </td>
+
+            <!-- Tenant -->
+            <td class="col-tenant">
+              <span class="tenant-badge">#{{ post.tenantId || 'default' }}</span>
+            </td>
+
+            <!-- Author -->
+            <td class="col-author">
+              <div class="author-cell">
+                <span class="author-name">{{ post.authorName || 'Author' }}</span>
+                <span class="author-email" *ngIf="post.authorEmail">{{ post.authorEmail }}</span>
+              </div>
+            </td>
+
+            <!-- Date -->
+            <td class="col-date">
+              <div class="date-cell">
+                <span class="date-created">{{ formatDate(post.createdAt) }}</span>
+                <span *ngIf="post.updatedAt" class="date-updated" title="Last modified">
+                  Edited: {{ formatDate(post.updatedAt) }}
+                </span>
+              </div>
+            </td>
+
+            <!-- Sources / Social Links Counts -->
+            <td class="col-links">
+              <div class="links-counts">
+                <span class="link-count-tag" title="Source citations">
+                  Src: {{ post.sourceLinks?.length || 0 }}
+                </span>
+                <span class="link-count-tag" title="Social discussion links">
+                  Soc: {{ post.socialLinks?.length || 0 }}
+                </span>
+              </div>
+            </td>
+
+            <!-- Action Buttons -->
+            <td class="col-actions">
+              <div class="action-btn-group">
+                <button
+                  type="button"
+                  class="action-icon-btn edit-action"
+                  (click)="openEditPost(post)"
+                  title="Edit post">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="action-icon-btn delete-action"
+                  (click)="promptDelete(post)"
+                  title="Delete post">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Footer -->
+    <footer *ngIf="filteredPosts.length > 0" class="admin-pagination-footer">
+      <div class="pagination-info">
+        <span>Showing <strong>{{ startRecordIndex }}–{{ endRecordIndex }}</strong> of <strong>{{ filteredPosts.length }}</strong> posts</span>
+
+        <div class="page-size-selector">
+          <label for="page-size-select">Per page:</label>
+          <select
+            id="page-size-select"
+            class="page-size-select"
+            [ngModel]="pageSize"
+            (ngModelChange)="onPageSizeChange($event)">
+            <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Pagination Buttons -->
+      <nav class="pagination-nav" aria-label="Blog posts pagination">
+        <button
+          type="button"
+          class="page-btn nav-btn"
+          (click)="goToPage(1)"
+          [disabled]="currentPage === 1"
+          title="First page">
+          &laquo;
+        </button>
+        <button
+          type="button"
+          class="page-btn nav-btn"
+          (click)="goToPage(currentPage - 1)"
+          [disabled]="currentPage === 1"
+          title="Previous page">
+          &lsaquo;
+        </button>
+
+        <ng-container *ngFor="let page of getPageNumbers()">
+          <button
+            type="button"
+            class="page-btn number-btn"
+            [class.active]="page === currentPage"
+            (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        </ng-container>
+
+        <button
+          type="button"
+          class="page-btn nav-btn"
+          (click)="goToPage(currentPage + 1)"
+          [disabled]="currentPage === totalPages"
+          title="Next page">
+          &rsaquo;
+        </button>
+        <button
+          type="button"
+          class="page-btn nav-btn"
+          (click)="goToPage(totalPages)"
+          [disabled]="currentPage === totalPages"
+          title="Last page">
+          &raquo;
+        </button>
+      </nav>
+    </footer>
+  </main>
+  </ng-container>
+
+  <!-- Author Approvals Section -->
+  <section *ngIf="activeSection === 'authors'" class="authors-admin-section">
+    <div class="authors-card-header">
+      <div>
+        <h2 class="authors-section-title">Author Account Approvals</h2>
+        <p class="authors-section-desc">
+          Only users approved by the administrator can publish and edit blog articles.
+          New users sign up with "Pending" status until you approve them below.
+        </p>
+      </div>
+
+      <button type="button" class="btn btn-secondary btn-sm" (click)="loadUsers()" [disabled]="isLoadingUsers">
+        <svg [class.spin]="isLoadingUsers" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"/>
+          <polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        <span>Refresh Users</span>
+      </button>
+    </div>
+
+    <div *ngIf="isLoadingUsers && usersList.length === 0" class="loading-state">
+      <div class="admin-spinner"></div>
+      <p>Loading registered authors...</p>
+    </div>
+
+    <div *ngIf="!isLoadingUsers && usersList.length === 0" class="empty-state">
+      <p>No registered authors found in Firestore yet.</p>
+    </div>
+
+    <div *ngIf="usersList.length > 0" class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Author</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Registered</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of usersList">
+            <!-- Author Name / Avatar -->
+            <td>
+              <div class="author-user-cell">
+                <span class="author-avatar-chip">
+                  {{ (user.displayName || user.email || 'A')[0] | uppercase }}
+                </span>
+                <span class="author-display-name">{{ user.displayName || 'Author' }}</span>
+              </div>
+            </td>
+
+            <!-- Email -->
+            <td>
+              <span class="user-email-text">{{ user.email }}</span>
+            </td>
+
+            <!-- Role -->
+            <td>
+              <span class="role-badge" [class.admin-role]="user.role === 'admin'">
+                {{ user.role === 'admin' ? 'Administrator' : 'Author' }}
+              </span>
+            </td>
+
+            <!-- Status Pill -->
+            <td>
+              <span
+                class="approval-status-pill"
+                [class.status-approved]="user.approved"
+                [class.status-pending]="!user.approved && user.status === 'pending'"
+                [class.status-rejected]="!user.approved && user.status === 'rejected'">
+                <span class="status-dot"></span>
+                <span>{{ user.approved ? 'Approved' : (user.status === 'rejected' ? 'Rejected' : 'Pending Approval') }}</span>
+              </span>
+            </td>
+
+            <!-- Registered Date -->
+            <td>
+              <span class="date-created">{{ formatDate(user.createdAt) }}</span>
+            </td>
+
+            <!-- Actions -->
+            <td>
+              <div class="author-actions-wrap" *ngIf="user.role !== 'admin'">
+                <button
+                  *ngIf="!user.approved"
+                  type="button"
+                  class="btn btn-sm btn-primary approve-btn"
+                  (click)="approveUser(user)"
+                  [disabled]="isLoading">
+                  ✓ Approve Author
+                </button>
+                <button
+                  *ngIf="user.approved"
+                  type="button"
+                  class="btn btn-sm btn-secondary revoke-btn"
+                  (click)="revokeUser(user)"
+                  [disabled]="isLoading">
+                  ✕ Revoke Access
+                </button>
+              </div>
+              <span *ngIf="user.role === 'admin'" class="admin-owner-tag">System Owner</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Single Post Delete Confirmation Modal -->
+  <div *ngIf="postToDelete" class="confirm-modal-backdrop" (click)="postToDelete = null">
+    <div class="confirm-modal-dialog" (click)="$event.stopPropagation()">
+      <div class="confirm-icon-box danger">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <h3 class="confirm-title">Delete Blog Post</h3>
+      <p class="confirm-desc">
+        Are you sure you want to permanently delete <strong>"{{ postToDelete.title }}"</strong>?
+        This action removes the document from Firestore and cannot be undone.
+      </p>
+      <div class="confirm-actions">
+        <button type="button" class="btn btn-secondary" (click)="postToDelete = null" [disabled]="isLoading">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-danger" (click)="confirmDeleteSingle()" [disabled]="isLoading">
+          {{ isLoading ? 'Deleting...' : 'Permanently Delete' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Batch Delete Confirmation Modal -->
+  <div *ngIf="isBatchDeleting" class="confirm-modal-backdrop" (click)="isBatchDeleting = false">
+    <div class="confirm-modal-dialog" (click)="$event.stopPropagation()">
+      <div class="confirm-icon-box danger">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <h3 class="confirm-title">Batch Delete {{ selectedPostIds.size }} Articles</h3>
+      <p class="confirm-desc">
+        You are about to delete <strong>{{ selectedPostIds.size }} selected posts</strong> from Firestore.
+        This action is irreversible.
+      </p>
+      <div class="confirm-actions">
+        <button type="button" class="btn btn-secondary" (click)="isBatchDeleting = false" [disabled]="isLoading">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-danger" (click)="executeBatchDelete()" [disabled]="isLoading">
+          {{ isLoading ? 'Deleting...' : 'Delete Selected Posts' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blog Editor Modal -->
+  <app-blog-editor
+    *ngIf="showEditorModal"
+    [postToEdit]="postToEdit"
+    (close)="showEditorModal = false; postToEdit = null"
+    (saved)="onEditorSaved($event)">
+  </app-blog-editor>
+
+  <!-- Auth Modal -->
+  <app-auth-modal
+    *ngIf="showAuthModal"
+    (close)="showAuthModal = false"
+    (authenticated)="showAuthModal = false; loadPosts()">
+  </app-auth-modal>
+</div>

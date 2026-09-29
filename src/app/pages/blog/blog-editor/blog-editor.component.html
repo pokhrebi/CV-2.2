@@ -1,0 +1,495 @@
+<div class="editor-modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="editor-modal-dialog">
+    <div class="editor-modal-header">
+      <div class="editor-title-group">
+        <span class="editor-eyebrow">{{ isEditMode ? 'EDIT POST' : 'NEW BLOG POST' }}</span>
+        <h2 class="editor-modal-title">{{ isEditMode ? 'Edit Article' : 'Draft New Article' }}</h2>
+      </div>
+
+      <div class="editor-header-actions">
+        <!-- Edit / Preview Tabs -->
+        <div class="segmented-control">
+          <button
+            type="button"
+            class="seg-btn"
+            [class.active]="activeTab === 'edit'"
+            (click)="activeTab = 'edit'">
+            Write
+          </button>
+          <button
+            type="button"
+            class="seg-btn"
+            [class.active]="activeTab === 'preview'"
+            (click)="activeTab = 'preview'">
+            Preview
+          </button>
+        </div>
+
+        <button class="icon-btn close-btn" (click)="close.emit()" aria-label="Close editor">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Error Banner -->
+    <div *ngIf="errorMsg" class="editor-error-banner" role="alert">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ errorMsg }}</span>
+    </div>
+
+    <!-- Pending Approval Warning Banner -->
+    <div *ngIf="!isApprovedAuthor" class="editor-warning-banner" role="alert">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span><strong>Approval Required:</strong> Your account must be approved by the administrator before you can publish or edit articles.</span>
+    </div>
+
+    <div class="editor-modal-body">
+      <!-- WRITE TAB -->
+      <div *ngIf="activeTab === 'edit'" class="editor-form-scroll">
+        <!-- 1. Post Title -->
+        <div class="form-group">
+          <label for="post-title" class="field-label required">Title</label>
+          <input
+            id="post-title"
+            type="text"
+            class="editor-input title-input"
+            [(ngModel)]="title"
+            placeholder="e.g., Scaling Distributed Event-Driven Architecture with CQRS"
+            maxlength="300"
+            required
+          />
+        </div>
+
+        <!-- 2. Summary / Description -->
+        <div class="form-group">
+          <label for="post-desc" class="field-label">
+            <span>Summary / Subtitle</span>
+            <span class="char-count">{{ description.length }}/1000</span>
+          </label>
+          <textarea
+            id="post-desc"
+            class="editor-textarea desc-input"
+            rows="2"
+            [(ngModel)]="description"
+            placeholder="A brief high-level overview displayed in cards and search previews..."
+            maxlength="1000">
+          </textarea>
+        </div>
+
+        <!-- 3. Featured Image & Firebase Storage File Selection -->
+        <div class="form-group image-section">
+          <label class="field-label">
+            <span>Featured Image (Firebase Storage Upload)</span>
+            <span class="field-hint">Upload a local file or specify a direct image URL</span>
+          </label>
+
+          <!-- Drag and Drop Dropzone with File Selection -->
+          <div
+            class="storage-dropzone"
+            [class.dragging]="isDraggingOver"
+            [class.uploading]="isUploadingImage"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onDrop($event)"
+            (click)="fileInput.click()">
+            <input
+              #fileInput
+              type="file"
+              class="hidden-file-input"
+              accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+              (change)="onFileInputChange($event)"
+            />
+
+            <div class="dropzone-content">
+              <div class="dropzone-icon-circle">
+                <svg *ngIf="!isUploadingImage" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <div *ngIf="isUploadingImage" class="mini-spinner"></div>
+              </div>
+
+              <div class="dropzone-text-group">
+                <p class="dropzone-primary-text">
+                  <span *ngIf="!isUploadingImage">
+                    <strong>Click to upload</strong> or drag and drop an image
+                  </span>
+                  <span *ngIf="isUploadingImage">
+                    Uploading to Firebase Storage ({{ uploadProgress }}%)...
+                  </span>
+                </p>
+                <p class="dropzone-secondary-text">
+                  PNG, JPEG, WebP, GIF or SVG (Max 10MB)
+                </p>
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm browse-btn"
+                (click)="$event.stopPropagation(); fileInput.click()"
+                [disabled]="isUploadingImage">
+                Browse Files
+              </button>
+            </div>
+
+            <!-- Upload Progress Bar -->
+            <div *ngIf="isUploadingImage" class="upload-progress-track">
+              <div class="upload-progress-fill" [style.width.%]="uploadProgress"></div>
+            </div>
+          </div>
+
+          <!-- Upload Status / File Tag -->
+          <div *ngIf="selectedFileName" class="selected-file-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+              <polyline points="13 2 13 9 20 9"/>
+            </svg>
+            <span class="file-name">{{ selectedFileName }}</span>
+            <span *ngIf="!isUploadingImage && imageUrl" class="file-status-success">✓ Uploaded</span>
+          </div>
+
+          <div *ngIf="uploadError" class="storage-error-note">
+            {{ uploadError }}
+          </div>
+
+          <!-- Alternative: Direct URL Input -->
+          <div class="image-input-row direct-url-row">
+            <span class="url-divider-text">Or enter image URL:</span>
+            <div class="input-with-clear">
+              <input
+                type="url"
+                class="editor-input"
+                [(ngModel)]="imageUrl"
+                placeholder="https://images.unsplash.com/..."
+              />
+              <button *ngIf="imageUrl" type="button" class="clear-input-btn" (click)="clearImage()" aria-label="Clear image URL">
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Sample Photo Chips for Quick Inspiration -->
+          <div class="image-presets-row">
+            <span class="presets-label">Presets:</span>
+            <button
+              *ngFor="let sample of sampleImages"
+              type="button"
+              class="preset-chip"
+              [class.active]="imageUrl === sample.url"
+              (click)="selectSampleImage(sample.url)">
+              {{ sample.label }}
+            </button>
+          </div>
+
+          <!-- Live Image Preview Card -->
+          <div *ngIf="imageUrl" class="image-preview-card">
+            <img [src]="imageUrl" alt="Featured Image Preview" class="preview-img" referrerpolicy="no-referrer" />
+            <div class="preview-overlay">
+              <span class="badge">Featured Cover Preview</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Post Body (Content) -->
+        <div class="form-group">
+          <label for="post-body" class="field-label required">
+            <span>Body Content</span>
+            <span class="field-hint">Supports headings (#, ##), paragraphs, quotes (>), and code snippets</span>
+          </label>
+          <textarea
+            id="post-body"
+            class="editor-textarea content-input"
+            rows="10"
+            [(ngModel)]="content"
+            placeholder="Write the article body here... Share architectural decisions, technical analysis, performance benchmarks, and code implementations."
+            required>
+          </textarea>
+        </div>
+
+        <!-- 5. Status (Public / Private) & Multi-Tenancy Scoping -->
+        <div class="settings-grid">
+          <!-- Visibility & Schedule Card -->
+          <div class="settings-card">
+            <h4 class="card-heading">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span>Status &amp; Schedule</span>
+            </h4>
+
+            <!-- Public / Private Status Selector -->
+            <div class="status-selector-row">
+              <label class="status-option" [class.selected]="status === 'public'">
+                <input type="radio" name="status" [(ngModel)]="status" value="public" />
+                <div class="status-label-group">
+                  <div class="status-pill public-pill">
+                    <span class="status-dot"></span>
+                    <strong>Public</strong>
+                  </div>
+                  <span class="status-desc">Visible to all readers and search engines</span>
+                </div>
+              </label>
+
+              <label class="status-option" [class.selected]="status === 'private'">
+                <input type="radio" name="status" [(ngModel)]="status" value="private" />
+                <div class="status-label-group">
+                  <div class="status-pill private-pill">
+                    <span class="status-dot"></span>
+                    <strong>Private</strong>
+                  </div>
+                  <span class="status-desc">Visible only to you when logged in</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Schedule Post to Go Public -->
+            <div class="schedule-section">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="isScheduled" />
+                <span class="custom-checkbox"></span>
+                <span class="label-text">Schedule publication for future release</span>
+              </label>
+
+              <div *ngIf="isScheduled" class="datetime-picker-wrap">
+                <label for="post-schedule-time" class="field-sublabel">Publication Date &amp; Time (Local)</label>
+                <input
+                  id="post-schedule-time"
+                  type="datetime-local"
+                  class="editor-input schedule-input"
+                  [(ngModel)]="scheduledAt"
+                  required
+                />
+                <p class="field-help-text">
+                  Article remains scheduled until this timestamp arrives.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Multi-Tenant Architecture Card -->
+          <div class="settings-card">
+            <h4 class="card-heading">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+                <line x1="6" y1="6" x2="6.01" y2="6"/>
+                <line x1="6" y1="18" x2="6.01" y2="18"/>
+              </svg>
+              <span>Multi-Tenant Architecture</span>
+            </h4>
+            <p class="card-desc">
+              Organize posts across isolated organizational tenants or brands for modular scaling.
+            </p>
+
+            <div class="form-group tenant-group">
+              <label for="tenant-id-input" class="field-sublabel">Tenant Identifier</label>
+              <div class="tenant-input-row">
+                <input
+                  id="tenant-id-input"
+                  type="text"
+                  class="editor-input"
+                  [(ngModel)]="tenantId"
+                  placeholder="default"
+                  maxlength="64"
+                />
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  (click)="tenantId = 'default'">
+                  Reset
+                </button>
+              </div>
+              <span class="field-help-text">
+                Current tenant: <code>{{ tenantId || 'default' }}</code>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Sources & References Section -->
+        <div class="links-section-box">
+          <div class="links-section-header">
+            <h4 class="section-subtitle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+              <span>Sources &amp; References</span>
+              <span class="count-badge">{{ sourceLinks.length }}</span>
+            </h4>
+            <span class="field-hint">Cite papers, documentation, benchmarks or repository sources</span>
+          </div>
+
+          <!-- Existing Sources List -->
+          <div *ngIf="sourceLinks.length > 0" class="items-list">
+            <div *ngFor="let source of sourceLinks; let i = index" class="item-pill">
+              <span class="item-title">{{ source.title }}</span>
+              <span class="item-url">{{ source.url }}</span>
+              <button type="button" class="item-remove-btn" (click)="removeSourceLink(i)" aria-label="Remove source">
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Add Source Input Row -->
+          <div class="add-link-grid">
+            <input
+              type="text"
+              class="editor-input"
+              [(ngModel)]="newSourceTitle"
+              placeholder="Source Title (e.g., Google Cloud Architecture Guide)"
+            />
+            <input
+              type="url"
+              class="editor-input"
+              [(ngModel)]="newSourceUrl"
+              placeholder="https://cloud.google.com/..."
+            />
+            <button
+              type="button"
+              class="btn btn-secondary add-btn"
+              (click)="addSourceLink()"
+              [disabled]="!newSourceUrl.trim()">
+              + Add Source
+            </button>
+          </div>
+        </div>
+
+        <!-- 7. Social Links Section -->
+        <div class="links-section-box">
+          <div class="links-section-header">
+            <h4 class="section-subtitle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              <span>Social &amp; Discussion Links</span>
+              <span class="count-badge">{{ socialLinks.length }}</span>
+            </h4>
+            <span class="field-hint">Link discussions on X, LinkedIn, GitHub or Substack</span>
+          </div>
+
+          <!-- Existing Social Links List -->
+          <div *ngIf="socialLinks.length > 0" class="items-list">
+            <div *ngFor="let social of socialLinks; let i = index" class="item-pill social-pill">
+              <span class="item-platform-badge">{{ social.platform }}</span>
+              <span class="item-url">{{ social.url }}</span>
+              <button type="button" class="item-remove-btn" (click)="removeSocialLink(i)" aria-label="Remove link">
+                &times;
+              </button>
+            </div>
+          </div>
+
+          <!-- Add Social Link Row -->
+          <div class="add-social-grid">
+            <select class="editor-select" [(ngModel)]="newSocialPlatform">
+              <option *ngFor="let opt of socialPlatformOptions" [value]="opt">{{ opt }}</option>
+            </select>
+            <input
+              type="url"
+              class="editor-input"
+              [(ngModel)]="newSocialUrl"
+              placeholder="https://x.com/..."
+            />
+            <button
+              type="button"
+              class="btn btn-secondary add-btn"
+              (click)="addSocialLink()"
+              [disabled]="!newSocialUrl.trim()">
+              + Add Link
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREVIEW TAB -->
+      <div *ngIf="activeTab === 'preview'" class="editor-preview-pane">
+        <div class="preview-article-sheet">
+          <div *ngIf="imageUrl" class="preview-hero-banner">
+            <img [src]="imageUrl" alt="Cover" referrerpolicy="no-referrer" />
+          </div>
+
+          <div class="preview-meta-row">
+            <span class="preview-tenant-tag">#{{ tenantId || 'default' }}</span>
+            <span class="status-badge" [class.public-badge]="status === 'public'" [class.private-badge]="status === 'private'">
+              {{ status | uppercase }}
+            </span>
+            <span *ngIf="isScheduled && scheduledAt" class="scheduled-badge">
+              Scheduled: {{ scheduledAt }}
+            </span>
+          </div>
+
+          <h1 class="preview-post-title">{{ title || 'Untitled Article' }}</h1>
+          <p *ngIf="description" class="preview-post-desc">{{ description }}</p>
+
+          <hr class="preview-divider" />
+
+          <div class="preview-body-content">
+            <p *ngFor="let paragraph of content.split('\n\n')" class="preview-paragraph">
+              {{ paragraph }}
+            </p>
+          </div>
+
+          <!-- Sources Preview -->
+          <div *ngIf="sourceLinks.length > 0" class="preview-sources-box">
+            <h4 class="preview-subheading">Sources &amp; References:</h4>
+            <ul class="preview-sources-list">
+              <li *ngFor="let s of sourceLinks">
+                <a [href]="s.url" target="_blank" rel="noopener noreferrer">{{ s.title }} &rarr;</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Social Links Preview -->
+          <div *ngIf="socialLinks.length > 0" class="preview-socials-box">
+            <h4 class="preview-subheading">Social &amp; Discussion:</h4>
+            <div class="preview-social-chips">
+              <span *ngFor="let soc of socialLinks" class="preview-social-chip">
+                {{ soc.platform }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="editor-modal-footer">
+      <div class="footer-left">
+        <span class="author-attribution">
+          Author: <strong>{{ firebaseService.currentUser?.displayName || firebaseService.currentUser?.email || 'Authenticated Author' }}</strong>
+        </span>
+      </div>
+
+      <div class="footer-right">
+        <button type="button" class="btn btn-secondary" (click)="close.emit()" [disabled]="isLoading || isUploadingImage">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary publish-btn" (click)="savePost()" [disabled]="isLoading || isUploadingImage || !isApprovedAuthor">
+          <span *ngIf="!isLoading && !isUploadingImage">
+            {{ isEditMode ? 'Update Article' : (status === 'public' ? 'Publish Post' : 'Save as Private') }}
+          </span>
+          <span *ngIf="isUploadingImage" class="btn-spinner">Uploading Image...</span>
+          <span *ngIf="isLoading && !isUploadingImage" class="btn-spinner">Saving...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

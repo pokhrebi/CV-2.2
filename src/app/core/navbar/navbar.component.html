@@ -6,6 +6,7 @@
       <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
       <li><a routerLink="/about" routerLinkActive="active">About</a></li>
       <li><a routerLink="/projects" routerLinkActive="active">Work</a></li>
+      <li><a routerLink="/blog" routerLinkActive="active">Blog</a></li>
       <li><a routerLink="/resume" routerLinkActive="active">Resume</a></li>
       <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
     </ul>
@@ -66,6 +67,14 @@
     <span class="dock-label">Work</span>
   </a>
 
+  <a routerLink="/blog" routerLinkActive="active" class="dock-item" (click)="closeMenu()">
+    <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    </svg>
+    <span class="dock-label">Blog</span>
+  </a>
+
   <a routerLink="/resume" routerLinkActive="active" class="dock-item" (click)="closeMenu()">
     <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -110,8 +119,16 @@
   
   <div class="mobile-menu-inner">
     <div class="mobile-nav-eyebrow">
-      <span>Menu &amp; Pages</span>
-      <span class="eyebrow-count">7 destinations</span>
+      <div class="eyebrow-left">
+        <span>Menu &amp; Pages</span>
+        <span class="eyebrow-count">8 destinations</span>
+      </div>
+      <button type="button" class="mobile-close-btn" (click)="closeMenu()" aria-label="Close navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
     </div>
 
     <!-- All Primary Navigations Clearly Visible -->
@@ -149,9 +166,20 @@
       </li>
 
       <li class="menu-item" style="--item-index: 4">
-        <a routerLink="/about" fragment="skills-section" (click)="closeMenu()">
+        <a routerLink="/blog" routerLinkActive="active" (click)="closeMenu()">
           <div class="item-left">
             <span class="item-num">04</span>
+            <span class="item-text">Blog &amp; Dispatches</span>
+          </div>
+          <span class="item-badge">Architecture &amp; Cloud</span>
+          <span class="item-arrow">→</span>
+        </a>
+      </li>
+
+      <li class="menu-item" style="--item-index: 5">
+        <a routerLink="/about" fragment="skills-section" (click)="closeMenu()">
+          <div class="item-left">
+            <span class="item-num">05</span>
             <span class="item-text">Skills Matrix</span>
           </div>
           <span class="item-badge">D3 Visualizer</span>
@@ -159,10 +187,10 @@
         </a>
       </li>
 
-      <li class="menu-item" style="--item-index: 5">
+      <li class="menu-item" style="--item-index: 6">
         <a routerLink="/resume" routerLinkActive="active" (click)="closeMenu()">
           <div class="item-left">
-            <span class="item-num">05</span>
+            <span class="item-num">06</span>
             <span class="item-text">Resume</span>
           </div>
           <span class="item-badge">CV &amp; MedPace</span>
@@ -170,10 +198,10 @@
         </a>
       </li>
 
-      <li class="menu-item" style="--item-index: 6">
+      <li class="menu-item" style="--item-index: 7">
         <a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">
           <div class="item-left">
-            <span class="item-num">06</span>
+            <span class="item-num">07</span>
             <span class="item-text">Contact</span>
           </div>
           <span class="item-badge">Get in touch</span>
@@ -181,10 +209,10 @@
         </a>
       </li>
 
-      <li class="menu-item" style="--item-index: 7">
+      <li class="menu-item" style="--item-index: 8">
         <a routerLink="/privacy" routerLinkActive="active" (click)="closeMenu()">
           <div class="item-left">
-            <span class="item-num">07</span>
+            <span class="item-num">08</span>
             <span class="item-text">Privacy &amp; Disclosure</span>
           </div>
           <span class="item-arrow">→</span>

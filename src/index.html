@@ -144,6 +144,16 @@
     ]
   }
   </script>
+  <script>
+    // Suppress dev server WebSocket reconnect noise in cloud proxy iframe
+    window.addEventListener('error', function(e) {
+      if (e && (e.message?.includes('webpack-dev-server') || e.message?.includes('WebSocket') || (e.target && e.target instanceof WebSocket))) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        return false;
+      }
+    }, true);
+  </script>
 </head>
 <body>
   <div class="scroll-progress" id="scrollProgress"></div>

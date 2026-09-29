@@ -1,0 +1,86 @@
+<div class="auth-modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="auth-modal-dialog">
+    <div class="auth-modal-header">
+      <div class="auth-modal-title-group">
+        <h3 class="auth-modal-title">{{ isRegister ? 'Create Author Account' : 'Sign in to Blog' }}</h3>
+        <p class="auth-modal-subtitle">
+          {{ isRegister ? 'Register to publish and manage blog posts on the portfolio.' : 'Sign in to write, edit, schedule, or manage your blog articles.' }}
+        </p>
+      </div>
+      <button class="icon-btn close-btn" (click)="close.emit()" aria-label="Close auth dialog">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="auth-modal-body">
+      <!-- Google Sign In -->
+      <button class="btn btn-google" (click)="signInWithGoogle()" [disabled]="isLoading">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <div class="auth-divider">
+        <span>or with email</span>
+      </div>
+
+      <form (ngSubmit)="submitEmailAuth()" class="auth-form">
+        <div *ngIf="errorMsg" class="auth-error-banner" role="alert">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>{{ errorMsg }}</span>
+        </div>
+
+        <div class="form-group">
+          <label for="auth-email">Email Address</label>
+          <input
+            id="auth-email"
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="you@example.com"
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="auth-password">Password</label>
+          <input
+            id="auth-password"
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="Minimum 6 characters"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary auth-submit-btn" [disabled]="isLoading">
+          <span *ngIf="!isLoading">{{ isRegister ? 'Create Account' : 'Sign In' }}</span>
+          <span *ngIf="isLoading" class="btn-spinner">Processing...</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="auth-modal-footer">
+      <p class="auth-toggle-prompt">
+        {{ isRegister ? 'Already have an author account?' : "Don't have an account yet?" }}
+        <button type="button" class="link-btn" (click)="toggleMode()">
+          {{ isRegister ? 'Sign in' : 'Create an account' }}
+        </button>
+      </p>
+    </div>
+  </div>
+</div>

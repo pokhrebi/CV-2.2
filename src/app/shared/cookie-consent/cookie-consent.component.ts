@@ -62,29 +62,38 @@ import { Component, OnInit } from '@angular/core';
     }
 
     .cookie-btn {
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      letter-spacing: 0.05em;
-      padding: 0.4rem 1rem;
+      letter-spacing: 0.03em;
+      padding: 0.6rem 1.4rem;
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border-radius: var(--radius);
       transition: all 0.2s ease;
       cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .cookie-btn-accept {
       background: var(--accent);
       color: var(--bg);
+      border: 1px solid var(--accent);
     }
 
     .cookie-btn-accept:hover {
       opacity: 0.88;
+      transform: translateY(-1px);
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 860px) {
       .cookie-banner {
         left: 1rem;
         right: 1rem;
-        bottom: calc(env(safe-area-inset-bottom, 0px) + 0.85rem);
+        bottom: calc(var(--sab, 0px) + 5rem);
         max-width: none;
       }
     }

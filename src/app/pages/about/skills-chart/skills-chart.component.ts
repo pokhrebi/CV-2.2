@@ -161,13 +161,21 @@ export interface SkillItem {
     .toggle-btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 0.4rem;
-      font-size: 0.76rem;
+      font-size: 0.8rem;
       font-weight: 500;
-      padding: 0.35rem 0.85rem;
+      padding: 0.45rem 1rem;
+      min-height: 44px;
+      min-width: 44px;
       border-radius: 999px;
+      border: none;
+      background: transparent;
       color: var(--text-muted);
       transition: all 0.2s ease;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .toggle-btn:hover {
@@ -183,18 +191,25 @@ export interface SkillItem {
     .category-filters {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.35rem;
+      gap: 0.45rem;
     }
 
     .filter-chip {
-      font-size: 0.72rem;
-      padding: 0.3rem 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      padding: 0.45rem 0.95rem;
+      min-height: 44px;
+      min-width: 44px;
       border-radius: 999px;
       border: 1px solid var(--line);
       background: var(--bg);
       color: var(--text-muted);
       transition: all 0.2s ease;
       cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .filter-chip:hover {
