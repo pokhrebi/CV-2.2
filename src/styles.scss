@@ -2767,9 +2767,32 @@ app-navbar {
   background: var(--bg-alt);
 }
 
-.share-btn {
-  min-width: 120px;
+.resume-actions-group .share-btn {
+  min-width: 125px;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-sm, 6px);
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.15rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+
+  &.copied {
+    background: #ecfdf5;
+    color: #059669;
+    border-color: #059669;
+  }
+}
+
+[data-theme='dark'] .resume-actions-group .share-btn.copied {
+  background: rgba(5, 150, 105, 0.2);
+  color: #34d399;
+  border-color: #34d399;
 }
 
 .resume-nav-tabs {
@@ -4056,11 +4079,14 @@ app-navbar {
   gap: 0.6rem;
 }
 
-.share-btn {
+.detail-header-actions .share-btn {
   width: 36px;
   height: 36px;
   border-radius: 50%;
   border: 1px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-danger-ghost {
