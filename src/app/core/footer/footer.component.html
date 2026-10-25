@@ -16,19 +16,27 @@
         </a>
       </div>
 
-      <!-- Seamless Sign In Link under social links -->
+      <!-- Seamless Sign In / Sign Out in footer -->
       <div class="footer-auth-row">
         <button
-          *ngIf="!(authService.currentUser$ | async)"
+          *ngIf="!(firebaseService.currentUser$ | async)"
           type="button"
           class="footer-seamless-signin-btn"
           (click)="authService.openAuthModal()">
           Sign In
         </button>
-        <div *ngIf="authService.currentUser$ | async as user" class="footer-auth-user-wrap">
-          <span class="footer-user-email">{{ user.displayName || user.email }}</span>
+        <div *ngIf="firebaseService.currentUser$ | async as user" class="footer-auth-user-wrap">
+          <span class="footer-user-email" [title]="user.email || ''">{{ user.displayName || user.email }}</span>
           <span class="footer-dot-sep">·</span>
-          <button type="button" class="footer-signout-btn" (click)="authService.signOut()">Sign Out</button>
+          <a *ngIf="firebaseService.isAdmin()" routerLink="/blog/admin" class="footer-seamless-signin-btn" style="text-decoration: underline; text-decoration-style: dotted;">Admin</a>
+          <span *ngIf="firebaseService.isAdmin()" class="footer-dot-sep">·</span>
+          <button
+            type="button"
+            class="footer-seamless-signin-btn"
+            (click)="signOut()"
+            title="Sign out of account">
+            Sign Out
+          </button>
         </div>
       </div>
     </div>
