@@ -21,6 +21,9 @@ export interface BlogPost {
   scheduledAt?: string; // ISO date/timestamp alias
   sourceLinks?: SourceLink[];
   socialLinks?: SocialLink[];
+  showAds?: boolean; // Controls whether Google AdSense in-article & banner units are dynamically rendered
+  adSlotId?: string; // Optional custom AdSense slot ID for in-article ad
+  bottomAdSlotId?: string; // Optional custom AdSense slot ID for bottom ad
   authorId: string;
   authorName?: string;
   authorEmail?: string;

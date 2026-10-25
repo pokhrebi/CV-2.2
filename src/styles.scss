@@ -4241,6 +4241,53 @@ app-navbar {
   white-space: pre-line;
 }
 
+.article-code-block {
+  margin: 2rem 0;
+  border-radius: var(--radius);
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.article-code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.72rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.article-code-pre {
+  margin: 0;
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  tab-size: 2;
+}
+
+.article-code-pre code {
+  font-family: inherit;
+  color: inherit;
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+
+.in-article-ad-container {
+  margin: 3rem 0;
+  clear: both;
+}
+
 /* Post Sources & References */
 .post-sources-section,
 .post-socials-section {

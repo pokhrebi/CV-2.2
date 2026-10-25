@@ -53,6 +53,11 @@ export class BlogEditorComponent implements OnInit {
   newSocialPlatform = 'X (Twitter)';
   newSocialUrl = '';
 
+  // Google AdSense Monetization & Dynamic In-Article Ad Settings
+  showAds: boolean = true;
+  adSlotId: string = '';
+  bottomAdSlotId: string = '';
+
   // Quick Preset Sample Images for One-Click Photography
   sampleImages = [
     { label: 'Architecture', url: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80' },
@@ -87,6 +92,9 @@ export class BlogEditorComponent implements OnInit {
       this.tenantId = this.postToEdit.tenantId || this.firebaseService.activeTenant || 'default';
       this.sourceLinks = this.postToEdit.sourceLinks ? [...this.postToEdit.sourceLinks] : [];
       this.socialLinks = this.postToEdit.socialLinks ? [...this.postToEdit.socialLinks] : [];
+      this.showAds = this.postToEdit.showAds !== false;
+      this.adSlotId = this.postToEdit.adSlotId || '';
+      this.bottomAdSlotId = this.postToEdit.bottomAdSlotId || '';
 
       const scheduleTime = this.postToEdit.scheduledDate || this.postToEdit.scheduledAt;
       if (scheduleTime) {
@@ -103,6 +111,9 @@ export class BlogEditorComponent implements OnInit {
     } else {
       this.tenantId = this.firebaseService.activeTenant || 'default';
       this.imageUrl = this.sampleImages[2].url;
+      this.showAds = true;
+      this.adSlotId = '';
+      this.bottomAdSlotId = '';
     }
   }
 
@@ -273,7 +284,10 @@ export class BlogEditorComponent implements OnInit {
       scheduledAt: resolvedSchedule,
       scheduledDate: resolvedSchedule,
       sourceLinks: this.sourceLinks,
-      socialLinks: this.socialLinks
+      socialLinks: this.socialLinks,
+      showAds: this.showAds,
+      adSlotId: this.adSlotId.trim() || undefined,
+      bottomAdSlotId: this.bottomAdSlotId.trim() || undefined
     };
 
     try {
@@ -301,6 +315,75 @@ export class BlogEditorComponent implements OnInit {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  getPreviewSegments(): { type: string; text?: string; codeLang?: string }[] {
+    if (!this.content) return [];
+    const segments: { type: string; text?: string; codeLang?: string }[] = [];
+    const lines = this.content.split('\n');
+    let currentParagraph: string[] = [];
+    let inCodeBlock = false;
+    let codeLanguage = '';
+    let currentCode: string[] = [];
+
+    const flushParagraph = () => {
+      if (currentParagraph.length > 0) {
+        const text = currentParagraph.join('\n').trim();
+        if (text) {
+          if (text.startsWith('### ')) {
+            segments.push({ type: 'h3', text: text.replace(/^###\s+/, '') });
+          } else if (text.startsWith('## ')) {
+            segments.push({ type: 'h2', text: text.replace(/^##\s+/, '') });
+          } else if (text.startsWith('> ')) {
+            segments.push({ type: 'quote', text: text.replace(/^>\s*/, '') });
+          } else {
+            segments.push({ type: 'paragraph', text });
+          }
+        }
+        currentParagraph = [];
+      }
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (line.trim().startsWith('```')) {
+        if (!inCodeBlock) {
+          flushParagraph();
+          inCodeBlock = true;
+          codeLanguage = line.trim().replace(/^```/, '').trim() || 'code';
+          currentCode = [];
+        } else {
+          inCodeBlock = false;
+          segments.push({ type: 'code', text: currentCode.join('\n'), codeLang: codeLanguage });
+          currentCode = [];
+        }
+        continue;
+      }
+      if (inCodeBlock) {
+        currentCode.push(line);
+        continue;
+      }
+      if (line.trim() === '') {
+        flushParagraph();
+      } else {
+        currentParagraph.push(line);
+      }
+    }
+    flushParagraph();
+
+    if (!this.showAds) return segments;
+
+    const paragraphIndices: number[] = [];
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].type === 'paragraph') paragraphIndices.push(i);
+    }
+    if (paragraphIndices.length >= 3) {
+      const targetP = Math.min(2, paragraphIndices.length - 1);
+      const result = [...segments];
+      result.splice(paragraphIndices[targetP] + 1, 0, { type: 'ad' });
+      return result;
+    }
+    return segments;
   }
 
   onBackdropClick(event: MouseEvent): void {

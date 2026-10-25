@@ -118,24 +118,46 @@
         />
       </div>
 
-      <!-- Main Post Body Content -->
+      <!-- Main Post Body Content with Dynamic In-Article Ad Placements -->
       <div class="post-body">
-        <ng-container *ngFor="let block of post.content.split('\n\n')">
-          <!-- Heading 3 if starts with ### -->
-          <h3 *ngIf="block.startsWith('### ')" class="article-h3">
-            {{ block.replace('### ', '') }}
-          </h3>
-          <!-- Heading 2 if starts with ## -->
-          <h2 *ngIf="block.startsWith('## ') && !block.startsWith('### ')" class="article-h2">
-            {{ block.replace('## ', '') }}
+        <ng-container *ngFor="let seg of contentSegments">
+          <!-- Heading 2 -->
+          <h2 *ngIf="seg.type === 'h2'" class="article-h2">
+            {{ seg.text }}
           </h2>
-          <!-- Blockquote if starts with > -->
-          <blockquote *ngIf="block.startsWith('> ')" class="article-quote">
-            <p>{{ block.replace('> ', '') }}</p>
+
+          <!-- Heading 3 -->
+          <h3 *ngIf="seg.type === 'h3'" class="article-h3">
+            {{ seg.text }}
+          </h3>
+
+          <!-- Blockquote -->
+          <blockquote *ngIf="seg.type === 'quote'" class="article-quote">
+            <p>{{ seg.text }}</p>
           </blockquote>
-          <!-- Standard paragraph -->
-          <p *ngIf="!block.startsWith('## ') && !block.startsWith('### ') && !block.startsWith('> ')" class="article-p">
-            {{ block }}
+
+          <!-- Code Block with Syntax Styling -->
+          <div *ngIf="seg.type === 'code'" class="article-code-block">
+            <div class="article-code-header">
+              <span>{{ seg.codeLang || 'code' }}</span>
+            </div>
+            <pre class="article-code-pre"><code>{{ seg.text }}</code></pre>
+          </div>
+
+          <!-- Dynamic In-Article Google AdSense Placement -->
+          <div *ngIf="seg.type === 'ad'" class="in-article-ad-container">
+            <app-ad-banner
+              layout="in-article"
+              format="fluid"
+              [slot]="seg.adSlot || ''"
+              minHeight="90px"
+              label="Advertisement · In-Article">
+            </app-ad-banner>
+          </div>
+
+          <!-- Standard Paragraph -->
+          <p *ngIf="seg.type === 'paragraph'" class="article-p">
+            {{ seg.text }}
           </p>
         </ng-container>
       </div>
@@ -189,9 +211,14 @@
         </div>
       </section>
 
-      <!-- Editorial In-Article Compliant Ad Placement -->
-      <div style="margin: 2.5rem 0;">
-        <app-ad-banner format="auto" minHeight="120px"></app-ad-banner>
+      <!-- Editorial Bottom Ad Placement (Display responsive unit) -->
+      <div *ngIf="post.showAds !== false" style="margin: 2.75rem 0;">
+        <app-ad-banner
+          format="auto"
+          [slot]="post.bottomAdSlotId || ''"
+          minHeight="120px"
+          label="Advertisement · Sponsored Content">
+        </app-ad-banner>
       </div>
 
       <!-- Bottom Author Card -->

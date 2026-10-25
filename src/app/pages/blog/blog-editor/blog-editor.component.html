@@ -417,6 +417,60 @@
             </button>
           </div>
         </div>
+
+        <!-- 8. Google AdSense Dynamic Monetization -->
+        <div class="links-section-box">
+          <div class="links-section-header">
+            <h4 class="section-subtitle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+              </svg>
+              <span>Google AdSense Monetization</span>
+              <span class="count-badge" [style.background]="showAds ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)'" [style.color]="showAds ? '#10b981' : 'inherit'">
+                {{ showAds ? 'Active' : 'Disabled' }}
+              </span>
+            </h4>
+            <span class="field-hint">Automatic in-article fluid ads and bottom display unit</span>
+          </div>
+
+          <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+            <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; font-size: 0.9rem; font-weight: 500;">
+              <input type="checkbox" [(ngModel)]="showAds" style="width: 1.15rem; height: 1.15rem; cursor: pointer;" />
+              <span>Enable Dynamic Google In-Article &amp; Display Ads for this post</span>
+            </label>
+
+            <div *ngIf="showAds" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-left: 1.85rem;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="field-label" style="font-size: 0.8rem;">
+                  <span>In-Article Ad Slot ID (Optional)</span>
+                </label>
+                <input
+                  type="text"
+                  class="editor-input"
+                  [(ngModel)]="adSlotId"
+                  placeholder="e.g. 8493367997 (Auto-fluid if blank)"
+                />
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="field-label" style="font-size: 0.8rem;">
+                  <span>Bottom Display Ad Slot ID (Optional)</span>
+                </label>
+                <input
+                  type="text"
+                  class="editor-input"
+                  [(ngModel)]="bottomAdSlotId"
+                  placeholder="e.g. 5074548982 (Auto-responsive if blank)"
+                />
+              </div>
+            </div>
+
+            <p *ngIf="showAds" style="font-size: 0.78rem; color: var(--text-muted); margin: 0; padding-left: 1.85rem; line-height: 1.5;">
+              In-article fluid ads are automatically balanced between paragraphs based on post reading length (after paragraph 2–3 on standard posts, and multiple balanced intervals on comprehensive guides), preventing consecutive ad overload in compliance with Google AdSense policies.
+            </p>
+          </div>
+        </div>
       </div>
 
       <!-- PREVIEW TAB -->
@@ -434,6 +488,9 @@
             <span *ngIf="isScheduled && scheduledAt" class="scheduled-badge">
               Scheduled: {{ scheduledAt }}
             </span>
+            <span *ngIf="showAds" class="scheduled-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.25);">
+              AdSense Enabled
+            </span>
           </div>
 
           <h1 class="preview-post-title">{{ title || 'Untitled Article' }}</h1>
@@ -442,9 +499,19 @@
           <hr class="preview-divider" />
 
           <div class="preview-body-content">
-            <p *ngFor="let paragraph of content.split('\n\n')" class="preview-paragraph">
-              {{ paragraph }}
-            </p>
+            <ng-container *ngFor="let seg of getPreviewSegments()">
+              <h2 *ngIf="seg.type === 'h2'" class="article-h2">{{ seg.text }}</h2>
+              <h3 *ngIf="seg.type === 'h3'" class="article-h3">{{ seg.text }}</h3>
+              <blockquote *ngIf="seg.type === 'quote'" class="article-quote"><p>{{ seg.text }}</p></blockquote>
+              <div *ngIf="seg.type === 'code'" class="article-code-block">
+                <div class="article-code-header"><span>{{ seg.codeLang || 'code' }}</span></div>
+                <pre class="article-code-pre"><code>{{ seg.text }}</code></pre>
+              </div>
+              <div *ngIf="seg.type === 'ad'" class="in-article-ad-container" style="margin: 2rem 0; border: 1px dashed var(--line); border-radius: 8px; padding: 0.85rem 1rem; text-align: center; background: rgba(0,0,0,0.02);">
+                <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); font-weight: 600;">[ Dynamic In-Article Google AdSense Unit Placement ]</span>
+              </div>
+              <p *ngIf="seg.type === 'paragraph'" class="preview-paragraph">{{ seg.text }}</p>
+            </ng-container>
           </div>
 
           <!-- Sources Preview -->
