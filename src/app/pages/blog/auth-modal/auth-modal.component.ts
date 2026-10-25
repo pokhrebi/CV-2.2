@@ -22,24 +22,6 @@ export class AuthModalComponent {
     this.errorMsg = '';
   }
 
-  currentDomain: string = typeof window !== 'undefined' ? window.location.hostname : 'bhaktipokhrel.com';
-  firebaseConsoleUrl: string = 'https://console.firebase.google.com/project/project-6c6397b8-aa35-4167-ba7/authentication/settings';
-  isUnauthorizedDomain: boolean = false;
-  copiedDomain: boolean = false;
-
-  async copyDomain(): Promise<void> {
-    try {
-      if (navigator.clipboard) {
-        await navigator.clipboard.writeText(this.currentDomain);
-      }
-      this.copiedDomain = true;
-      setTimeout(() => { this.copiedDomain = false; }, 2500);
-    } catch {
-      this.copiedDomain = true;
-      setTimeout(() => { this.copiedDomain = false; }, 2500);
-    }
-  }
-
   onBackdropClick(event: MouseEvent): void {
     if ((event.target as HTMLElement).classList.contains('auth-modal-backdrop')) {
       this.close.emit();
@@ -49,17 +31,12 @@ export class AuthModalComponent {
   async signInWithGoogle(): Promise<void> {
     this.isLoading = true;
     this.errorMsg = '';
-    this.isUnauthorizedDomain = false;
     try {
       await this.authService.signInWithGoogle();
       this.authenticated.emit();
       this.close.emit();
     } catch (err: any) {
-      const msg = err.message || '';
-      if (msg.includes('authorized domain') || err?.code === 'auth/unauthorized-domain') {
-        this.isUnauthorizedDomain = true;
-      }
-      this.errorMsg = msg || 'Google sign in failed.';
+      this.errorMsg = err.message || 'Google sign in failed.';
     } finally {
       this.isLoading = false;
     }

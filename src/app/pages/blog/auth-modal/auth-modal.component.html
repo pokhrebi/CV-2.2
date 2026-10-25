@@ -16,49 +16,8 @@
     </div>
 
     <div class="auth-modal-body">
-      <!-- Domain Authorization Notice -->
-      <div *ngIf="isUnauthorizedDomain" class="domain-auth-guide" style="margin-bottom: 1.25rem; background: var(--bg-alt); border: 1px solid var(--accent); border-radius: var(--radius-sm); padding: 1rem;">
-        <div style="display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.5rem;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent); flex-shrink: 0; margin-top: 2px;">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <div>
-            <h4 style="margin: 0 0 0.25rem; font-size: 0.95rem; font-weight: 600;">One-Time Domain Authorization</h4>
-            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.45;">
-              Firebase Auth requires your custom domain to be authorized before allowing Google Sign-In.
-            </p>
-          </div>
-        </div>
-
-        <div style="background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 0.5rem 0.75rem; display: flex; align-items: center; justify-content: space-between; margin: 0.75rem 0;">
-          <code style="font-size: 0.88rem; font-weight: 600; color: var(--text);">{{ currentDomain }}</code>
-          <button type="button" class="btn btn-sm btn-secondary" (click)="copyDomain()" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">
-            {{ copiedDomain ? 'Copied!' : 'Copy Domain' }}
-          </button>
-        </div>
-
-        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <a [href]="firebaseConsoleUrl" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary" style="font-size: 0.85rem; padding: 0.5rem 0.85rem; text-decoration: none;">
-            <span>Open Firebase Console Settings</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 0.35rem;">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-              <polyline points="15 3 21 3 21 9"/>
-              <line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
-          </a>
-          <button type="button" class="btn btn-sm btn-secondary" (click)="signInWithGoogle()" style="font-size: 0.85rem;">
-            Retry Sign-In
-          </button>
-        </div>
-        <p style="margin: 0.6rem 0 0; font-size: 0.78rem; color: var(--text-muted);">
-          In Firebase Console &gt; <strong>Authorized domains</strong> &gt; Click <strong>Add domain</strong> and paste <code>{{ currentDomain }}</code>.
-        </p>
-      </div>
-
-      <!-- General Error Banner -->
-      <div *ngIf="errorMsg && !isUnauthorizedDomain" class="auth-error-banner" role="alert" style="margin-bottom: 1.25rem;">
+      <!-- Error Banner -->
+      <div *ngIf="errorMsg" class="auth-error-banner" role="alert" style="margin-bottom: 1.25rem;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/>
           <line x1="12" y1="8" x2="12" y2="12"/>
@@ -66,13 +25,6 @@
         </svg>
         <div style="flex: 1;">
           <p style="margin: 0; font-weight: 500;">{{ errorMsg }}</p>
-          <button *ngIf="errorMsg.includes('popup') || errorMsg.includes('blocked')"
-                  type="button"
-                  class="btn btn-sm btn-secondary"
-                  style="margin-top: 0.5rem;"
-                  (click)="signInWithGoogle()">
-            Try Google Sign-In Again
-          </button>
         </div>
       </div>
 

@@ -270,7 +270,7 @@ export class AuthService {
       case 'auth/operation-not-allowed':
         return 'Email/password sign-in is disabled in your Firebase console. Please click "Continue with Google" above.';
       case 'auth/unauthorized-domain':
-        return 'This domain is not in your Firebase authorized domains list. Please check Firebase Console > Authentication > Settings.';
+        return 'Sign-in is currently unavailable on this domain. Please try again later.';
       case 'auth/too-many-requests':
         return 'Too many failed login attempts. Please try again later.';
       case 'auth/network-request-failed':
