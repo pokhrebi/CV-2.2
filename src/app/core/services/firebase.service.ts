@@ -36,6 +36,7 @@ import {
 } from 'firebase/storage';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { BlogPost, UserProfile } from '../models/blog.model';
+import { BASELINE_POSTS } from '../models/baseline-posts';
 
 export const ADMIN_EMAILS = [
   'hamroghar106@gmail.com',
@@ -467,6 +468,13 @@ export class FirebaseService {
         }
       }
 
+      // 3. Ensure baseline high-value architectural articles are available for readers & AdSense
+      BASELINE_POSTS.forEach((bp) => {
+        if (!postsMap.has(bp.id!)) {
+          postsMap.set(bp.id!, bp);
+        }
+      });
+
       const allPosts = Array.from(postsMap.values());
 
       // Filter by tenantId if provided (defaults to active tenant if not 'all')
@@ -479,7 +487,8 @@ export class FirebaseService {
       filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       return filtered;
     } catch (error) {
-      this.handleFirestoreError(error, OperationType.LIST, path);
+      console.warn('Firestore posts query returned error, serving baseline dispatches:', error);
+      return BASELINE_POSTS;
     }
   }
 
@@ -489,10 +498,13 @@ export class FirebaseService {
       const docRef = doc(this.db, 'posts', id);
       const snap = await getDoc(docRef);
       if (!snap.exists()) {
-        return null;
+        const baseline = BASELINE_POSTS.find(p => p.id === id);
+        return baseline || null;
       }
       return { ...(snap.data() as BlogPost), id: snap.id };
     } catch (error) {
+      const baseline = BASELINE_POSTS.find(p => p.id === id);
+      if (baseline) return baseline;
       this.handleFirestoreError(error, OperationType.GET, path);
     }
   }
