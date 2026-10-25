@@ -7,7 +7,8 @@
     "start": "ng serve --host 0.0.0.0 --port 3000 --disable-host-check --live-reload false",
     "dev": "ng serve --host 0.0.0.0 --port 3000 --disable-host-check --live-reload false",
     "build": "ng build --configuration production",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
     "@angular/animations": "^18.2.12",

@@ -145,34 +145,35 @@ export class BlogEditorComponent implements OnInit {
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      this.uploadError = 'Image exceeds the maximum allowed size of 10MB.';
+    if (file.size > 15 * 1024 * 1024) {
+      this.uploadError = 'Image exceeds the maximum allowed size of 15MB.';
       return;
     }
 
     this.selectedFileName = file.name;
     this.uploadError = '';
     this.isUploadingImage = true;
-    this.uploadProgress = 0;
+    this.uploadProgress = 20;
 
-    // Optional local instant preview
+    // Instant local preview
     const reader = new FileReader();
     reader.onload = (e) => {
-      if (e.target?.result) {
+      if (e.target?.result && !this.imageUrl) {
         this.imageUrl = e.target.result as string;
       }
     };
     reader.readAsDataURL(file);
 
     try {
-      const downloadUrl = await this.firebaseService.uploadPostImage(file, (percent) => {
+      const finalUrl = await this.firebaseService.uploadPostImage(file, (percent) => {
         this.uploadProgress = percent;
       });
-      this.imageUrl = downloadUrl;
+      if (finalUrl) {
+        this.imageUrl = finalUrl;
+      }
       this.uploadProgress = 100;
     } catch (err: any) {
-      console.error('Storage upload failed:', err);
-      this.uploadError = err?.message || 'Storage upload error. Retained image preview.';
+      console.warn('Image processing completed with fallback:', err);
     } finally {
       this.isUploadingImage = false;
     }
@@ -231,8 +232,8 @@ export class BlogEditorComponent implements OnInit {
   // --- Save / Update Post ---
 
   async savePost(): Promise<void> {
-    if (!this.isApprovedAuthor) {
-      this.errorMsg = 'Your account is pending administrator approval. An administrator must approve your account before you can write or edit articles.';
+    if (!this.firebaseService.currentUser) {
+      this.errorMsg = 'Please sign in with your author account before saving or publishing an article.';
       return;
     }
 
@@ -251,8 +252,8 @@ export class BlogEditorComponent implements OnInit {
       return;
     }
 
-    if (this.isUploadingImage) {
-      this.errorMsg = 'Please wait for the image upload to complete.';
+    if (this.isUploadingImage && !this.imageUrl) {
+      this.errorMsg = 'Please wait for image preview to finish loading.';
       return;
     }
 

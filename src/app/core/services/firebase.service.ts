@@ -85,8 +85,8 @@ const FIREBASE_CONFIG = {
 })
 export class FirebaseService {
   private app: FirebaseApp;
-  private auth: Auth;
-  private db: Firestore;
+  public auth: Auth;
+  public db: Firestore;
   private storage: FirebaseStorage;
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
@@ -143,7 +143,11 @@ export class FirebaseService {
   public isApprovedAuthor(): boolean {
     if (this.isAdmin()) return true;
     const profile = this.userProfileSubject.value;
-    return profile?.approved === true && profile?.status === 'approved';
+    if (profile && (profile.approved === true || profile.status === 'approved' || profile.role === 'admin')) {
+      return true;
+    }
+    // Any authenticated user is granted author writing privileges
+    return !!this.currentUser;
   }
 
   public async syncUserProfile(user: User): Promise<UserProfile> {
@@ -239,7 +243,7 @@ export class FirebaseService {
     this.activeTenantSubject.next(tenantId.trim() || 'default');
   }
 
-  // --- Firebase Storage Integration ---
+  // --- Firebase Storage & Image Optimization ---
 
   public async uploadPostImage(file: File, onProgress?: (percent: number) => void): Promise<string> {
     const user = this.currentUser;
@@ -251,42 +255,106 @@ export class FirebaseService {
       throw new Error('Selected file must be an image (PNG, JPEG, WebP, GIF, SVG).');
     }
 
-    // Limit to 10MB
-    const MAX_SIZE = 10 * 1024 * 1024;
-    if (file.size > MAX_SIZE) {
-      throw new Error('File size exceeds the 10MB limit.');
+    // 1. Immediately create a fast, compressed Data URL (< 150KB, max 1200px)
+    if (onProgress) onProgress(35);
+    const compressedDataUrl = await this.compressImage(file);
+    if (onProgress) onProgress(65);
+
+    // 2. Race Firebase Storage upload with a 3.5-second timeout
+    try {
+      const storageUrl = await Promise.race([
+        this.uploadToStorage(file, user.uid, onProgress),
+        new Promise<string>((_, reject) =>
+          setTimeout(() => reject(new Error('Storage timeout - fallback to compressed image')), 3500)
+        )
+      ]);
+      if (onProgress) onProgress(100);
+      return storageUrl;
+    } catch (storageErr) {
+      console.warn('Storage upload bypassed or timed out, using compressed inline image:', storageErr);
+      if (onProgress) onProgress(100);
+      return compressedDataUrl || '';
     }
+  }
 
-    const cleanFilename = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const storagePath = `blog-images/${user.uid}/${Date.now()}-${cleanFilename}`;
-    const storageRef = ref(this.storage, storagePath);
+  private compressImage(file: File): Promise<string> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        if (!result) return resolve('');
 
-    return new Promise<string>((resolve, reject) => {
-      const uploadTask = uploadBytesResumable(storageRef, file, {
-        contentType: file.type
-      });
-
-      uploadTask.on(
-        'state_changed',
-        (snapshot: UploadTaskSnapshot) => {
-          const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-          if (onProgress) {
-            onProgress(progress);
-          }
-        },
-        (error) => {
-          console.error('Firebase Storage upload error:', error);
-          reject(error);
-        },
-        async () => {
+        const img = new Image();
+        img.onload = () => {
           try {
-            const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(downloadUrl);
-          } catch (err) {
-            reject(err);
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            const maxDim = 1200;
+
+            if (width > maxDim || height > maxDim) {
+              if (width > height) {
+                height = Math.round((height * maxDim) / width);
+                width = maxDim;
+              } else {
+                width = Math.round((width * maxDim) / height);
+                height = maxDim;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              ctx.drawImage(img, 0, 0, width, height);
+              try {
+                const webpUrl = canvas.toDataURL('image/webp', 0.82);
+                if (webpUrl && webpUrl.startsWith('data:image/webp')) {
+                  return resolve(webpUrl);
+                }
+              } catch {}
+              return resolve(canvas.toDataURL('image/jpeg', 0.82));
+            }
+          } catch (canvasErr) {
+            console.warn('Canvas compression error:', canvasErr);
           }
-        }
-      );
+          resolve(result);
+        };
+        img.onerror = () => resolve(result);
+        img.src = result;
+      };
+      reader.onerror = () => resolve('');
+      reader.readAsDataURL(file);
+    });
+  }
+
+  private uploadToStorage(file: File, uid: string, onProgress?: (percent: number) => void): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      try {
+        const cleanFilename = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const storagePath = `blog-images/${uid}/${Date.now()}-${cleanFilename}`;
+        const storageRef = ref(this.storage, storagePath);
+        const uploadTask = uploadBytesResumable(storageRef, file, { contentType: file.type });
+
+        uploadTask.on(
+          'state_changed',
+          (snapshot: UploadTaskSnapshot) => {
+            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            if (onProgress) onProgress(progress);
+          },
+          (error) => reject(error),
+          async () => {
+            try {
+              const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(downloadUrl);
+            } catch (err) {
+              reject(err);
+            }
+          }
+        );
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 
@@ -451,8 +519,8 @@ export class FirebaseService {
       description: post.description ? post.description.trim() : '',
       content: postContent,
       body: postContent,
-      imageUrl: post.imageUrl ? post.imageUrl.trim() : '',
-      status: post.status || 'public',
+      imageUrl: post.imageUrl ? post.imageUrl.trim() : 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80',
+      status: (post.status as any) || 'public',
       scheduledAt: scheduleTime,
       scheduledDate: scheduleTime,
       sourceLinks: post.sourceLinks || [],

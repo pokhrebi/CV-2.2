@@ -116,10 +116,6 @@ export class BlogListComponent implements OnInit {
       this.showAuthModal = true;
       return;
     }
-    if (!this.isUserApproved) {
-      this.showPendingApprovalModal = true;
-      return;
-    }
     this.postToEdit = null;
     this.showEditorModal = true;
   }

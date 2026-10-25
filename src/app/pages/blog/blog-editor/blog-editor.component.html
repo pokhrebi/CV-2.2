@@ -44,14 +44,14 @@
       <span>{{ errorMsg }}</span>
     </div>
 
-    <!-- Pending Approval Warning Banner -->
-    <div *ngIf="!isApprovedAuthor" class="editor-warning-banner" role="alert">
+    <!-- Sign-in Prompt Banner -->
+    <div *ngIf="!firebaseService.currentUser" class="editor-warning-banner" role="alert">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="10"/>
         <line x1="12" y1="8" x2="12" y2="12"/>
         <line x1="12" y1="16" x2="12.01" y2="16"/>
       </svg>
-      <span><strong>Approval Required:</strong> Your account must be approved by the administrator before you can publish or edit articles.</span>
+      <span>Please sign in with your author account to publish articles.</span>
     </div>
 
     <div class="editor-modal-body">
@@ -479,15 +479,14 @@
       </div>
 
       <div class="footer-right">
-        <button type="button" class="btn btn-secondary" (click)="close.emit()" [disabled]="isLoading || isUploadingImage">
+        <button type="button" class="btn btn-secondary" (click)="close.emit()" [disabled]="isLoading">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary publish-btn" (click)="savePost()" [disabled]="isLoading || isUploadingImage || !isApprovedAuthor">
-          <span *ngIf="!isLoading && !isUploadingImage">
+        <button type="button" class="btn btn-primary publish-btn" (click)="savePost()" [disabled]="isLoading || !isApprovedAuthor">
+          <span *ngIf="!isLoading">
             {{ isEditMode ? 'Update Article' : (status === 'public' ? 'Publish Post' : 'Save as Private') }}
           </span>
-          <span *ngIf="isUploadingImage" class="btn-spinner">Uploading Image...</span>
-          <span *ngIf="isLoading && !isUploadingImage" class="btn-spinner">Saving...</span>
+          <span *ngIf="isLoading" class="btn-spinner">Saving...</span>
         </button>
       </div>
     </div>

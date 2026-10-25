@@ -5803,43 +5803,73 @@ app-navbar {
   margin: 2rem auto 1rem;
 }
 
-/* Bottom-Left Fixed Sign-In Button (When logged out) */
-.bottom-left-signin-wrap {
-  position: fixed;
-  bottom: 2rem;
-  left: 2rem;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease;
+/* Seamless Footer Sign-In (Under Social Links) */
+.footer-right-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65rem;
 }
 
-.btn-bottom-left-signin {
-  background: var(--text);
-  color: var(--bg);
-  font-weight: 700;
-  font-size: 0.88rem;
-  letter-spacing: -0.01em;
-  padding: 0.7rem 1.4rem;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.16);
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: inherit;
-  display: inline-flex;
+.footer-auth-row {
+  display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.5rem;
 }
 
-.btn-bottom-left-signin:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
+.footer-seamless-signin-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease, opacity 0.2s ease;
+  font-family: inherit;
+  opacity: 0.85;
 }
 
-.btn-bottom-left-signin:active {
-  transform: translateY(0);
+.footer-seamless-signin-btn:hover {
+  color: var(--text);
+  opacity: 1;
+}
+
+.footer-auth-user-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.footer-user-email {
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer-dot-sep {
+  opacity: 0.4;
+}
+
+.footer-signout-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-family: inherit;
+}
+
+.footer-signout-btn:hover {
+  color: var(--text);
 }
 
 /* Author Pending Status Chip */
@@ -6448,22 +6478,12 @@ app-navbar {
     font-size: 16px !important;
   }
 
-  /* Bottom-Left Sign In Button (Mobile Safe Placement - In-flow at bottom-left of articles) */
-  .bottom-left-signin-wrap {
-    position: static !important;
-    display: flex !important;
-    justify-content: flex-start !important;
-    margin: 3rem 0 1.5rem 0 !important;
-    padding-left: 0.25rem !important;
-    z-index: 10 !important;
+  .footer-right-column {
+    align-items: center !important;
+    gap: 0.75rem !important;
   }
-  .btn-bottom-left-signin {
-    font-size: 0.88rem !important;
-    padding: 0.7rem 1.4rem !important;
-    min-height: 46px !important;
-    border-radius: 999px !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14) !important;
-    touch-action: manipulation;
+  .footer-auth-row {
+    justify-content: center !important;
   }
 
   .blog-grid {

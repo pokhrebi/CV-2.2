@@ -15,6 +15,7 @@ import {
 } from 'firebase/auth';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { BehaviorSubject, Observable, map } from 'rxjs';
+import { FirebaseService } from './firebase.service';
 
 export interface UserSession {
   uid: string;
@@ -55,6 +56,17 @@ export class AuthService {
   private isAdminSubject = new BehaviorSubject<boolean>(false);
   public isAdmin$: Observable<boolean> = this.isAdminSubject.asObservable();
 
+  private showAuthModalSubject = new BehaviorSubject<boolean>(false);
+  public showAuthModal$: Observable<boolean> = this.showAuthModalSubject.asObservable();
+
+  public openAuthModal(): void {
+    this.showAuthModalSubject.next(true);
+  }
+
+  public closeAuthModal(): void {
+    this.showAuthModalSubject.next(false);
+  }
+
   // Derived Observable: Is Authenticated
   public isAuthenticated$: Observable<boolean> = this.currentUser$.pipe(
     map((user) => !!user)
@@ -75,12 +87,12 @@ export class AuthService {
     })
   );
 
-  constructor() {
-    this.app = getApps().length ? getApp() : initializeApp(FIREBASE_CONFIG);
-    this.auth = getAuth(this.app);
+  constructor(private firebaseService: FirebaseService) {
+    this.auth = this.firebaseService.auth;
+    this.app = (this.auth as any).app;
 
-    // Subscribe to Firebase Auth lifecycle and manage session state
-    onAuthStateChanged(this.auth, async (user) => {
+    // Direct synchronization with FirebaseService's single source of truth
+    this.firebaseService.currentUser$.subscribe((user) => {
       this.currentUserSubject.next(user);
       this.isAdminSubject.next(this.checkIsAdmin(user));
       this.isLoadedSubject.next(true);
@@ -90,11 +102,11 @@ export class AuthService {
   // --- Synchronous Getters ---
 
   public get currentUser(): User | null {
-    return this.currentUserSubject.value;
+    return this.currentUserSubject.value || this.firebaseService.currentUser;
   }
 
   public get isAuthenticated(): boolean {
-    return !!this.currentUserSubject.value;
+    return !!this.currentUser;
   }
 
   public get isLoaded(): boolean {
@@ -102,7 +114,7 @@ export class AuthService {
   }
 
   public get isAdmin(): boolean {
-    return this.checkIsAdmin(this.currentUser);
+    return this.checkIsAdmin(this.currentUser) || this.firebaseService.isAdmin();
   }
 
   // --- Authentication Actions ---
@@ -112,10 +124,10 @@ export class AuthService {
    */
   public async signInWithGoogle(): Promise<User> {
     try {
-      const provider = new GoogleAuthProvider();
-      provider.setCustomParameters({ prompt: 'select_account' });
-      const result = await signInWithPopup(this.auth, provider);
-      return result.user;
+      const user = await this.firebaseService.signInWithGoogle();
+      this.currentUserSubject.next(user);
+      this.isAdminSubject.next(this.checkIsAdmin(user));
+      return user;
     } catch (error: any) {
       console.error('Google Sign-In failed:', error);
       throw new Error(this.formatAuthError(error));
@@ -252,7 +264,13 @@ export class AuthService {
       case 'auth/invalid-email':
         return 'Please enter a valid email address.';
       case 'auth/popup-closed-by-user':
-        return 'Sign-in popup was closed before completing.';
+        return 'The Google sign-in popup was closed before completing.';
+      case 'auth/popup-blocked':
+        return 'The sign-in popup was blocked by your browser. Please allow popups for this site, or open the link directly.';
+      case 'auth/operation-not-allowed':
+        return 'Email/password sign-in is disabled in your Firebase console. Please click "Continue with Google" above.';
+      case 'auth/unauthorized-domain':
+        return 'This domain is not in your Firebase authorized domains list. Please check Firebase Console > Authentication > Settings.';
       case 'auth/too-many-requests':
         return 'Too many failed login attempts. Please try again later.';
       case 'auth/network-request-failed':

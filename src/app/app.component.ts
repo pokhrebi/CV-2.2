@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -6,6 +7,8 @@ import { Component, OnInit, HostListener } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   private scrollRafId: number | null = null;
+
+  constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
     document.body.classList.add('page-loaded');

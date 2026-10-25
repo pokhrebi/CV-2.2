@@ -7,3 +7,9 @@
 <app-footer></app-footer>
 
 <app-cookie-consent></app-cookie-consent>
+
+<!-- Seamless Global Auth Modal -->
+<app-auth-modal
+  *ngIf="authService.showAuthModal$ | async"
+  (close)="authService.closeAuthModal()">
+</app-auth-modal>

@@ -39,7 +39,7 @@
         },
         "status": {
           "type": "string",
-          "enum": ["public", "private"],
+          "enum": ["public", "private", "scheduled", "draft"],
           "description": "Visibility status of post"
         },
         "scheduledAt": {

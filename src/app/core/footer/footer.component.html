@@ -6,13 +6,31 @@
       Say hello <span class="arrow">→</span>
     </a>
 
-    <div class="footer-right">
-      <a href="https://www.linkedin.com/in/bhaktipokhrel" target="_blank" rel="noopener" aria-label="LinkedIn" class="footer-social-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 24h5V7H0v17zM8 7h4.7v2.3h.1c.7-1.3 2.5-2.7 5.1-2.7C23.6 6.6 24 10 24 14.6V24h-5v-8.8c0-2 .1-4.5-2.8-4.5-2.9 0-3.3 2.3-3.3 4.4V24H8V7z"/></svg>
-      </a>
-      <a href="mailto:myphotosfirst@gmail.com" aria-label="Email" class="footer-social-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-      </a>
+    <div class="footer-right-column">
+      <div class="footer-right">
+        <a href="https://www.linkedin.com/in/bhaktipokhrel" target="_blank" rel="noopener" aria-label="LinkedIn" class="footer-social-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 24h5V7H0v17zM8 7h4.7v2.3h.1c.7-1.3 2.5-2.7 5.1-2.7C23.6 6.6 24 10 24 14.6V24h-5v-8.8c0-2 .1-4.5-2.8-4.5-2.9 0-3.3 2.3-3.3 4.4V24H8V7z"/></svg>
+        </a>
+        <a href="mailto:myphotosfirst@gmail.com" aria-label="Email" class="footer-social-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        </a>
+      </div>
+
+      <!-- Seamless Sign In Link under social links -->
+      <div class="footer-auth-row">
+        <button
+          *ngIf="!(authService.currentUser$ | async)"
+          type="button"
+          class="footer-seamless-signin-btn"
+          (click)="authService.openAuthModal()">
+          Sign In
+        </button>
+        <div *ngIf="authService.currentUser$ | async as user" class="footer-auth-user-wrap">
+          <span class="footer-user-email">{{ user.displayName || user.email }}</span>
+          <span class="footer-dot-sep">·</span>
+          <button type="button" class="footer-signout-btn" (click)="authService.signOut()">Sign Out</button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="footer-meta-row" style="margin-top: 2rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; font-size: 0.85rem; color: var(--text-muted); border-top: 1px solid var(--line); padding-top: 1.5rem;">
