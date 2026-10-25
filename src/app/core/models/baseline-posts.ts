@@ -137,6 +137,10 @@ By combining .NET 8's native AOT capabilities, clean architectural boundaries vi
     imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80',
     status: 'public',
     showAds: true,
+    upvotesCount: 24,
+    downvotesCount: 1,
+    score: 23,
+    commentsCount: 3,
     authorId: 'author-bhakti',
     authorName: 'Bhakti Pokhrel',
     authorEmail: 'bhaktipokhrel2004@gmail.com',
@@ -248,6 +252,10 @@ By bootstrapping without \`provideZoneChangeDetection()\` and using \`provideExp
     imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80',
     status: 'public',
     showAds: true,
+    upvotesCount: 38,
+    downvotesCount: 2,
+    score: 36,
+    commentsCount: 5,
     authorId: 'author-bhakti',
     authorName: 'Bhakti Pokhrel',
     authorEmail: 'bhaktipokhrel2004@gmail.com',
@@ -372,6 +380,10 @@ Relational database tuning in high-throughput environments requires disciplined 
     imageUrl: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=1200&q=80',
     status: 'public',
     showAds: true,
+    upvotesCount: 19,
+    downvotesCount: 0,
+    score: 19,
+    commentsCount: 2,
     authorId: 'author-bhakti',
     authorName: 'Bhakti Pokhrel',
     authorEmail: 'bhaktipokhrel2004@gmail.com',
@@ -385,3 +397,60 @@ Relational database tuning in high-throughput environments requires disciplined 
     ]
   }
 ];
+
+export const BASELINE_COMMENTS: Record<string, import('./blog.model').ArticleComment[]> = {
+  'post-dotnet8-enterprise': [
+    {
+      id: 'comm-101',
+      postId: 'post-dotnet8-enterprise',
+      authorId: 'usr-sarah-m',
+      authorName: 'Sarah Miller',
+      content: 'Fantastic breakdown of CQRS with MediatR. How do you handle distributed transactions across multiple bounded contexts when Azure Service Bus delivers commands out of order?',
+      createdAt: '2026-09-16T14:22:00.000Z'
+    },
+    {
+      id: 'comm-102',
+      postId: 'post-dotnet8-enterprise',
+      authorId: 'author-bhakti',
+      authorName: 'Bhakti Pokhrel',
+      content: 'Great question Sarah! We use Azure Service Bus Sessions partitioned by AggregateId (e.g., StudyId or PatientId) to guarantee FIFO ordering per stream, paired with idempotency tokens in our command handlers.',
+      createdAt: '2026-09-16T16:05:00.000Z'
+    },
+    {
+      id: 'comm-103',
+      postId: 'post-dotnet8-enterprise',
+      authorId: 'usr-marcus-k',
+      authorName: 'Marcus Krause',
+      content: 'The 21 CFR Part 11 audit logging behavior is such a clean pattern. MediatR pipeline behaviors make cross-cutting compliance concerns so maintainable.',
+      createdAt: '2026-09-17T09:12:00.000Z'
+    }
+  ],
+  'post-angular-zoneless-signals': [
+    {
+      id: 'comm-201',
+      postId: 'post-angular-zoneless-signals',
+      authorId: 'usr-david-chen',
+      authorName: 'David Chen',
+      content: 'Zoneless change detection combined with signal graphs made a night-and-day difference in our data grid latency. Truly the future of enterprise Angular.',
+      createdAt: '2026-09-23T11:40:00.000Z'
+    },
+    {
+      id: 'comm-202',
+      postId: 'post-angular-zoneless-signals',
+      authorId: 'usr-elena-v',
+      authorName: 'Elena Vasquez',
+      content: 'Did you notice any quirks when interfacing with third-party libraries that rely on zone.js event dispatching?',
+      createdAt: '2026-09-24T08:15:00.000Z'
+    }
+  ],
+  'post-sqlserver-indexing-saas': [
+    {
+      id: 'comm-301',
+      postId: 'post-sqlserver-indexing-saas',
+      authorId: 'usr-raj-patel',
+      authorName: 'Raj Patel',
+      content: 'Covering indexes with INCLUDE are so often overlooked! We cut our production logical reads in half just by applying this to our heaviest patient search queries.',
+      createdAt: '2026-09-30T10:14:00.000Z'
+    }
+  ]
+};

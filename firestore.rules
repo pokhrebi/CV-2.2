@@ -40,7 +40,7 @@ service cloud.firestore {
 
     function isValidBlogPost(data) {
       return data.keys().hasAll(['tenantId', 'title', 'content', 'status', 'authorId', 'createdAt'])
-        && data.keys().hasOnly(['tenantId', 'title', 'description', 'content', 'body', 'imageUrl', 'status', 'scheduledAt', 'scheduledDate', 'sourceLinks', 'socialLinks', 'authorId', 'authorName', 'authorEmail', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['tenantId', 'title', 'description', 'content', 'body', 'imageUrl', 'status', 'scheduledAt', 'scheduledDate', 'sourceLinks', 'socialLinks', 'showAds', 'adSlotId', 'bottomAdSlotId', 'upvotesCount', 'downvotesCount', 'score', 'commentsCount', 'authorId', 'authorName', 'authorEmail', 'createdAt', 'updatedAt'])
         && data.tenantId is string && data.tenantId.size() > 0 && data.tenantId.size() <= 64
         && data.title is string && data.title.size() > 0 && data.title.size() <= 300
         && data.content is string && data.content.size() > 0 && data.content.size() <= 50000
@@ -56,7 +56,32 @@ service cloud.firestore {
         && (!('authorEmail' in data) || (data.authorEmail is string && data.authorEmail.size() <= 128))
         && (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 64))
         && (!('sourceLinks' in data) || (data.sourceLinks is list && data.sourceLinks.size() <= 10))
-        && (!('socialLinks' in data) || (data.socialLinks is list && data.socialLinks.size() <= 10));
+        && (!('socialLinks' in data) || (data.socialLinks is list && data.socialLinks.size() <= 10))
+        && (!('showAds' in data) || (data.showAds is bool))
+        && (!('adSlotId' in data) || (data.adSlotId is string && data.adSlotId.size() <= 64))
+        && (!('bottomAdSlotId' in data) || (data.bottomAdSlotId is string && data.bottomAdSlotId.size() <= 64))
+        && (!('upvotesCount' in data) || (data.upvotesCount is int || data.upvotesCount is float))
+        && (!('downvotesCount' in data) || (data.downvotesCount is int || data.downvotesCount is float))
+        && (!('score' in data) || (data.score is int || data.score is float))
+        && (!('commentsCount' in data) || (data.commentsCount is int || data.commentsCount is float));
+    }
+
+    function isValidComment(data, postId) {
+      return data.keys().hasAll(['id', 'postId', 'authorId', 'authorName', 'content', 'createdAt'])
+        && data.keys().hasOnly(['id', 'postId', 'authorId', 'authorName', 'authorEmail', 'authorPhotoUrl', 'content', 'createdAt', 'updatedAt'])
+        && data.authorId == request.auth.uid
+        && data.postId == postId
+        && data.content is string && data.content.size() > 0 && data.content.size() <= 2000
+        && data.authorName is string && data.authorName.size() > 0 && data.authorName.size() <= 128;
+    }
+
+    function isValidVote(data, postId, userId) {
+      return data.keys().hasAll(['postId', 'userId', 'vote', 'createdAt'])
+        && data.keys().hasOnly(['postId', 'userId', 'vote', 'createdAt', 'updatedAt'])
+        && data.userId == request.auth.uid
+        && data.userId == userId
+        && data.postId == postId
+        && (data.vote == 1 || data.vote == -1);
     }
 
     // Blog Posts Collection with Multi-Tenant & Privacy Protections
@@ -64,11 +89,36 @@ service cloud.firestore {
       allow get: if resource.data.status == 'public' || (isSignedIn() && (resource.data.authorId == request.auth.uid || isAdmin()));
       allow list: if resource.data.status == 'public' || (isSignedIn() && (resource.data.authorId == request.auth.uid || isAdmin()));
       allow create: if isSignedIn() && isValidId(postId) && isValidBlogPost(incoming());
-      allow update: if isSignedIn() && isValidId(postId)
-        && (resource.data.authorId == request.auth.uid || isAdmin())
-        && isValidBlogPost(incoming())
-        && incoming().createdAt == resource.data.createdAt;
+      
+      // Updates allowed either for full post authors/admins, OR for signed-in users updating vote/comment counters
+      allow update: if isSignedIn() && isValidId(postId) && (
+        ((resource.data.authorId == request.auth.uid || isAdmin())
+          && isValidBlogPost(incoming())
+          && incoming().createdAt == resource.data.createdAt)
+        ||
+        (incoming().diff(existing()).affectedKeys().hasOnly(['upvotesCount', 'downvotesCount', 'score', 'commentsCount', 'updatedAt']))
+      );
+      
       allow delete: if isSignedIn() && isValidId(postId) && (resource.data.authorId == request.auth.uid || isAdmin());
+
+      // Comments Subcollection (ONLY signed-in users can post comments)
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if isSignedIn() && isValidId(commentId) && isValidComment(incoming(), postId);
+        allow update: if isSignedIn() && isValidId(commentId)
+          && (existing().authorId == request.auth.uid || isAdmin())
+          && incoming().authorId == existing().authorId
+          && incoming().postId == postId
+          && incoming().content is string && incoming().content.size() > 0 && incoming().content.size() <= 2000;
+        allow delete: if isSignedIn() && isValidId(commentId) && (existing().authorId == request.auth.uid || isAdmin());
+      }
+
+      // Votes Subcollection (ONLY signed-in users can Up arrow or Down arrow)
+      match /votes/{userId} {
+        allow read: if true;
+        allow create, update: if isSignedIn() && request.auth.uid == userId && isValidVote(incoming(), postId, userId);
+        allow delete: if isSignedIn() && request.auth.uid == userId;
+      }
     }
 
     // User Profiles & Author Approvals

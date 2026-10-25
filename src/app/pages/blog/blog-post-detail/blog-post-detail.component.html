@@ -105,6 +105,41 @@
             </svg>
             <span>Goes live {{ post.scheduledAt | date:'medium' }}</span>
           </div>
+
+          <!-- Article Header Ranking Widget (Signed-In Only Voting) -->
+          <div class="article-header-ranking" [title]="firebaseService.currentUser ? 'Upvote or Downvote to rank this article' : 'Sign in to vote'">
+            <button
+              type="button"
+              class="vote-btn vote-up-btn"
+              [class.active]="userVote === 1"
+              [disabled]="isVoting"
+              (click)="onVote('up')"
+              aria-label="Upvote article">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="18 15 12 9 6 15"/>
+              </svg>
+            </button>
+
+            <span class="ranking-score-value" [class.score-positive]="voteScore > 0" [class.score-negative]="voteScore < 0">
+              {{ voteScore > 0 ? '+' + voteScore : voteScore }}
+            </span>
+
+            <button
+              type="button"
+              class="vote-btn vote-down-btn"
+              [class.active]="userVote === -1"
+              [disabled]="isVoting"
+              (click)="onVote('down')"
+              aria-label="Downvote article">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+
+            <span class="ranking-tag-text">
+              Rank Score
+            </span>
+          </div>
         </div>
       </header>
 
@@ -221,6 +256,59 @@
         </app-ad-banner>
       </div>
 
+      <!-- Dedicated Article Ranking & Feedback Bar -->
+      <section class="article-ranking-box">
+        <div class="ranking-box-left">
+          <div class="ranking-vote-controls">
+            <button
+              type="button"
+              class="vote-pill-btn vote-up-pill"
+              [class.active]="userVote === 1"
+              [disabled]="isVoting"
+              (click)="onVote('up')"
+              title="Upvote this dispatch">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="18 15 12 9 6 15"/>
+              </svg>
+              <span>Upvote</span>
+            </button>
+
+            <span class="ranking-pill-score" [class.score-positive]="voteScore > 0" [class.score-negative]="voteScore < 0">
+              {{ voteScore > 0 ? '+' + voteScore : voteScore }}
+            </span>
+
+            <button
+              type="button"
+              class="vote-pill-btn vote-down-pill"
+              [class.active]="userVote === -1"
+              [disabled]="isVoting"
+              (click)="onVote('down')"
+              title="Downvote this dispatch">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+              <span>Downvote</span>
+            </button>
+          </div>
+
+          <div class="ranking-info-text">
+            <h4>Article Community Ranking</h4>
+            <p>
+              Rank Score: <strong>{{ voteScore }}</strong> ({{ upvotesCount }} up &bull; {{ downvotesCount }} down)
+              <span *ngIf="!(firebaseService.currentUser$ | async)" class="ranking-guest-notice">
+                &bull; Sign in required to cast your vote
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="!(firebaseService.currentUser$ | async)" class="ranking-box-right">
+          <button type="button" class="btn btn-secondary btn-sm" (click)="authService.openAuthModal()">
+            Sign in to Vote
+          </button>
+        </div>
+      </section>
+
       <!-- Bottom Author Card -->
       <div class="author-bio-card">
         <div class="author-bio-avatar">
@@ -240,6 +328,151 @@
           </div>
         </div>
       </div>
+
+      <!-- ============================================== -->
+      <!-- Article Comments Section (Signed-In Only)      -->
+      <!-- ============================================== -->
+      <section class="comments-section" id="comments">
+        <div class="comments-header">
+          <div class="comments-header-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <h3>Reader Discussion &amp; Thoughts</h3>
+            <span class="comments-count-badge">{{ comments.length }}</span>
+          </div>
+          <p class="comments-subtitle">
+            Verified technical feedback and insights. Only signed-in members can submit comments and rank dispatches.
+          </p>
+        </div>
+
+        <!-- Auth Gating Banner: Displayed when User is NOT Signed In -->
+        <div *ngIf="!(firebaseService.currentUser$ | async)" class="comments-guest-cta-card">
+          <div class="cta-guest-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <div class="cta-guest-content">
+            <h4>Sign in to join the conversation</h4>
+            <p>
+              To maintain high-quality architectural discussion and protect from spam, comments and article ranking are exclusive to signed-in readers.
+            </p>
+          </div>
+          <div class="cta-guest-action">
+            <button
+              type="button"
+              class="btn btn-primary btn-signin-cta"
+              (click)="authService.openAuthModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Sign in with Google</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Comment Composer: Displayed ONLY when User is Signed In -->
+        <div *ngIf="firebaseService.currentUser$ | async as user" class="comment-composer-box">
+          <div class="composer-header">
+            <div class="composer-user-avatar">
+              <img *ngIf="user.photoURL; else initialAvatar" [src]="user.photoURL" [alt]="user.displayName || 'User'" referrerpolicy="no-referrer"/>
+              <ng-template #initialAvatar>
+                <span>{{ ((user.displayName || user.email || 'U')[0]) | uppercase }}</span>
+              </ng-template>
+            </div>
+            <div class="composer-user-info">
+              <span class="composer-author-name">{{ user.displayName || user.email }}</span>
+              <span class="composer-badge">Authenticated Reader</span>
+            </div>
+          </div>
+
+          <form (ngSubmit)="submitComment()" class="composer-form">
+            <textarea
+              class="comment-textarea"
+              placeholder="What are your thoughts or questions on this architecture?"
+              rows="3"
+              maxlength="2000"
+              [(ngModel)]="newCommentText"
+              name="commentText"
+              [disabled]="isSubmittingComment"
+              aria-label="Add your comment"></textarea>
+
+            <div class="composer-actions-bar">
+              <span class="char-counter" [class.near-limit]="newCommentText.length > 1800">
+                {{ newCommentText.length }}/2000
+              </span>
+
+              <div class="composer-btns">
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-sm post-comment-btn"
+                  [disabled]="isSubmittingComment || !newCommentText.trim()">
+                  <svg *ngIf="!isSubmittingComment" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="22" y1="2" x2="11" y2="13"/>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                  </svg>
+                  <span *ngIf="isSubmittingComment" class="spinner-small"></span>
+                  <span>{{ isSubmittingComment ? 'Posting...' : 'Post Thought' }}</span>
+                </button>
+              </div>
+            </div>
+
+            <p *ngIf="commentError" class="composer-error-text" role="alert">
+              {{ commentError }}
+            </p>
+          </form>
+        </div>
+
+        <!-- Comments List -->
+        <div class="comments-list-wrap">
+          <div *ngIf="isLoadingComments" class="comments-loading">
+            <div class="loading-spinner"></div>
+            <span>Loading reader comments...</span>
+          </div>
+
+          <div *ngIf="!isLoadingComments && comments.length === 0" class="no-comments-yet">
+            <p>No thoughts shared yet. Be the first to start the discussion!</p>
+          </div>
+
+          <div *ngIf="!isLoadingComments && comments.length > 0" class="comments-items">
+            <article *ngFor="let comment of comments" class="comment-item-card">
+              <div class="comment-card-header">
+                <div class="comment-avatar">
+                  <img *ngIf="comment.authorPhotoUrl; else authorInitial" [src]="comment.authorPhotoUrl" [alt]="comment.authorName" referrerpolicy="no-referrer"/>
+                  <ng-template #authorInitial>
+                    <span>{{ (comment.authorName[0] || 'U') | uppercase }}</span>
+                  </ng-template>
+                </div>
+                <div class="comment-author-meta">
+                  <span class="comment-author-name">{{ comment.authorName }}</span>
+                  <span class="comment-timestamp">{{ comment.createdAt | date:'mediumDate' }} at {{ comment.createdAt | date:'shortTime' }}</span>
+                </div>
+
+                <!-- Delete Comment Option (Author or Admin) -->
+                <button
+                  *ngIf="canDeleteComment(comment)"
+                  class="delete-comment-btn"
+                  (click)="deleteComment(comment.id)"
+                  title="Delete this comment">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="comment-card-body">
+                <p>{{ comment.content }}</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
     </article>
   </div>
 

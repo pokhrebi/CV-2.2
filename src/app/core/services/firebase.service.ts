@@ -35,8 +35,8 @@ import {
   UploadTaskSnapshot
 } from 'firebase/storage';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BlogPost, UserProfile } from '../models/blog.model';
-import { BASELINE_POSTS } from '../models/baseline-posts';
+import { BlogPost, UserProfile, ArticleComment, ArticleVote } from '../models/blog.model';
+import { BASELINE_POSTS, BASELINE_COMMENTS } from '../models/baseline-posts';
 
 export const ADMIN_EMAILS = [
   'hamroghar106@gmail.com',
@@ -98,6 +98,10 @@ export class FirebaseService {
 
   private userProfileSubject = new BehaviorSubject<UserProfile | null>(null);
   public userProfile$: Observable<UserProfile | null> = this.userProfileSubject.asObservable();
+
+  private localVotesCache = new Map<string, 1 | -1 | 0>();
+  private localPostScores = new Map<string, { upvotes: number; downvotes: number; score: number }>();
+  private localCommentsCache = new Map<string, ArticleComment[]>();
 
   constructor() {
     this.app = getApps().length ? getApp() : initializeApp(FIREBASE_CONFIG);
@@ -475,7 +479,12 @@ export class FirebaseService {
         }
       });
 
-      const allPosts = Array.from(postsMap.values());
+      const allPosts = Array.from(postsMap.values()).map(p => {
+        if (p.id && this.localPostScores.has(p.id)) {
+          return { ...p, ...this.localPostScores.get(p.id) };
+        }
+        return p;
+      });
 
       // Filter by tenantId if provided (defaults to active tenant if not 'all')
       const targetTenant = tenantId || this.activeTenant;
@@ -488,25 +497,40 @@ export class FirebaseService {
       return filtered;
     } catch (error) {
       console.warn('Firestore posts query returned error, serving baseline dispatches:', error);
-      return BASELINE_POSTS;
+      return BASELINE_POSTS.map(p => {
+        if (p.id && this.localPostScores.has(p.id)) {
+          return { ...p, ...this.localPostScores.get(p.id) };
+        }
+        return p;
+      });
     }
   }
 
   public async getPost(id: string): Promise<BlogPost | null> {
     const path = `posts/${id}`;
+    let result: BlogPost | null = null;
     try {
       const docRef = doc(this.db, 'posts', id);
       const snap = await getDoc(docRef);
       if (!snap.exists()) {
         const baseline = BASELINE_POSTS.find(p => p.id === id);
-        return baseline || null;
+        result = baseline || null;
+      } else {
+        result = { ...(snap.data() as BlogPost), id: snap.id };
       }
-      return { ...(snap.data() as BlogPost), id: snap.id };
     } catch (error) {
       const baseline = BASELINE_POSTS.find(p => p.id === id);
-      if (baseline) return baseline;
-      this.handleFirestoreError(error, OperationType.GET, path);
+      if (baseline) {
+        result = baseline;
+      } else {
+        this.handleFirestoreError(error, OperationType.GET, path);
+      }
     }
+
+    if (result && result.id && this.localPostScores.has(result.id)) {
+      result = { ...result, ...this.localPostScores.get(result.id) };
+    }
+    return result;
   }
 
   public async createPost(post: Omit<BlogPost, 'id' | 'authorId' | 'createdAt'>): Promise<string> {
@@ -533,6 +557,11 @@ export class FirebaseService {
       body: postContent,
       imageUrl: post.imageUrl ? post.imageUrl.trim() : 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80',
       status: (post.status as any) || 'public',
+      showAds: true,
+      upvotesCount: 0,
+      downvotesCount: 0,
+      score: 0,
+      commentsCount: 0,
       scheduledAt: scheduleTime,
       scheduledDate: scheduleTime,
       sourceLinks: post.sourceLinks || [],
@@ -616,4 +645,229 @@ export class FirebaseService {
       this.handleFirestoreError(error, OperationType.DELETE, path);
     }
   }
+
+  // --- Article Ranking & Up/Down Voting System (Strictly Authenticated) ---
+
+  public async getUserVote(postId: string): Promise<1 | -1 | 0> {
+    const user = this.currentUser;
+    if (!user) return 0;
+
+    const cacheKey = `${postId}_${user.uid}`;
+    if (this.localVotesCache.has(cacheKey)) {
+      return this.localVotesCache.get(cacheKey)!;
+    }
+
+    try {
+      const voteDocRef = doc(this.db, 'posts', postId, 'votes', user.uid);
+      const snap = await getDoc(voteDocRef);
+      if (snap.exists()) {
+        const val = snap.data()?.['vote'] as (1 | -1);
+        this.localVotesCache.set(cacheKey, val);
+        return val;
+      }
+    } catch (err) {
+      console.warn('Could not read user vote from Firestore:', err);
+    }
+    return 0;
+  }
+
+  public async voteArticle(postId: string, direction: 'up' | 'down'): Promise<{ userVote: 1 | -1 | 0; score: number; upvotes: number; downvotes: number }> {
+    const user = this.currentUser;
+    if (!user) {
+      throw new Error('Authentication required. Only signed-in users can upvote or downvote articles.');
+    }
+
+    const currentVote = await this.getUserVote(postId);
+    const targetVote: 1 | -1 = direction === 'up' ? 1 : -1;
+    let newVote: 1 | -1 | 0 = 0;
+
+    // Toggle off if clicking the same direction again
+    if (currentVote === targetVote) {
+      newVote = 0;
+    } else {
+      newVote = targetVote;
+    }
+
+    const cacheKey = `${postId}_${user.uid}`;
+    this.localVotesCache.set(cacheKey, newVote);
+
+    // Fetch baseline / current post stats
+    const post = await this.getPost(postId);
+    let upvotes = post?.upvotesCount ?? (post?.score && post.score > 0 ? post.score : 0);
+    let downvotes = post?.downvotesCount ?? 0;
+
+    // Apply delta from currentVote to newVote
+    if (currentVote === 1) {
+      upvotes = Math.max(0, upvotes - 1);
+    } else if (currentVote === -1) {
+      downvotes = Math.max(0, downvotes - 1);
+    }
+
+    if (newVote === 1) {
+      upvotes += 1;
+    } else if (newVote === -1) {
+      downvotes += 1;
+    }
+
+    const score = upvotes - downvotes;
+    this.localPostScores.set(postId, { upvotes, downvotes, score });
+
+    // Update in Firestore
+    try {
+      const voteDocRef = doc(this.db, 'posts', postId, 'votes', user.uid);
+      if (newVote === 0) {
+        await deleteDoc(voteDocRef);
+      } else {
+        const votePayload: ArticleVote = {
+          postId,
+          userId: user.uid,
+          vote: newVote,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        await setDoc(voteDocRef, votePayload);
+      }
+
+      // Update counters on post document if post is in Firestore
+      const postRef = doc(this.db, 'posts', postId);
+      await updateDoc(postRef, {
+        upvotesCount: upvotes,
+        downvotesCount: downvotes,
+        score,
+        updatedAt: new Date().toISOString()
+      }).catch(err => {
+        console.warn('Post stats counter update bypassed for offline/baseline dispatch:', err);
+      });
+    } catch (err) {
+      console.warn('Firestore vote persistence bypassed, maintained in active session:', err);
+    }
+
+    return { userVote: newVote, score, upvotes, downvotes };
+  }
+
+  // --- Article Comments System (Strictly Authenticated) ---
+
+  public async getComments(postId: string): Promise<ArticleComment[]> {
+    const commentsList: ArticleComment[] = [];
+    const seenIds = new Set<string>();
+
+    try {
+      const commentsColl = collection(this.db, 'posts', postId, 'comments');
+      const snap = await getDocs(query(commentsColl, orderBy('createdAt', 'asc')));
+      snap.forEach((d) => {
+        const data = d.data() as ArticleComment;
+        seenIds.add(data.id || d.id);
+        commentsList.push({ ...data, id: data.id || d.id });
+      });
+    } catch (err) {
+      console.warn('Could not read comments from Firestore, serving community comments:', err);
+    }
+
+    // Include baseline community comments if any
+    const baseline = BASELINE_COMMENTS[postId] || [];
+    baseline.forEach((c) => {
+      if (!seenIds.has(c.id)) {
+        seenIds.add(c.id);
+        commentsList.push(c);
+      }
+    });
+
+    // Also include any local comments in session cache
+    const local = this.localCommentsCache.get(postId) || [];
+    local.forEach((c) => {
+      if (!seenIds.has(c.id)) {
+        seenIds.add(c.id);
+        commentsList.push(c);
+      }
+    });
+
+    // Sort chronologically ascending
+    commentsList.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    return commentsList;
+  }
+
+  public async addComment(postId: string, content: string): Promise<ArticleComment> {
+    const user = this.currentUser;
+    if (!user) {
+      throw new Error('Authentication required. Only signed-in users can comment on articles.');
+    }
+
+    const clean = content.trim();
+    if (!clean) {
+      throw new Error('Comment text cannot be empty.');
+    }
+    if (clean.length > 2000) {
+      throw new Error('Comment cannot exceed 2000 characters.');
+    }
+
+    const commentId = 'comm-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7);
+    const newComment: ArticleComment = {
+      id: commentId,
+      postId,
+      authorId: user.uid,
+      authorName: user.displayName || user.email?.split('@')[0] || 'Community Member',
+      authorEmail: user.email || '',
+      authorPhotoUrl: user.photoURL || '',
+      content: clean,
+      createdAt: new Date().toISOString()
+    };
+
+    // Cache locally
+    const currentList = this.localCommentsCache.get(postId) || [];
+    currentList.push(newComment);
+    this.localCommentsCache.set(postId, currentList);
+
+    // Persist to Firestore
+    try {
+      const commentDocRef = doc(this.db, 'posts', postId, 'comments', commentId);
+      await setDoc(commentDocRef, newComment);
+
+      // Increment comments count on post
+      const postRef = doc(this.db, 'posts', postId);
+      const postSnap = await getDoc(postRef);
+      if (postSnap.exists()) {
+        const postData = postSnap.data() as BlogPost;
+        const currentCount = postData.commentsCount || 0;
+        await updateDoc(postRef, {
+          commentsCount: currentCount + 1,
+          updatedAt: new Date().toISOString()
+        }).catch(() => {});
+      }
+    } catch (err) {
+      console.warn('Comment Firestore write bypassed, cached locally:', err);
+    }
+
+    return newComment;
+  }
+
+  public async deleteComment(postId: string, commentId: string): Promise<void> {
+    const user = this.currentUser;
+    if (!user) {
+      throw new Error('Authentication required.');
+    }
+
+    // Remove from local cache
+    const currentList = this.localCommentsCache.get(postId) || [];
+    this.localCommentsCache.set(postId, currentList.filter(c => c.id !== commentId));
+
+    try {
+      const commentDocRef = doc(this.db, 'posts', postId, 'comments', commentId);
+      await deleteDoc(commentDocRef);
+
+      // Decrement count on post if exists
+      const postRef = doc(this.db, 'posts', postId);
+      const postSnap = await getDoc(postRef);
+      if (postSnap.exists()) {
+        const postData = postSnap.data() as BlogPost;
+        const currentCount = Math.max(0, (postData.commentsCount || 1) - 1);
+        await updateDoc(postRef, {
+          commentsCount: currentCount,
+          updatedAt: new Date().toISOString()
+        }).catch(() => {});
+      }
+    } catch (err) {
+      console.warn('Comment delete bypassed in Firestore:', err);
+    }
+  }
 }
+

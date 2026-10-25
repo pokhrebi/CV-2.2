@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { SeoService } from '../../../core/seo.service';
 import { FirebaseService } from '../../../core/services/firebase.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { BlogPost } from '../../../core/models/blog.model';
 
-export type BlogFilterTab = 'all' | 'public' | 'scheduled' | 'private';
+export type BlogFilterTab = 'all' | 'top-ranked' | 'most-discussed' | 'public' | 'scheduled' | 'private';
 
 @Component({
   selector: 'app-blog-list',
@@ -21,6 +22,10 @@ export class BlogListComponent implements OnInit {
   tenantId = 'default';
   availableTenants: string[] = ['default', 'cloud-systems', 'mobile-lab'];
 
+  // User Votes on Posts (for card active state)
+  userVotesMap = new Map<string, 1 | -1 | 0>();
+  votingPostId: string | null = null;
+
   // Modal States
   showAuthModal = false;
   showEditorModal = false;
@@ -35,6 +40,7 @@ export class BlogListComponent implements OnInit {
 
   constructor(
     public firebaseService: FirebaseService,
+    public authService: AuthService,
     private seoService: SeoService
   ) {}
 
@@ -59,6 +65,16 @@ export class BlogListComponent implements OnInit {
     try {
       this.posts = await this.firebaseService.getPosts(this.tenantId);
       this.applyFilter();
+
+      // If user is authenticated, query their votes for these posts
+      if (this.firebaseService.currentUser) {
+        this.posts.forEach(async (p) => {
+          if (p.id) {
+            const v = await this.firebaseService.getUserVote(p.id);
+            this.userVotesMap.set(p.id, v);
+          }
+        });
+      }
     } catch (err: any) {
       console.error('Failed to load posts:', err);
       this.errorMsg = 'Could not load posts. Please try again.';
@@ -86,11 +102,10 @@ export class BlogListComponent implements OnInit {
     const q = this.searchQuery.trim().toLowerCase();
     const now = new Date().getTime();
 
-    this.filteredPosts = this.posts.filter((post) => {
+    let list = this.posts.filter((post) => {
       // Tab filter
       if (this.activeTab === 'public') {
         if (post.status !== 'public') return false;
-        // If scheduled for future, not strictly public yet
         if (post.scheduledAt && new Date(post.scheduledAt).getTime() > now) return false;
       } else if (this.activeTab === 'scheduled') {
         if (!post.scheduledAt || new Date(post.scheduledAt).getTime() <= now) return false;
@@ -109,6 +124,50 @@ export class BlogListComponent implements OnInit {
 
       return true;
     });
+
+    // Ranking and sorting logic
+    if (this.activeTab === 'top-ranked') {
+      list.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    } else if (this.activeTab === 'most-discussed') {
+      list.sort((a, b) => (b.commentsCount ?? 0) - (a.commentsCount ?? 0));
+    } else {
+      list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+
+    this.filteredPosts = list;
+  }
+
+  async onCardVote(post: BlogPost, direction: 'up' | 'down', event: Event): Promise<void> {
+    event.stopPropagation();
+    event.preventDefault();
+
+    if (!this.firebaseService.currentUser) {
+      this.authService.openAuthModal();
+      return;
+    }
+
+    if (!post.id || this.votingPostId === post.id) return;
+
+    this.votingPostId = post.id;
+    try {
+      const res = await this.firebaseService.voteArticle(post.id, direction);
+      post.score = res.score;
+      post.upvotesCount = res.upvotes;
+      post.downvotesCount = res.downvotes;
+      this.userVotesMap.set(post.id, res.userVote);
+      if (this.activeTab === 'top-ranked') {
+        this.applyFilter();
+      }
+    } catch (err: any) {
+      console.error('Card vote failed:', err);
+    } finally {
+      this.votingPostId = null;
+    }
+  }
+
+  getPostVote(postId?: string): 1 | -1 | 0 {
+    if (!postId || !this.firebaseService.currentUser) return 0;
+    return this.userVotesMap.get(postId) || 0;
   }
 
   openWriteModal(): void {

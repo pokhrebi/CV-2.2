@@ -24,9 +24,33 @@ export interface BlogPost {
   showAds?: boolean; // Controls whether Google AdSense in-article & banner units are dynamically rendered
   adSlotId?: string; // Optional custom AdSense slot ID for in-article ad
   bottomAdSlotId?: string; // Optional custom AdSense slot ID for bottom ad
+  upvotesCount?: number; // Total up arrow votes
+  downvotesCount?: number; // Total down arrow votes
+  score?: number; // Aggregate rank score (upvotes - downvotes)
+  commentsCount?: number; // Total comments count
   authorId: string;
   authorName?: string;
   authorEmail?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ArticleComment {
+  id: string;
+  postId: string;
+  authorId: string;
+  authorName: string;
+  authorEmail?: string;
+  authorPhotoUrl?: string;
+  content: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ArticleVote {
+  postId: string;
+  userId: string;
+  vote: 1 | -1;
   createdAt: string;
   updatedAt?: string;
 }

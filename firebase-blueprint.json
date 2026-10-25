@@ -60,6 +60,26 @@
           "type": "array",
           "description": "List of social links"
         },
+        "showAds": {
+          "type": "boolean",
+          "description": "Whether AdSense dynamic in-article units are active"
+        },
+        "upvotesCount": {
+          "type": "number",
+          "description": "Total count of up-arrow votes"
+        },
+        "downvotesCount": {
+          "type": "number",
+          "description": "Total count of down-arrow votes"
+        },
+        "score": {
+          "type": "number",
+          "description": "Calculated article rank score (upvotes minus downvotes)"
+        },
+        "commentsCount": {
+          "type": "number",
+          "description": "Total count of user comments"
+        },
         "authorId": {
           "type": "string",
           "maxLength": 128,
@@ -87,6 +107,93 @@
         }
       },
       "required": ["tenantId", "title", "content", "status", "authorId", "createdAt"]
+    },
+    "ArticleComment": {
+      "title": "Article Comment",
+      "description": "A user-submitted comment on a blog article by an authenticated user",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Comment ID"
+        },
+        "postId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Parent blog post ID"
+        },
+        "authorId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Firebase UID of commenting user"
+        },
+        "authorName": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Display name or email of user"
+        },
+        "authorEmail": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Email of author"
+        },
+        "authorPhotoUrl": {
+          "type": "string",
+          "maxLength": 2048,
+          "description": "Avatar URL of author"
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000,
+          "description": "Comment content text"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "ISO timestamp of comment creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "ISO timestamp of last update"
+        }
+      },
+      "required": ["id", "postId", "authorId", "authorName", "content", "createdAt"]
+    },
+    "ArticleVote": {
+      "title": "Article Vote",
+      "description": "Up arrow (+1) or down arrow (-1) vote cast by a signed-in user for ranking",
+      "type": "object",
+      "properties": {
+        "postId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Parent blog post ID"
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Firebase UID of voter"
+        },
+        "vote": {
+          "type": "number",
+          "enum": [1, -1],
+          "description": "Upvote (+1) or Downvote (-1)"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "ISO timestamp when vote was cast"
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "ISO timestamp of last change"
+        }
+      },
+      "required": ["postId", "userId", "vote", "createdAt"]
     },
     "UserProfile": {
       "title": "User Profile",
@@ -150,6 +257,14 @@
     "/posts/{postId}": {
       "schema": "BlogPost",
       "description": "Collection of blog articles"
+    },
+    "/posts/{postId}/comments/{commentId}": {
+      "schema": "ArticleComment",
+      "description": "Subcollection of comments on an article, restricted to signed-in users"
+    },
+    "/posts/{postId}/votes/{userId}": {
+      "schema": "ArticleVote",
+      "description": "Subcollection of up/down votes for article ranking, restricted to signed-in users"
     },
     "/users/{userId}": {
       "schema": "UserProfile",

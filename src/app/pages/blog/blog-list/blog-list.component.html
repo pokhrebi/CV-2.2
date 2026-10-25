@@ -46,7 +46,27 @@
           class="filter-pill"
           [class.active]="activeTab === 'all'"
           (click)="setTab('all')">
-          All Posts ({{ posts.length }})
+          All Dispatches ({{ posts.length }})
+        </button>
+        <button
+          class="filter-pill ranking-tab-pill"
+          [class.active]="activeTab === 'top-ranked'"
+          (click)="setTab('top-ranked')"
+          title="Sort articles by highest community vote rank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="18 15 12 9 6 15"/>
+          </svg>
+          <span>Top Ranked</span>
+        </button>
+        <button
+          class="filter-pill"
+          [class.active]="activeTab === 'most-discussed'"
+          (click)="setTab('most-discussed')"
+          title="Sort articles by reader discussion count">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Most Discussed</span>
         </button>
         <button
           class="filter-pill"
@@ -141,6 +161,10 @@
               {{ isScheduledFuture(post) ? 'Scheduled' : (post.status | uppercase) }}
             </span>
 
+            <span class="badge rank-badge" [class.rank-high]="(post.score || 0) > 20">
+              ▲ {{ (post.score !== undefined ? post.score : ((post.upvotesCount || 0) - (post.downvotesCount || 0))) > 0 ? '+' : '' }}{{ post.score !== undefined ? post.score : ((post.upvotesCount || 0) - (post.downvotesCount || 0)) }}
+            </span>
+
             <span class="badge tenant-badge">
               #{{ post.tenantId || 'default' }}
             </span>
@@ -166,8 +190,16 @@
             {{ post.description }}
           </p>
 
-          <!-- Sources & Social Links Summary -->
+          <!-- Sources, Thoughts Count & Social Links Summary -->
           <div class="card-footer-tags">
+            <!-- Reader Thoughts Count Pill -->
+            <a [routerLink]="['/blog', post.id]" fragment="comments" class="tag-pill comments-count-pill" title="Read user thoughts & comments">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>{{ post.commentsCount || 0 }} {{ (post.commentsCount === 1) ? 'thought' : 'thoughts' }}</span>
+            </a>
+
             <span *ngIf="post.sourceLinks && post.sourceLinks.length > 0" class="tag-pill source-count-pill">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
@@ -182,8 +214,37 @@
             </div>
           </div>
 
-          <!-- Bottom Card Row: Author + Edit / Delete Controls -->
+          <!-- Bottom Card Row: Ranking Controls + Author + Edit / Delete -->
           <div class="card-bottom-row">
+            <!-- Inline Card Ranking Controls -->
+            <div class="card-ranking-controls" (click)="$event.stopPropagation()">
+              <button
+                type="button"
+                class="card-vote-btn card-vote-up"
+                [class.active]="getPostVote(post.id) === 1"
+                (click)="onCardVote(post, 'up', $event)"
+                [title]="firebaseService.currentUser ? 'Upvote this article' : 'Sign in to vote'">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15"/>
+                </svg>
+              </button>
+
+              <span class="card-vote-score" [class.score-pos]="(post.score || 0) > 0" [class.score-neg]="(post.score || 0) < 0">
+                {{ post.score !== undefined ? post.score : ((post.upvotesCount || 0) - (post.downvotesCount || 0)) }}
+              </span>
+
+              <button
+                type="button"
+                class="card-vote-btn card-vote-down"
+                [class.active]="getPostVote(post.id) === -1"
+                (click)="onCardVote(post, 'down', $event)"
+                [title]="firebaseService.currentUser ? 'Downvote this article' : 'Sign in to vote'">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+            </div>
+
             <div class="author-info">
               <span class="author-name">By {{ post.authorName || 'Staff Engineer' }}</span>
             </div>
